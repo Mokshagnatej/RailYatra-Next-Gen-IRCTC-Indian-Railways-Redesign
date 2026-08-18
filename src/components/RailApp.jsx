@@ -1,16 +1,17 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   ArrowLeftRight, Search, SlidersHorizontal, ChevronDown, ChevronRight,
   Check, Clock, Users, CreditCard, ShieldCheck, AlertTriangle, Loader2,
   Download, Share2, Home, Ticket, Compass, LifeBuoy, User, X, Train,
   MapPin, CalendarDays, Phone, Mail, HelpCircle, FileText, ChevronUp,
   BadgeCheck, Wallet, Languages, Bell, LogOut, Hotel, Sparkles, PhoneCall,
-  MessageSquareText, PackageSearch, Landmark
+  MessageSquareText, PackageSearch, Landmark, ScanLine
 } from "lucide-react";
 import ConfirmationScreen, { buildBooking } from "./ConfirmationScreen.jsx";
 import {
   QuickTools, StatsBand, PopularRoutes, Services, HowItWorks, TrustStrip, FAQ,
 } from "./HomeSections.jsx";
+import stationList from "../stationList.json";
 
 /* ---------------------------------------------------------------
    TOKENS
@@ -72,6 +73,10 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 @keyframes train-cross{
   0%{ transform: translateX(-10%); }
   100%{ transform: translateX(110%); }
+}
+@keyframes train-down{
+  0%{ transform: translateY(-10vh); }
+  100%{ transform: translateY(110vh); }
 }
 @keyframes train-chug{
   0%,100%{ transform: translateY(0) rotate(0deg); }
@@ -392,7 +397,13 @@ function SearchScreen({ onSearch }) {
   const availabilityHint = { "24 Aug": "amber", "25 Aug": "green", "26 Aug": "green", "27 Aug": "red", "28 Aug": "green", "29 Aug": "amber", "30 Aug": "green" };
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+      <div className="fixed top-0 left-4 md:left-8 bottom-0 w-[2px] z-50 opacity-30 pointer-events-none"
+           style={{ background: "repeating-linear-gradient(180deg, var(--blue) 0 10px, transparent 10px 18px)" }}>
+        <div className="absolute -left-[11px]" style={{ animation: "train-down 15s linear infinite" }}>
+          <Train size={24} style={{ color: "var(--marigold)" }} />
+        </div>
+      </div>
       <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
         <div className="max-w-6xl mx-auto px-4 md:px-6 pt-12 pb-24 md:pt-16 md:pb-32 grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-6 items-center">
           <FadeIn>
@@ -493,14 +504,60 @@ function SearchScreen({ onSearch }) {
 }
 
 function Field({ label, icon: Icon, value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (inputRef.current && !inputRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const filtered = useMemo(() => {
+    if (!search) return stationList.slice(0, 50);
+    const lower = search.toLowerCase();
+    return stationList.filter(s => s.toLowerCase().includes(lower)).slice(0, 50);
+  }, [search]);
+
   return (
-    <div>
+    <div ref={inputRef} className="relative z-20">
       <label className="f-body text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>{label}</label>
-      <div className="mt-1.5 h-12 rounded-xl border flex items-center gap-2 px-3" style={{ borderColor: "var(--line)" }}>
+      <div className="mt-1.5 h-12 rounded-xl border flex items-center gap-2 px-3 bg-white transition-colors" style={{ borderColor: open ? "var(--blue)" : "var(--line)" }}>
         <Icon size={16} style={{ color: "var(--blue)" }} />
-        <input value={value} onChange={(e) => onChange(e.target.value)}
+        <input 
+          value={open ? search : value} 
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => {
+            setSearch("");
+            setOpen(true);
+          }}
+          placeholder={value}
           className="f-body flex-1 outline-none text-[15px] bg-transparent" style={{ color: "var(--ink)" }} />
       </div>
+      
+      {open && filtered.length > 0 && (
+        <div className="absolute top-[100%] left-0 right-0 mt-2 bg-white border rounded-xl shadow-xl max-h-60 overflow-y-auto" style={{ borderColor: "var(--line)" }}>
+          {filtered.map(station => (
+            <div 
+              key={station} 
+              className="px-4 py-3 hover:bg-gray-50 cursor-pointer text-sm border-b last:border-b-0 transition-colors truncate"
+              style={{ borderColor: "var(--line)" }}
+              onClick={() => {
+                onChange(station);
+                setOpen(false);
+              }}
+            >
+              {station}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -722,6 +779,8 @@ function ResultsScreen({ onBook, onBack }) {
           </div>
         </div>
       )}
+
+
     </div>
   );
 }
@@ -932,17 +991,30 @@ function TripsScreen() {
   const [tab, setTab] = useState("upcoming");
   const [pnr, setPnr] = useState("");
   const [pnrResult, setPnrResult] = useState(null);
+  const [isSearchingPnr, setIsSearchingPnr] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
   const checkPnr = () => {
     if (!pnr.trim()) return;
-    setPnrResult({
-      pnr: pnr || "8462097315",
-      train: "12951 Mumbai Rajdhani",
-      date: "25 Aug 2026",
-      from: "NDLS", to: "BCT",
-      cls: "3A", coach: "B4", seat: "22, Side Lower",
-      chart: "Not prepared", status: "CNF",
-    });
+    setIsSearchingPnr(true);
+    setPnrResult(null);
+    setTimeout(() => {
+      setIsSearchingPnr(false);
+      setPnrResult({
+        pnr: pnr || "8462097315",
+        train: "12951 Mumbai Rajdhani",
+        date: "25 Aug 2026",
+        from: "NDLS", to: "BCT",
+        cls: "3A", coach: "B4", seat: "22, Side Lower",
+        chart: "Not prepared", status: "CNF",
+      });
+    }, 800);
+  };
+
+  const handleCancelTicket = () => {
+    setIsCancelled(true);
+    setActiveModal(null);
   };
 
   const tabs = [
@@ -954,11 +1026,11 @@ function TripsScreen() {
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
       <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, PNR status, and refund tracking — consolidated from four scattered pages on the old site." />
-      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-20">
         <div className="flex gap-1 bg-white rounded-xl border p-1 w-fit mb-6" style={{ borderColor: "var(--line)" }}>
           {tabs.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className="px-4 h-10 rounded-lg text-sm font-medium f-body"
+              className="px-4 h-10 rounded-lg text-sm font-medium f-body transition-colors"
               style={{ background: tab === t.key ? "var(--blue)" : "transparent", color: tab === t.key ? "white" : "var(--ink)" }}>
               {t.label}
             </button>
@@ -966,22 +1038,28 @@ function TripsScreen() {
         </div>
 
         {tab === "upcoming" && (
-          <div className="rounded-xl border bg-white overflow-hidden mb-16 ticket-notch" style={{ borderColor: "var(--line)" }}>
-            <div className="p-5 flex items-center justify-between" style={{ background: "var(--green-bg)" }}>
+          <div onClick={() => setActiveModal('ticket_details')} className="rounded-xl border bg-white overflow-hidden mb-16 ticket-notch cursor-pointer hover:shadow-lg transition-shadow" style={{ borderColor: "var(--line)" }}>
+            <div className="p-5 flex items-center justify-between transition-colors duration-500" style={{ background: isCancelled ? "var(--red-bg)" : "var(--green-bg)" }}>
               <div>
                 <p className="f-display font-semibold text-sm">Mumbai Rajdhani · #12951</p>
                 <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>25 Aug · 16:35 NDLS → 08:35 BCT · 3A</p>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: "var(--green)", color: "white" }}>Confirmed</span>
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--green)", color: "white" }}>
+                {isCancelled ? "Cancelled" : "Confirmed"}
+              </span>
             </div>
-            <div className="border-t border-dashed p-5 flex flex-wrap gap-6" style={{ borderColor: "var(--line)" }}>
+            <div className="border-t border-dashed p-5 flex flex-wrap gap-6 items-center" style={{ borderColor: "var(--line)" }}>
               <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</p><p className="f-mono text-sm font-semibold">8462 097 315</p></div>
-              <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Coach / Seat</p><p className="f-mono text-sm font-semibold">B4 / 22 SL</p></div>
-              <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Live status</p><p className="text-sm font-semibold" style={{ color: "var(--green)" }}>On time</p></div>
-              <div className="ml-auto flex gap-2">
-                <button className="h-9 px-3 rounded-lg border text-xs font-semibold" style={{ borderColor: "var(--line)" }}>Live tracking</button>
-                <button className="h-9 px-3 rounded-lg border text-xs font-semibold" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Cancel</button>
-              </div>
+              {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Coach / Seat</p><p className="f-mono text-sm font-semibold">B4 / 22 SL</p></div>}
+              {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Live status</p><p className="text-sm font-semibold" style={{ color: "var(--green)" }}>On time</p></div>}
+              {isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Refund Status</p><p className="text-sm font-semibold" style={{ color: "var(--amber)" }}>Processing</p></div>}
+              
+              {!isCancelled && (
+                <div className="ml-auto flex gap-2">
+                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('live_tracking'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>Live tracking</button>
+                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('cancel_ticket'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Cancel</button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -992,12 +1070,14 @@ function TripsScreen() {
             <p className="text-sm mb-4" style={{ color: "var(--steel)" }}>10-digit number printed on your ticket / SMS.</p>
             <div className="flex gap-2">
               <input value={pnr} onChange={(e) => setPnr(e.target.value)} placeholder="e.g. 8462097315"
-                className="flex-1 h-11 rounded-lg border px-3 text-sm f-mono outline-none" style={{ borderColor: "var(--line)" }} />
-              <button onClick={checkPnr} className="h-11 px-5 rounded-lg font-semibold text-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>Check</button>
+                className="flex-1 h-11 rounded-lg border px-3 text-sm f-mono outline-none focus:border-blue-500 transition-colors" style={{ borderColor: "var(--line)" }} />
+              <button onClick={checkPnr} className="h-11 px-5 rounded-lg font-semibold text-sm flex items-center justify-center min-w-[80px] transition-transform active:scale-[0.98]" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
+                {isSearchingPnr ? <div className="w-4 h-4 border-2 border-blue-900 border-t-transparent rounded-full animate-spin"></div> : "Check"}
+              </button>
             </div>
 
-            {pnrResult && (
-              <div className="mt-5 rounded-lg border p-4" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
+            {pnrResult && !isSearchingPnr && (
+              <div className="mt-5 rounded-lg border p-4 anim-fade-up" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
                 <div className="flex items-center justify-between mb-3">
                   <p className="f-mono text-sm font-semibold">PNR {pnrResult.pnr}</p>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: "var(--green-bg)", color: "var(--green)" }}>{pnrResult.status} — Confirmed</span>
@@ -1023,7 +1103,7 @@ function TripsScreen() {
               ].map((s, i, arr) => (
                 <div key={s.label} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className="h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: s.done ? "var(--green)" : "white", border: `2px solid ${s.done ? "var(--green)" : "var(--line)"}` }}>
+                    <div className="h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors" style={{ background: s.done ? "var(--green)" : "white", border: `2px solid ${s.done ? "var(--green)" : "var(--line)"}` }}>
                       {s.done && <Check size={12} color="white" />}
                     </div>
                     {i < arr.length - 1 && <div className="w-[2px] flex-1 my-1" style={{ background: s.done ? "var(--green)" : "var(--line)", minHeight: 28 }} />}
@@ -1038,6 +1118,141 @@ function TripsScreen() {
           </div>
         )}
       </div>
+
+      {/* MODALS */}
+      <Modal isOpen={activeModal === 'live_tracking'} onClose={() => setActiveModal(null)} title="Live Tracking">
+        <div className="flex flex-col py-4">
+          <div className="flex items-center justify-between mb-6 p-4 rounded-xl" style={{ background: "var(--green-bg)" }}>
+            <div>
+              <p className="f-mono text-xs" style={{ color: "var(--green)" }}>LIVE STATUS</p>
+              <p className="font-semibold text-lg">On Time</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs" style={{ color: "var(--steel)" }}>Next Stop</p>
+              <p className="font-semibold text-lg">Kota Jn (KOTA)</p>
+            </div>
+          </div>
+          
+          <div className="space-y-0 px-2">
+            {[
+              { station: "New Delhi (NDLS)", time: "16:35", status: "Departed", done: true },
+              { station: "Mathura Jn (MTJ)", time: "18:02", status: "Departed", done: true },
+              { station: "Kota Jn (KOTA)", time: "20:45", status: "Expected", active: true },
+              { station: "Ratlam Jn (RTM)", time: "00:15", status: "Upcoming", done: false },
+              { station: "Vadodara Jn (BRC)", time: "03:55", status: "Upcoming", done: false },
+              { station: "Mumbai Central (BCT)", time: "08:35", status: "Destination", done: false },
+            ].map((s, i, arr) => (
+              <div key={s.station} className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className="h-4 w-4 rounded-full flex-shrink-0 relative" style={{ background: s.active ? "var(--blue)" : s.done ? "var(--green)" : "var(--line)" }}>
+                    {s.active && <div className="h-4 w-4 rounded-full bg-blue-400 animate-ping absolute top-0 left-0"></div>}
+                  </div>
+                  {i < arr.length - 1 && <div className="w-[2px] flex-1 my-1" style={{ background: s.done ? "var(--green)" : "var(--line)", minHeight: 40 }} />}
+                </div>
+                <div className="pb-6 w-full flex justify-between items-start">
+                  <div>
+                    <p className={`text-[15px] font-semibold ${s.active ? "text-blue-600" : s.done ? "" : "text-gray-400"}`}>{s.station}</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{s.status}</p>
+                  </div>
+                  <p className="f-mono text-sm font-semibold">{s.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={activeModal === 'cancel_ticket'} onClose={() => setActiveModal(null)} title="Cancel Ticket">
+        <div className="flex flex-col py-2">
+          <div className="h-14 w-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
+            <X size={28} className="text-red-500" />
+          </div>
+          <h3 className="text-center font-semibold text-lg mb-1">Confirm Cancellation</h3>
+          <p className="text-center text-sm mb-6" style={{ color: "var(--steel)" }}>Are you sure you want to cancel your ticket for Mumbai Rajdhani?</p>
+          
+          <div className="rounded-xl border p-4 mb-6 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+            <div className="flex justify-between text-sm mb-2">
+              <span style={{ color: "var(--steel)" }}>Ticket Fare</span>
+              <span className="font-semibold">₹2,840</span>
+            </div>
+            <div className="flex justify-between text-sm mb-2 text-red-600">
+              <span>Cancellation Fee</span>
+              <span className="font-semibold">-₹240</span>
+            </div>
+            <div className="w-full h-px bg-gray-200 my-3"></div>
+            <div className="flex justify-between text-[15px] font-bold">
+              <span>Estimated Refund</span>
+              <span className="text-green-600">₹2,600</span>
+            </div>
+          </div>
+          
+          <div className="flex gap-3 mt-auto">
+            <button onClick={() => setActiveModal(null)} className="flex-1 h-12 rounded-xl font-semibold border hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>Keep Ticket</button>
+            <button onClick={handleCancelTicket} className="flex-1 h-12 rounded-xl font-semibold text-white hover:bg-red-600 transition-colors" style={{ background: "var(--red)" }}>Confirm Cancel</button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal isOpen={activeModal === 'ticket_details'} onClose={() => setActiveModal(null)} title="E-Ticket Details">
+        <div className="flex flex-col py-2">
+          <div className="rounded-2xl border overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
+            <div className="p-5 text-white transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--blue)" }}>
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="font-bold text-lg leading-none">Mumbai Rajdhani</p>
+                  <p className="text-white/80 text-xs mt-1">Train #12951</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-lg leading-none">{isCancelled ? "CANCELLED" : "CONFIRMED"}</p>
+                  <p className="text-white/80 text-xs mt-1">PNR 8462097315</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-2xl font-bold">NDLS</p>
+                  <p className="text-xs text-white/80">New Delhi</p>
+                </div>
+                <div className="flex flex-col items-center px-4">
+                  <span className="text-[10px] text-white/80">16:00 hr</span>
+                  <div className="w-16 h-px bg-white/30 my-1 relative">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><Train size={12} className="text-white/80" /></div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold">BCT</p>
+                  <p className="text-xs text-white/80">Mumbai Ctrl</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-5 bg-white">
+              <p className="text-[11px] uppercase tracking-wide mb-3" style={{ color: "var(--steel)" }}>Passenger Details</p>
+              <div className="flex justify-between items-center py-2 border-b" style={{ borderColor: "var(--line)" }}>
+                <div>
+                  <p className="font-semibold text-sm">Ananya Rao</p>
+                  <p className="text-xs" style={{ color: "var(--steel)" }}>28 Yrs, Female</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-sm">B4, 22</p>
+                  <p className="text-xs" style={{ color: "var(--steel)" }}>Side Lower</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-center justify-center mt-6 mb-2">
+                <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
+                  <ScanLine size={32} style={{ color: "var(--steel)" }} />
+                </div>
+                <p className="text-xs mt-2 text-center" style={{ color: "var(--steel)" }}>Show this QR code to the TT</p>
+              </div>
+            </div>
+          </div>
+          
+          <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+            <Download size={16} /> Download PDF
+          </button>
+        </div>
+      </Modal>
+
       <Footer />
     </div>
   );
@@ -1046,63 +1261,129 @@ function TripsScreen() {
 /* ---------------- EXPLORE ---------------- */
 
 function ExploreScreen() {
-  const packages = [
-    { name: "Dev Darshan Yatra", days: "6N/7D", desc: "Temple circuit across North India — Ayodhya, Varanasi, Prayagraj.", price: "₹18,900" },
-    { name: "Bharat Gaurav Tourist Train", days: "8N/9D", desc: "AC III-Tier themed circuit train promoting domestic heritage tourism.", price: "₹24,500" },
-    { name: "Kashmir Vaishno Devi", days: "5N/6D", desc: "Srinagar, Gulmarg, Katra — Mata Vaishno Devi darshan included.", price: "₹21,300" },
-    { name: "Maharajas' Express", days: "7N/8D", desc: "Luxury heritage train — 'World's Leading Luxury Train' 6 years running.", price: "On request" },
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeModal, setActiveModal] = useState(null);
+  
+  const trending = [
+    { name: "Kashmir Vaishno Devi", days: "5N/6D", price: "₹21,300", image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&q=80&w=800" },
+    { name: "Dev Darshan Yatra", days: "6N/7D", price: "₹18,900", image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&q=80&w=800" },
+    { name: "Kerala Backwaters", days: "4N/5D", price: "₹16,500", image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&q=80&w=800" },
   ];
-  return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
-      <PageHero eyebrow="Explore" title="Beyond booking a seat." sub="Planning tools and IRCTC Tourism packages, kept separate from live booking so you can browse without a countdown." />
 
-      <div className="max-w-6xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        <ToolCard icon={Train} title="Trains between stations" body="See every train on a route before you commit to a date." />
-        <ToolCard icon={Wallet} title="Fare enquiry" body="Compare fares by class without starting a booking." />
-        <ToolCard icon={Hotel} title="Retiring rooms" body="Book a room or dorm at the station for a layover." />
+  const packages = [
+    { name: "Bharat Gaurav Tourist Train", days: "8N/9D", desc: "AC III-Tier themed circuit train promoting domestic heritage tourism.", price: "₹24,500", image: "https://images.unsplash.com/photo-1533580556209-775b8dbbb9d1?auto=format&fit=crop&q=80&w=800" },
+    { name: "Maharajas' Express", days: "7N/8D", desc: "Luxury heritage train — 'World's Leading Luxury Train' 6 years running.", price: "On request", image: "https://images.unsplash.com/photo-1515159495742-0b29c919d363?auto=format&fit=crop&q=80&w=800" },
+    { name: "Goa Beach Holidays", days: "3N/4D", desc: "Relaxing beach vacation covering North and South Goa highlights.", price: "₹12,000", image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80&w=800" },
+  ];
+
+  return (
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20">
+      <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
+        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-10 pb-20 md:pt-12 md:pb-24">
+          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold)" }}>Explore</p>
+          <h1 className="f-display text-3xl md:text-4xl font-semibold text-white mt-2 max-w-xl">Beyond booking a seat.</h1>
+          <p className="text-sm mt-2 max-w-lg mb-8" style={{ color: "#C7D2DD" }}>Planning tools and IRCTC Tourism packages, curated for your next journey.</p>
+          
+          <div className="relative max-w-lg">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={18} style={{ color: "var(--steel)" }} />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Search packages, destinations or trains..." 
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="block w-full pl-10 pr-3 py-3 rounded-xl border-none outline-none f-body shadow-lg"
+              style={{ color: "var(--ink)", background: "white" }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <ToolCard onClick={() => setActiveModal({ title: "Trains between stations" })} icon={Train} title="Trains between stations" body="See every train on a route before you commit to a date." />
+        <ToolCard onClick={() => setActiveModal({ title: "Fare enquiry" })} icon={Wallet} title="Fare enquiry" body="Compare fares by class without starting a booking." />
+        <ToolCard onClick={() => setActiveModal({ title: "Retiring rooms" })} icon={Hotel} title="Retiring rooms" body="Book a room or dorm at the station for a layover." />
+      </div>
+
+      <div className="mb-12">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 mb-4">
+          <div className="flex items-center gap-2">
+            <Sparkles size={16} style={{ color: "var(--marigold-2)" }} />
+            <h2 className="f-display font-semibold text-xl">Trending Destinations</h2>
+          </div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto flex overflow-x-auto px-4 md:px-6 gap-4 pb-4 snap-x hide-scrollbar">
+          {trending.map(p => (
+            <div onClick={() => setActiveModal(p)} key={p.name} className="snap-start relative w-[280px] md:w-[320px] h-[360px] rounded-2xl overflow-hidden shadow-md flex-shrink-0 group cursor-pointer">
+              <img src={p.image} alt={p.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <span className="inline-block mb-2 text-[10px] f-mono px-2 py-1 rounded-full text-white bg-black/40 backdrop-blur-md border border-white/20">
+                  {p.days}
+                </span>
+                <h3 className="text-white font-semibold text-lg leading-tight mb-1">{p.name}</h3>
+                <p className="text-white/80 text-sm font-semibold">{p.price}</p>
+              </div>
+            </div>
+          ))}
+          <div className="w-4 md:w-6 flex-shrink-0"></div>
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 md:px-6">
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles size={16} style={{ color: "var(--marigold-2)" }} />
-          <p className="f-display font-semibold text-lg">IRCTC Tourism packages</p>
-        </div>
-        <p className="text-sm mb-5" style={{ color: "var(--steel)" }}>Domestic and international tours, pilgrimage circuits, and heritage trains — curated by IRCTC.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-16">
+        <h2 className="f-display font-semibold text-xl mb-1">All Packages</h2>
+        <p className="text-sm mb-5" style={{ color: "var(--steel)" }}>Domestic and international tours, pilgrimage circuits, and heritage trains.</p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {packages.map((p) => (
-            <div key={p.name} className="rounded-xl border bg-white p-4 flex gap-4" style={{ borderColor: "var(--line)" }}>
-              <div className="h-14 w-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ background: "var(--paper-2)" }}>
-                <Landmark size={22} style={{ color: "var(--blue)" }} />
+            <div onClick={() => setActiveModal(p)} key={p.name} className="rounded-xl border bg-white overflow-hidden flex flex-col sm:flex-row group cursor-pointer transition-shadow hover:shadow-lg" style={{ borderColor: "var(--line)" }}>
+              <div className="h-48 sm:h-auto sm:w-40 relative overflow-hidden flex-shrink-0">
+                <img src={p.image} alt={p.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
-              <div className="flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="f-body font-semibold text-sm">{p.name}</p>
+              <div className="p-4 sm:p-5 flex flex-col justify-center flex-1">
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <h3 className="f-body font-semibold text-[15px]">{p.name}</h3>
                   <span className="text-[10px] f-mono px-2 py-0.5 rounded-full flex-shrink-0" style={{ background: "var(--paper-2)", color: "var(--steel)" }}>{p.days}</span>
                 </div>
-                <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--steel)" }}>{p.desc}</p>
-                <div className="flex items-center justify-between mt-2">
-                  <span className="f-mono text-sm font-semibold">{p.price}</span>
-                  <button className="text-xs font-semibold" style={{ color: "var(--blue)" }}>View package →</button>
+                <p className="text-xs mt-1 mb-4 leading-relaxed" style={{ color: "var(--steel)" }}>{p.desc}</p>
+                <div className="flex items-center justify-between mt-auto">
+                  <span className="f-mono text-sm font-semibold" style={{ color: "var(--ink)" }}>{p.price}</span>
+                  <button className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors hover:bg-gray-100" style={{ color: "var(--blue)" }}>View details</button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-      <Footer />
+
+      <Modal isOpen={!!activeModal} onClose={() => setActiveModal(null)} title={activeModal?.title || activeModal?.name}>
+        <div className="flex flex-col items-center py-10 text-center">
+          <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+            <Compass size={32} style={{ color: "var(--blue)" }} />
+          </div>
+          <h4 className="font-semibold text-lg">{activeModal?.name || activeModal?.title}</h4>
+          <p className="text-sm mt-2 max-w-[280px]" style={{ color: "var(--steel)" }}>This feature is a preview and will be fully available in a future update.</p>
+          <button onClick={() => setActiveModal(null)} className="mt-6 h-11 px-8 rounded-xl font-semibold text-[15px] flex items-center justify-center text-white transition-transform active:scale-[0.98]" style={{ background: "var(--blue)" }}>
+            Got it
+          </button>
+        </div>
+      </Modal>
+
     </div>
   );
 }
 
-function ToolCard({ icon: Icon, title, body }) {
+function ToolCard({ icon: Icon, title, body, onClick }) {
   return (
-    <button className="rounded-xl border bg-white p-4 text-left hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
-      <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3" style={{ background: "var(--blue)" }}>
-        <Icon size={18} color="white" />
+    <div onClick={onClick} className="rounded-xl border bg-white p-5 group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1" style={{ borderColor: "var(--line)" }}>
+      <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300 group-hover:bg-blue-50" style={{ background: "var(--paper-2)" }}>
+        <Icon size={20} className="transition-colors duration-300" style={{ color: "var(--blue)" }} />
       </div>
-      <p className="f-body font-semibold text-sm">{title}</p>
+      <p className="font-semibold text-[15px]">{title}</p>
       <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--steel)" }}>{body}</p>
-    </button>
+    </div>
   );
 }
 
@@ -1161,14 +1442,179 @@ function HelpScreen() {
 
 /* ---------------- ACCOUNT ---------------- */
 
-function AccountScreen() {
+function SimpleInput({ label, icon: Icon, value }) {
+  return (
+    <div>
+      <label className="f-body text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>{label}</label>
+      <div className="mt-1.5 h-11 rounded-xl border flex items-center gap-2 px-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+        <Icon size={16} style={{ color: "var(--steel)" }} />
+        <input defaultValue={value} className="f-body flex-1 outline-none text-[15px] bg-transparent" style={{ color: "var(--ink)" }} />
+      </div>
+    </div>
+  );
+}
+
+function Modal({ title, isOpen, onClose, children }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/40 backdrop-blur-sm transition-opacity" onClick={onClose}>
+      <div 
+        className="bg-white w-full md:w-[480px] max-h-[90vh] md:max-h-[80vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col anim-fade-up overflow-hidden" 
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="h-14 px-5 border-b flex items-center justify-between" style={{ borderColor: "var(--line)" }}>
+          <h3 className="font-semibold text-lg" style={{ color: "var(--ink)" }}>{title}</h3>
+          <button onClick={onClose} className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <X size={16} style={{ color: "var(--steel)" }} />
+          </button>
+        </div>
+        <div className="p-5 overflow-y-auto">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileModal({ isOpen, onClose }) {
+  return (
+    <Modal title="Edit Profile" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-4">
+        <SimpleInput label="First Name" icon={User} value="Ananya" />
+        <SimpleInput label="Last Name" icon={User} value="Rao" />
+        <SimpleInput label="Mobile Number" icon={Phone} value="+91 98765 43210" />
+        <SimpleInput label="Email Address" icon={Mail} value="ananya.rao@example.com" />
+        <button className="mt-2 w-full h-12 rounded-xl f-body font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform active:scale-[0.99]" style={{ background: "var(--marigold)", color: "var(--blue)" }} onClick={onClose}>Save Changes</button>
+      </div>
+    </Modal>
+  );
+}
+
+function PassengersModal({ isOpen, onClose }) {
+  const passengers = [
+    { name: "Ananya Rao", age: 28, gender: "Female", pref: "Lower" },
+    { name: "Rohan Rao", age: 30, gender: "Male", pref: "Upper" },
+    { name: "Sita Devi", age: 58, gender: "Female", pref: "Lower" },
+    { name: "Arjun Rao", age: 8, gender: "Male", pref: "No Preference" },
+  ];
+  return (
+    <Modal title="Saved Passengers" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        {passengers.map((p, i) => (
+          <div key={i} className="p-3 border rounded-xl flex items-center justify-between bg-gray-50" style={{ borderColor: "var(--line)" }}>
+            <div>
+              <p className="font-semibold text-[15px]">{p.name}</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{p.age} yrs, {p.gender} • {p.pref} Berth</p>
+            </div>
+            <button className="text-sm font-medium transition-colors hover:text-blue-700" style={{ color: "var(--blue)" }}>Edit</button>
+          </div>
+        ))}
+        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
+          <User size={16} /> Add New Passenger
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function PaymentsModal({ isOpen, onClose }) {
+  return (
+    <Modal title="Payment Methods" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-green-100"><CreditCard size={18} className="text-green-700" /></div>
+          <div className="flex-1">
+            <p className="font-semibold text-[15px]">HDFC Bank Credit Card</p>
+            <p className="text-xs" style={{ color: "var(--steel)" }}>•••• 4242</p>
+          </div>
+        </div>
+        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-blue-100"><Landmark size={18} className="text-blue-700" /></div>
+          <div className="flex-1">
+            <p className="font-semibold text-[15px]">Google Pay</p>
+            <p className="text-xs" style={{ color: "var(--steel)" }}>ananya@okaxis</p>
+          </div>
+        </div>
+        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
+          <CreditCard size={16} /> Add Payment Method
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function KycModal({ isOpen, onClose }) {
+  return (
+    <Modal title="KYC / Aadhaar" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col items-center py-6 text-center">
+        <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+          <BadgeCheck size={32} className="text-green-600" />
+        </div>
+        <h4 className="font-semibold text-lg">Verified Successfully</h4>
+        <p className="text-sm mt-1 max-w-[250px]" style={{ color: "var(--steel)" }}>Your Aadhaar ending in <strong>8392</strong> is linked to your IRCTC account.</p>
+        <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+          Update Aadhaar
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function LanguageModal({ isOpen, onClose }) {
+  const [lang, setLang] = useState("English");
+  return (
+    <Modal title="Select Language" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-2">
+        {["English", "हिंदी (Hindi)", "తెలుగు (Telugu)", "தமிழ் (Tamil)", "বাংলা (Bengali)", "मराठी (Marathi)"].map(l => (
+          <button key={l} onClick={() => { setLang(l); setTimeout(onClose, 200); }} className="p-3 border rounded-xl text-left font-medium text-[15px] transition-colors hover:bg-gray-50 flex items-center justify-between" style={{ borderColor: lang === l ? "var(--blue)" : "var(--line)", background: lang === l ? "var(--blue-3)" : "transparent" }}>
+            <span>{l}</span>
+            {lang === l && <Check size={16} style={{ color: "var(--blue)" }} />}
+          </button>
+        ))}
+      </div>
+    </Modal>
+  );
+}
+
+function NotificationsModal({ isOpen, onClose }) {
+  const [toggles, setToggles] = useState({ sms: true, wa: true, push: false });
+  const items = [
+    { id: "sms", icon: MessageSquareText, title: "SMS Updates", desc: "PNR status and journey alerts via SMS." },
+    { id: "wa", icon: PhoneCall, title: "WhatsApp Updates", desc: "Get tickets directly on WhatsApp." },
+    { id: "push", icon: Bell, title: "Push Notifications", desc: "App alerts for Tatkal and availability." }
+  ];
+  return (
+    <Modal title="Notifications" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        {items.map(n => (
+          <div key={n.id} onClick={() => setToggles(p => ({ ...p, [n.id]: !p[n.id] }))} className="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center"><n.icon size={18} style={{ color: "var(--blue)" }} /></div>
+              <div>
+                <p className="font-semibold text-[14px]">{n.title}</p>
+                <p className="text-[11px]" style={{ color: "var(--steel)" }}>{n.desc}</p>
+              </div>
+            </div>
+            <div className="w-11 h-6 rounded-full relative transition-colors duration-300" style={{ background: toggles[n.id] ? "var(--green)" : "var(--steel)" }}>
+              <div className="absolute top-1 h-4 w-4 bg-white rounded-full shadow-sm transition-all duration-300" style={{ left: toggles[n.id] ? "calc(100% - 20px)" : "4px" }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Modal>
+  );
+}
+
+function AccountScreen({ onLogout }) {
+  const [activeModal, setActiveModal] = useState(null);
+
   const rows = [
-    { icon: User, label: "Profile", detail: "Name, mobile, email" },
-    { icon: Users, label: "Saved passengers", detail: "4 saved" },
-    { icon: CreditCard, label: "Payment methods", detail: "2 UPI IDs, 1 card" },
-    { icon: BadgeCheck, label: "KYC / Aadhaar", detail: "Verified" },
-    { icon: Languages, label: "Language", detail: "English" },
-    { icon: Bell, label: "Notifications", detail: "SMS + push enabled" },
+    { id: "profile", icon: User, label: "Profile", detail: "Name, mobile, email" },
+    { id: "passengers", icon: Users, label: "Saved passengers", detail: "4 saved" },
+    { id: "payments", icon: CreditCard, label: "Payment methods", detail: "2 UPI IDs, 1 card" },
+    { id: "kyc", icon: BadgeCheck, label: "KYC / Aadhaar", detail: "Verified" },
+    { id: "language", icon: Languages, label: "Language", detail: "English" },
+    { id: "notifications", icon: Bell, label: "Notifications", detail: "SMS + push enabled" },
   ];
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
@@ -1176,7 +1622,7 @@ function AccountScreen() {
       <div className="max-w-2xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-16">
         <div className="rounded-xl border bg-white overflow-hidden" style={{ borderColor: "var(--line)" }}>
           {rows.map((r, i) => (
-            <button key={r.label} className="w-full flex items-center gap-3 px-5 py-4 text-left" style={{ borderBottom: i < rows.length - 1 ? `1px solid var(--line)` : "none" }}>
+            <button key={r.id} onClick={() => setActiveModal(r.id)} className="w-full flex items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-gray-50 active:bg-gray-100" style={{ borderBottom: i < rows.length - 1 ? `1px solid var(--line)` : "none" }}>
               <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: "var(--paper-2)" }}>
                 <r.icon size={16} style={{ color: "var(--blue)" }} />
               </div>
@@ -1188,10 +1634,18 @@ function AccountScreen() {
             </button>
           ))}
         </div>
-        <button className="mt-4 w-full h-12 rounded-xl border font-semibold text-sm flex items-center justify-center gap-2" style={{ borderColor: "var(--red)", color: "var(--red)" }}>
+        <button onClick={() => { if(confirm("Are you sure you want to log out?")) onLogout(); }} className="mt-4 w-full h-12 rounded-xl border font-semibold text-sm flex items-center justify-center gap-2 hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>
           <LogOut size={15} /> Log out
         </button>
       </div>
+
+      <ProfileModal isOpen={activeModal === "profile"} onClose={() => setActiveModal(null)} />
+      <PassengersModal isOpen={activeModal === "passengers"} onClose={() => setActiveModal(null)} />
+      <PaymentsModal isOpen={activeModal === "payments"} onClose={() => setActiveModal(null)} />
+      <KycModal isOpen={activeModal === "kyc"} onClose={() => setActiveModal(null)} />
+      <LanguageModal isOpen={activeModal === "language"} onClose={() => setActiveModal(null)} />
+      <NotificationsModal isOpen={activeModal === "notifications"} onClose={() => setActiveModal(null)} />
+
       <Footer />
     </div>
   );
@@ -1244,7 +1698,7 @@ export default function App() {
       {screen === "trips" && <TripsScreen />}
       {screen === "explore" && <ExploreScreen />}
       {screen === "help" && <HelpScreen />}
-      {screen === "account" && <AccountScreen />}
+      {screen === "account" && <AccountScreen onLogout={() => setScreen("search")} />}
     </div>
   );
 }
