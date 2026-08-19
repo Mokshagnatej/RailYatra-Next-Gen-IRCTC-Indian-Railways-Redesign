@@ -3,9 +3,9 @@ import {
   Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
   Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
 } from 'lucide-react';
-import FadeIn from '../common/FadeIn';
-import PageHero from '../common/PageHero';
-\nfunction EndToEndTrainTrack() {
+import FadeIn from '../../common/FadeIn';
+import PageHero from '../../common/PageHero';
+function EndToEndTrainTrack() {
   const [mode, setMode] = useState("vande"); // "vande" | "rajdhani" | "tejas"
   const [isPaused, setIsPaused] = useState(false);
 
@@ -376,4 +376,4 @@ import PageHero from '../common/PageHero';
     </div>
   );
 }
-\nexport default EndToEndTrainTrack;\n
+export default EndToEndTrainTrack;

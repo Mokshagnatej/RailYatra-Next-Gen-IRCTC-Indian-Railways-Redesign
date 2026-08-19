@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
+  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
+  Users, BadgeCheck, Languages, LogOut
 } from 'lucide-react';
-import FadeIn from '../common/FadeIn';
-import PageHero from '../common/PageHero';
-\nfunction AccountScreen({ onLogout }) {
+import FadeIn from '../components/common/FadeIn';
+import PageHero from '../components/common/PageHero';
+import { ProfileModal, PassengersModal, PaymentsModal, KycModal, LanguageModal, NotificationsModal } from '../components/common/Shared';
+function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);
 
   const rows = [
@@ -48,4 +50,4 @@ import PageHero from '../common/PageHero';
     </div>
   );
 }
-\nexport default AccountScreen;\n
+export default AccountScreen;

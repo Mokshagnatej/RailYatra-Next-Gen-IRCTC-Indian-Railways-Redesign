@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
+  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
+  PhoneCall, Mail, MessageSquareText, Search, ChevronUp
 } from 'lucide-react';
-import FadeIn from '../common/FadeIn';
-import PageHero from '../common/PageHero';
-\nfunction HelpScreen() {
+import FadeIn from '../components/common/FadeIn';
+import PageHero from '../components/common/PageHero';
+function HelpScreen() {
   const [openFaq, setOpenFaq] = useState(0);
   const faqs = [
     { q: "My money was debited but I didn't get a ticket. What now?", a: "You'll see a 'Verifying' status immediately with a confirmation SLA. If the booking can't be confirmed within that window, the amount is auto-refunded to your original payment method — no TDR filing needed for this case. Refunds typically appear within 3–5 working days." },
@@ -58,4 +59,4 @@ import PageHero from '../common/PageHero';
     </div>
   );
 }
-\nexport default HelpScreen;\n
+export default HelpScreen;
