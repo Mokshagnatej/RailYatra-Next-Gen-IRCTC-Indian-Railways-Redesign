@@ -77,14 +77,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "IRCTC — Indian Railway Catering & Tourism Corporation | Book Train Tickets Online" },
+      { name: "description", content: "Book Indian Railways tickets online on IRCTC. Search trains, check PNR status, get live train running status, compare fares and manage your journeys — all in one place." },
+      { name: "author", content: "IRCTC — Indian Railway Catering & Tourism Corporation Ltd." },
+      { name: "keywords", content: "IRCTC, Indian Railways, train booking, PNR status, train tickets, Tatkal booking, rail tickets, live train status, train fare" },
+      { property: "og:title", content: "IRCTC — Book Indian Train Tickets Online" },
+      { property: "og:description", content: "Search trains, check real-time seat availability, book tickets with UPI/Cards/Net Banking, and track PNR status. 13,000+ trains across 7,000+ stations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@IRCTCofficial" },
     ],
     links: [
       {
