@@ -17,12 +17,14 @@ import ExploreScreen from "../screens/ExploreScreen";
 import PageHero from "./common/PageHero";
 
 import TripsScreen from "../screens/MyTripsScreen";
+
 import AccountScreen from "../screens/AccountScreen";
+
 import HelpScreen from "../screens/HelpScreen";
-import FadeIn from "./common/FadeIn";
+
 import LiveRailRadarCard from "../components/features/radar/LiveRailRadarCard";
+
 import EndToEndTrainTrack from "../components/features/animation/EndToEndTrainTrack";
-import { Modal } from "./common/Shared";
 
 /* ---------------------------------------------------------------
    TOKENS
@@ -43,8 +45,8 @@ import { Modal } from "./common/Shared";
 const FONT_IMPORT = `
 :root{
   --ink:#1B1A18; --paper:#F7F4EC; --paper-2:#EFEADC;
-  --blue:#0F2A45; --blue-2:#1B4470; --blue-3:#091C31;
-  --marigold:#E5A93D; --marigold-2:#C08321;
+  --blue:#0F2A45; --blue-2:#1B4470; --blue-3:#060F1D;
+  --marigold:#E5A93D; --marigold-2:#C08321; --marigold-dim:rgba(229,169,61,0.12);
   --green:#1F7A4C; --green-bg:#E9F4EE;
   --amber:#C9861F; --amber-bg:#FCF2E1;
   --red:#C23B32; --red-bg:#FBEBE9;
@@ -52,10 +54,12 @@ const FONT_IMPORT = `
   --shadow-lg: 0 28px 56px -24px rgba(9,28,49,0.34), 0 4px 14px -6px rgba(9,28,49,0.12);
   --shadow-sm: 0 1px 2px rgba(9,28,49,0.04), 0 6px 16px -10px rgba(9,28,49,0.18);
   --shadow-hover: 0 18px 34px -18px rgba(9,28,49,0.30);
+  --shadow-gold: 0 0 0 1px rgba(229,169,61,0.25), 0 8px 32px -8px rgba(229,169,61,0.28);
 }
 html{ scroll-behavior:smooth; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
-::selection{ background: rgba(229,169,61,0.35); }
-.f-display{ letter-spacing:-0.015em; }
+::selection{ background: rgba(229,169,61,0.32); }
+.f-display{ letter-spacing:-0.02em; }
+.f-serif{ font-family:'Fraunces',Georgia,serif; letter-spacing:-0.02em; }
 button, a, input, select{ outline-color: var(--marigold); }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible{
   outline:2px solid var(--marigold); outline-offset:2px; border-radius:10px;
@@ -63,15 +67,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 input, select, button{ transition: border-color .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, transform .18s ease; }
 input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0 0 3px rgba(15,42,69,0.08); }
 .paper-texture{ position:relative; }
-::-webkit-scrollbar{ height:8px; width:8px; }
+::-webkit-scrollbar{ height:6px; width:6px; }
 ::-webkit-scrollbar-thumb{ background: #CFC7B4; border-radius:8px; }
 ::-webkit-scrollbar-track{ background: transparent; }
-.f-display{font-family:'Space Grotesk',sans-serif;}
-.f-body{font-family:'IBM Plex Sans',sans-serif;}
+.f-display{font-family:'Inter',system-ui,sans-serif; letter-spacing:-0.02em;}
+.f-body{font-family:'Inter',system-ui,sans-serif;}
 .f-mono{font-family:'IBM Plex Mono',monospace;}
 .paper-texture{
-  background-image: radial-gradient(circle, rgba(15,42,69,0.05) 1px, transparent 1px);
-  background-size: 14px 14px;
+  background-image: radial-gradient(circle, rgba(15,42,69,0.045) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 .ticket-notch{ position: relative; }
 .ticket-notch::before, .ticket-notch::after{
@@ -80,6 +84,24 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 }
 .ticket-notch::before{ left:-8px; }
 .ticket-notch::after{ right:-8px; }
+
+/* Hero star field */
+.star-field{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.star{ position:absolute; border-radius:50%; background:white; }
+
+/* Scroll-reveal */
+.reveal{ opacity:0; transform:translateY(22px); transition: opacity 0.65s cubic-bezier(.2,.8,.2,1), transform 0.65s cubic-bezier(.2,.8,.2,1); }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+.reveal-delay-1{ transition-delay: 0.1s; }
+.reveal-delay-2{ transition-delay: 0.2s; }
+.reveal-delay-3{ transition-delay: 0.3s; }
+
+/* glass card */
+.glass-card{
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
 
 @keyframes train-cross{
   0%{ transform: translateX(-10%); }
@@ -90,8 +112,8 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
   100%{ transform: translateY(110vh); }
 }
 @keyframes train-chug{
-  0%,100%{ transform: translateY(0) rotate(0deg); }
-  50%{ transform: translateY(-2px) rotate(-1deg); }
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-1.5px); }
 }
 @keyframes float-cloud{
   0%{ transform: translateX(0); }
@@ -102,7 +124,11 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
   50%{ opacity: 0.35; }
 }
 @keyframes fade-up{
-  from{ opacity: 0; transform: translateY(14px); }
+  from{ opacity: 0; transform: translateY(18px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-up-md{
+  from{ opacity: 0; transform: translateY(28px); }
   to{ opacity: 1; transform: translateY(0); }
 }
 @keyframes pulse-dot{
@@ -136,26 +162,45 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 }
 @keyframes bob{
   0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-5px); }
+  50%{ transform: translateY(-6px); }
+}
+@keyframes bob-slow{
+  0%,100%{ transform: translateY(0) rotate(-1deg); }
+  50%{ transform: translateY(-9px) rotate(1deg); }
 }
 @keyframes ripple{
   0%{ transform: scale(0.6); opacity: 0.35; }
   100%{ transform: scale(1.6); opacity: 0; }
 }
-.anim-fade-up{ animation: fade-up 0.55s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes glow-pulse{
+  0%,100%{ opacity:0.5; transform:scale(1); }
+  50%{ opacity:1; transform:scale(1.08); }
+}
+@keyframes star-twinkle{
+  0%,100%{ opacity:0.15; }
+  50%{ opacity:0.9; }
+}
+@keyframes gradient-shift{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+@keyframes slide-in-up{
+  from{ opacity:0; transform:translateY(32px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.anim-fade-up{ animation: fade-up 0.6s cubic-bezier(.16,1,.3,1) both; }
+.anim-fade-up-md{ animation: fade-up-md 0.75s cubic-bezier(.16,1,.3,1) both; }
 .anim-pulse-dot{ animation: pulse-dot 2s infinite; }
+.anim-bob{ animation: bob 3.5s ease-in-out infinite; }
+.anim-bob-slow{ animation: bob-slow 5s ease-in-out infinite; }
+.anim-glow-pulse{ animation: glow-pulse 3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce){
-  .anim-fade-up, .anim-pulse-dot, [style*="animation"]{ animation: none !important; }
-  .opacity-0{ opacity: 1 !important; }
+  .anim-fade-up,.anim-fade-up-md,.anim-pulse-dot,.anim-bob,.anim-bob-slow,.anim-glow-pulse,
+  .reveal,[style*="animation"]{ animation: none !important; transition: none !important; }
+  .reveal{ opacity:1; transform:none; }
+  .opacity-0{ opacity:1 !important; }
 }
-
-/* soft glow behind hero gradients */
-.paper-texture::after{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background: radial-gradient(80% 60% at 78% 12%, rgba(229,169,61,0.16) 0%, transparent 60%),
-              radial-gradient(60% 50% at 8% 90%, rgba(31,122,76,0.14) 0%, transparent 65%);
-}
-.paper-texture > *{ position:relative; z-index:1; }
 `;
 
 /* ---------------- sample data (enriched with running days, pantry, distance) ---------------- */
@@ -251,58 +296,258 @@ function ConfettiBurst() {
   );
 }
 
+/* Reveal-on-mount wrapper for staggered list/card entrances. */
+function useReveal() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { el.classList.add("visible"); obs.unobserve(el); }
+    }, { threshold: 0.12 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+
+function FadeIn({ children, delay = 0, className = "", hero = false }) {
+  const ref = useReveal();
+  if (hero) {
+    return (
+      <div ref={ref} className={`anim-fade-up ${className}`} style={{ animationDelay: `${delay}s` }}>
+        {children}
+      </div>
+    );
+  }
+  return (
+    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}s` }}>
+      {children}
+    </div>
+  );
+}
+
+/* ── Scenic SVG hero illustration ── */
+function HeroScenery() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Star field */}
+      {[
+        [8,12,1.5,2],[14,22,1,3],[22,8,2,1.5],[32,18,1,2.5],[40,6,1.8,2],
+        [50,14,1.2,3],[58,9,1.5,1.5],[66,20,2,2],[74,5,1,2.5],[82,16,1.5,3],
+        [88,11,2,1.5],[94,7,1.2,2],[5,40,1,3],[18,35,1.5,2],[28,45,2,1.5],
+        [45,38,1,2],[62,42,1.5,2.5],[78,36,1.2,2],[92,44,1.8,3],[35,28,1,1.5],
+        [55,32,1.5,2],[70,25,1.2,3],[85,30,1,2],[12,52,2,1.5],[68,55,1.5,2],
+      ].map(([x, y, r, dur], i) => (
+        <div key={i} style={{
+          position:"absolute", left:`${x}%`, top:`${y}%`,
+          width: r*2, height: r*2, borderRadius:"50%", background:"white",
+          animation:`star-twinkle ${dur}s ${i*0.3}s ease-in-out infinite`,
+          opacity:0.4,
+        }} />
+      ))}
+
+      {/* Distant mountains */}
+      <svg viewBox="0 0 1440 560" preserveAspectRatio="none"
+        style={{ position:"absolute", bottom:0, left:0, width:"100%", height:"90%" }}>
+        <defs>
+          <linearGradient id="sky-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#060F1D" stopOpacity="0" />
+            <stop offset="100%" stopColor="#060F1D" stopOpacity="0.6" />
+          </linearGradient>
+          <linearGradient id="mtn-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0D2035" />
+            <stop offset="100%" stopColor="#091728" />
+          </linearGradient>
+          <linearGradient id="hill-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0F2A45" />
+            <stop offset="100%" stopColor="#0A1F35" />
+          </linearGradient>
+          <linearGradient id="fg-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0D2235" />
+            <stop offset="100%" stopColor="#060F1D" />
+          </linearGradient>
+          <linearGradient id="marigold-glow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#E5A93D" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#E5A93D" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Moon glow */}
+        <circle cx="1100" cy="90" r="55" fill="#FEF9E7" opacity="0.06" />
+        <circle cx="1100" cy="90" r="34" fill="#FEF9E7" opacity="0.09" />
+        <circle cx="1100" cy="90" r="20" fill="#FEFCE8" opacity="0.18" />
+
+        {/* Far mountains */}
+        <path d="M0 340 L90 200 L180 270 L280 160 L380 240 L480 140 L580 220 L680 170 L780 230 L880 120 L980 200 L1080 130 L1180 210 L1280 155 L1380 195 L1440 175 L1440 560 L0 560Z"
+          fill="url(#mtn-grad)" opacity="0.9" />
+
+        {/* Snow caps */}
+        <path d="M480 140 L510 185 L450 185Z" fill="white" opacity="0.07" />
+        <path d="M880 120 L912 168 L848 168Z" fill="white" opacity="0.07" />
+        <path d="M1080 130 L1108 172 L1052 172Z" fill="white" opacity="0.07" />
+
+        {/* Mid hills */}
+        <path d="M0 390 Q120 310 240 360 Q360 290 480 355 Q600 310 720 370 Q840 300 960 365 Q1080 315 1200 375 Q1320 335 1440 380 L1440 560 L0 560Z"
+          fill="url(#hill-grad)" />
+
+        {/* Foreground */}
+        <path d="M0 440 Q180 410 360 445 Q540 415 720 450 Q900 420 1080 455 Q1260 425 1440 445 L1440 560 L0 560Z"
+          fill="url(#fg-grad)" />
+
+        {/* Track bed */}
+        <rect x="0" y="495" width="1440" height="65" fill="#060F1D" />
+        {/* Rail left */}
+        <rect x="0" y="500" width="1440" height="4" rx="2" fill="#1B4470" opacity="0.8" />
+        {/* Rail right */}
+        <rect x="0" y="516" width="1440" height="4" rx="2" fill="#1B4470" opacity="0.8" />
+        {/* Sleepers */}
+        {Array.from({length:36}).map((_,i) => (
+          <rect key={i} x={i*42} y="498" width="18" height="26" rx="2" fill="#0D2235" />
+        ))}
+
+        {/* Tree silhouettes */}
+        {[[60,430],[140,420],[260,435],[340,425],[420,432],[900,428],[1000,418],[1100,430],[1200,422],[1320,435],[1400,425]].map(([x,y],i) => (
+          <g key={i} transform={`translate(${x},${y})`}>
+            <rect x="-2" y="20" width="4" height="18" fill="#051525" />
+            <ellipse cx="0" cy="10" rx="9" ry="22" fill="#071E32" />
+          </g>
+        ))}
+
+        {/* Marigold glow at horizon */}
+        <rect x="0" y="420" width="1440" height="140" fill="url(#marigold-glow)" />
+
+        {/* Track lights — glowing dots */}
+        {[80,200,360,520,680,840,1000,1160,1320].map((x,i) => (
+          <circle key={i} cx={x} cy="502" r="2.5" fill="#E5A93D" opacity="0.5" />
+        ))}
+
+        {/* Sky fade overlay */}
+        <rect x="0" y="0" width="1440" height="560" fill="url(#sky-fade)" />
+      </svg>
+    </div>
+  );
+}
 
 function TopNav({ screen, setScreen }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isHome = ["search","results","booking","confirmation"].includes(screen);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 48);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const items = [
-    { key: "search", label: "Book a Train", icon: Home },
+    { key: "search", label: "Book Tickets", icon: Home },
     { key: "trips", label: "My Trips", icon: Ticket },
     { key: "explore", label: "Explore", icon: Compass },
-    { key: "help", label: "Help & Support", icon: LifeBuoy },
+    { key: "help", label: "Help", icon: LifeBuoy },
   ];
+
+  const navBg = scrolled || !isHome
+    ? "rgba(9,28,49,0.97)"
+    : "transparent";
+
   return (
-    <header className="sticky top-0 z-40" style={{ background: "var(--blue)", boxShadow: "var(--shadow-sm)" }}>
-      <div className="text-[11px] f-body text-center py-1 px-4" style={{ background: "var(--blue-3)", color: "#B9C6D4" }}>
-        An Indian Railways redesign concept · Helpline 139 for real bookings
+    <>
+      {/* Announcement bar */}
+      <div className="relative z-50 text-center py-2 px-4 f-body text-xs font-medium"
+        style={{ background: "var(--marigold)", color: "var(--blue)" }}>
+        ✦ Concept redesign &mdash; for real bookings call{" "}
+        <span className="f-mono font-semibold">139</span> or visit irctc.co.in
       </div>
-      <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        <button onClick={() => setScreen("search")} className="flex items-center gap-2.5 f-display font-semibold text-white text-lg tracking-tight">
-          <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: "var(--marigold)" }}>
-            <Train size={19} color="var(--blue)" />
-          </div>
-          <span>IRCTC<span className="hidden sm:inline font-normal text-[13px] ml-1.5 opacity-70">| Indian Railways</span></span>
-        </button>
-        <nav className="hidden md:flex items-center gap-1">
-          {items.map((it) => {
-            const Icon = it.icon;
-            const active = screen === it.key || (it.key === "search" && ["search","results","booking","confirmation"].includes(screen));
-            return (
-              <button key={it.key} onClick={() => setScreen(it.key)}
-                className="f-body flex items-center gap-2 px-3 h-11 rounded-lg text-sm font-medium transition-colors"
-                style={{ color: active ? "var(--blue)" : "#D7DEE6", background: active ? "var(--marigold)" : "transparent" }}>
-                <Icon size={16} /> {it.label}
-              </button>
-            );
-          })}
-        </nav>
-        <button onClick={() => setScreen("account")} className="h-11 w-11 rounded-full flex items-center justify-center transition-colors"
-          style={{ background: screen === "account" ? "var(--marigold)" : "var(--blue-2)" }}>
-          <User size={18} color={screen === "account" ? "var(--blue)" : "white"} />
-        </button>
-      </div>
-      <nav className="md:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto">
-        {items.map((it) => {
-          const Icon = it.icon;
-          const active = screen === it.key || (it.key === "search" && ["search","results","booking","confirmation"].includes(screen));
-          return (
-            <button key={it.key} onClick={() => setScreen(it.key)}
-              className="f-body flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium flex-shrink-0"
-              style={{ color: active ? "var(--blue)" : "#D7DEE6", background: active ? "var(--marigold)" : "var(--blue-2)" }}>
-              <Icon size={13} /> {it.label}
+
+      <header className="sticky top-[33px] z-40 transition-all duration-300"
+        style={{
+          background: navBg,
+          backdropFilter: scrolled || !isHome ? "blur(16px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+          boxShadow: scrolled ? "0 4px 32px rgba(6,15,29,0.4)" : "none",
+        }}>
+        <div className="max-w-7xl mx-auto px-4 md:px-8 h-[66px] flex items-center justify-between gap-4">
+
+          {/* Logo */}
+          <button onClick={() => setScreen("search")}
+            className="flex items-center gap-3 flex-shrink-0 group">
+            <div className="h-9 w-9 rounded-xl flex items-center justify-center shadow-md transition-transform group-hover:scale-105"
+              style={{ background: "var(--marigold)" }}>
+              <Train size={18} color="var(--blue)" />
+            </div>
+            <span className="f-serif font-bold text-white text-xl">
+              Rail<span style={{ color: "var(--marigold)" }}>Yatra</span>
+            </span>
+          </button>
+
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-0.5">
+            {items.map((it) => {
+              const Icon = it.icon;
+              const active = screen === it.key || (it.key === "search" && isHome);
+              return (
+                <button key={it.key} onClick={() => setScreen(it.key)}
+                  className="f-body flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                  style={{
+                    color: active ? "var(--blue)" : "rgba(255,255,255,0.82)",
+                    background: active ? "var(--marigold)" : "transparent",
+                    fontWeight: active ? 600 : 400,
+                  }}>
+                  <Icon size={15} /> {it.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* CTA area */}
+          <div className="flex items-center gap-2">
+            <button onClick={() => setScreen("account")}
+              className="hidden md:flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium border transition-all duration-200 hover:bg-white/10"
+              style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.85)" }}>
+              <User size={15} />
+              <span className={screen === "account" ? "text-[var(--marigold)]" : ""}>Account</span>
             </button>
-          );
-        })}
-      </nav>
-    </header>
+            <button onClick={() => { setScreen("search"); setMobileMenuOpen(false); }}
+              className="h-10 px-5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 active:scale-[0.97] shadow-md"
+              style={{ background: "var(--marigold)", color: "var(--blue)" }}>
+              Book Now
+            </button>
+            {/* Mobile hamburger */}
+            <button onClick={() => setMobileMenuOpen(v => !v)}
+              className="md:hidden flex flex-col gap-1.5 p-2"
+              aria-label="Menu">
+              {[0,1,2].map(i => (
+                <span key={i} className="block h-0.5 w-5 rounded-full transition-all"
+                  style={{ background: "rgba(255,255,255,0.8)", transformOrigin:"center",
+                    transform: mobileMenuOpen && i===0 ? "rotate(45deg) translate(3px,3px)" :
+                               mobileMenuOpen && i===1 ? "scaleX(0)" :
+                               mobileMenuOpen && i===2 ? "rotate(-45deg) translate(3px,-3px)" : "none" }} />
+              ))}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden px-4 pb-4 border-t" style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(9,28,49,0.98)" }}>
+            <div className="grid grid-cols-2 gap-2 pt-3">
+              {[...items, { key:"account", label:"Account", icon:User }].map((it) => {
+                const Icon = it.icon;
+                const active = screen === it.key || (it.key === "search" && isHome);
+                return (
+                  <button key={it.key} onClick={() => { setScreen(it.key); setMobileMenuOpen(false); }}
+                    className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                    style={{ color: active ? "var(--blue)" : "rgba(255,255,255,0.8)", background: active ? "var(--marigold)" : "rgba(255,255,255,0.06)" }}>
+                    <Icon size={16} /> {it.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </header>
+    </>
   );
 }
 
@@ -480,64 +725,72 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
 
 function Footer({ onAction }) {
   const cols = [
-    { title: "Quick links", items: ["PNR Status", "Train Between Stations", "Fare Enquiry", "Live Train Status", "Seat Availability", "Cancel / TDR"] },
+    { title: "Quick Tools", items: ["PNR Status", "Train Between Stations", "Fare Enquiry", "Live Train Status", "Seat Availability", "Cancel / TDR"] },
     { title: "Explore", items: ["IRCTC Tourism", "Bharat Gaurav Trains", "Maharajas' Express", "Retiring Rooms", "e-Catering", "Buddhist Circuit"] },
-    { title: "Important", items: ["RTI Disclosure", "Annual Report", "Tenders & Notices", "Careers at IRCTC", "Vigilance Corner"] },
+    { title: "Company", items: ["RTI Disclosure", "Annual Report", "Tenders & Notices", "Careers at IRCTC", "Vigilance Corner"] },
     { title: "Support", items: ["Helpline: 139", "care@irctc.co.in", "Grievance Tracker", "Complaint Status", "FAQs", "Accessibility"] },
   ];
   return (
-    <footer className="f-body" style={{ background: "var(--blue-3)", color: "#B9C6D4" }}>
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 grid grid-cols-2 md:grid-cols-5 gap-8">
+    <footer className="f-body relative" style={{ background: "var(--blue-3)", color: "#8BA5BE" }}>
+      {/* Top border accent */}
+      <div className="h-px w-full" style={{ background:"linear-gradient(90deg,transparent,var(--marigold),transparent)", opacity:0.3 }} />
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-14 grid grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-8 md:gap-10">
+        {/* Brand col */}
         <div className="col-span-2 md:col-span-1">
-          <div className="flex items-center gap-2 f-display font-semibold text-white text-base mb-2">
-            <div className="h-7 w-7 rounded-md flex items-center justify-center" style={{ background: "var(--marigold)" }}>
-              <Train size={15} color="var(--blue)" />
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-9 w-9 rounded-xl flex items-center justify-center" style={{ background: "var(--marigold)" }}>
+              <Train size={18} color="var(--blue)" />
             </div>
-            IRCTC
+            <span className="f-serif font-bold text-white text-xl">Rail<span style={{ color:"var(--marigold)" }}>Yatra</span></span>
           </div>
-          <p className="text-xs leading-relaxed mb-3">Indian Railway Catering &amp; Tourism Corporation Ltd. A Mini Ratna (Category-I) PSU under the Ministry of Railways, Govt. of India.</p>
-          <div className="flex items-center gap-2 mb-3">
-            {["Twitter", "Facebook", "Instagram", "YouTube"].map((s) => (
-              <a key={s} className="h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-semibold hover:bg-white/10 transition-colors cursor-pointer" style={{ background: "var(--blue-2)" }}>
-                {s[0]}
+          <p className="text-xs leading-relaxed mb-5 max-w-[220px]">Indian Railway Catering &amp; Tourism Corporation — Mini Ratna (Category-I) PSU, Ministry of Railways, Govt. of India.</p>
+          <div className="flex items-center gap-2 mb-5">
+            {[["𝕏","Twitter"],["f","Facebook"],["▶","YouTube"]].map(([sym, name]) => (
+              <a key={name} aria-label={name} className="h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold hover:text-white transition-colors cursor-pointer"
+                style={{ background: "rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.1)" }}>
+                {sym}
               </a>
             ))}
           </div>
-          <div className="flex gap-2">
-            <span className="text-[10px] px-2 py-1.5 rounded-md cursor-pointer hover:bg-white/10 transition-colors" style={{ background: "var(--blue-2)" }}>📱 iOS App</span>
-            <span className="text-[10px] px-2 py-1.5 rounded-md cursor-pointer hover:bg-white/10 transition-colors" style={{ background: "var(--blue-2)" }}>📱 Android</span>
+          <div className="flex gap-2 flex-wrap">
+            {["iOS App", "Android"].map(label => (
+              <span key={label} className="text-[11px] px-3 py-1.5 rounded-lg cursor-pointer hover:text-white transition-colors font-medium"
+                style={{ background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.08)" }}>
+                📱 {label}
+              </span>
+            ))}
           </div>
         </div>
+
         {cols.map((c) => (
           <div key={c.title}>
-            <p className="text-white text-xs font-semibold uppercase tracking-wide mb-3">{c.title}</p>
-            <ul className="space-y-2 text-xs">
-              {c.items.map((i) => (
-                <li 
-                  key={i} 
-                  onClick={() => onAction && onAction(i)} 
-                  className="hover:text-white hover:underline cursor-pointer transition-colors"
-                >
-                  {i}
+            <p className="text-white text-xs font-semibold uppercase tracking-widest mb-4 f-mono">{c.title}</p>
+            <ul className="space-y-2.5 text-xs">
+              {c.items.map((item) => (
+                <li key={item} onClick={() => onAction && onAction(item)}
+                  className="hover:text-white cursor-pointer transition-colors duration-150 flex items-start gap-1.5 leading-relaxed">
+                  {item}
                 </li>
               ))}
             </ul>
           </div>
         ))}
       </div>
-      <div className="border-t px-4 md:px-6 py-4 max-w-6xl mx-auto" style={{ borderColor: "#20405F" }}>
+
+      <div className="border-t max-w-7xl mx-auto px-4 md:px-8 py-5" style={{ borderColor:"rgba(255,255,255,0.06)" }}>
         <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center text-[11px]">
-          <div>
-            <span>© Indian Railway Catering &amp; Tourism Corporation Ltd — redesign concept, not the live site.</span>
-            <span className="block sm:inline sm:ml-3 f-mono">CIN: L74899DL1999GOI101707</span>
+          <div className="space-y-1">
+            <span>© IRCTC Ltd — redesign concept · not the live site</span>
+            <span className="block f-mono opacity-50">CIN: L74899DL1999GOI101707</span>
           </div>
-          <div className="flex gap-4">
-            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-white cursor-pointer">Terms of Use</span>
-            <span className="hover:text-white cursor-pointer">Disclaimer</span>
+          <div className="flex gap-5 flex-wrap">
+            {["Privacy Policy","Terms of Use","Disclaimer","Sitemap"].map(l => (
+              <span key={l} className="hover:text-white cursor-pointer transition-colors">{l}</span>
+            ))}
           </div>
         </div>
-        <p className="text-[10px] mt-2 opacity-60">Ministry of Railways · Government of India · A UX redesign concept by the design community — not affiliated with or endorsed by Indian Railways or IRCTC.</p>
+        <p className="text-[10px] mt-3 opacity-40 leading-relaxed">A UX redesign concept — not affiliated with or endorsed by Indian Railways or IRCTC. For real bookings visit irctc.co.in or call 139.</p>
       </div>
     </footer>
   );
@@ -631,35 +884,57 @@ function SearchScreen({ onSearch, onFooterAction }) {
 
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
-      <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-10 pb-16 md:pt-14 md:pb-20 grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-6 items-center">
-          <FadeIn>
-            <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold)" }}>Book a Train</p>
-            <h1 className="f-display text-3xl md:text-[2.6rem] leading-tight font-semibold text-white mt-2 max-w-xl">
-              Find your train, see what's actually available, book without the guesswork.
-            </h1>
-            <p className="text-sm mt-3 max-w-md" style={{ color: "#C7D2DD" }}>
-              Search 13,000+ trains across 7,000+ stations. Honest seat availability, transparent fares, and a payment flow that never leaves you guessing where your money went.
-            </p>
-            <div className="flex items-center gap-4 mt-4">
-              <div className="flex items-center gap-2 text-xs" style={{ color: "#9DB4CA" }}>
-                <ShieldCheck size={14} style={{ color: "var(--green)" }} /> <span>Govt. of India Enterprise</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs" style={{ color: "#9DB4CA" }}>
-                <Clock size={14} style={{ color: "var(--marigold)" }} /> <span>1.2M+ bookings daily</span>
-              </div>
-            </div>
-          </FadeIn>
-          <FadeIn delay={0.15} className="w-full max-w-[420px] mx-auto mt-4 md:mt-0">
-            <LiveRailRadarCard onQuickAction={onFooterAction} />
-          </FadeIn>
-        </div>
-      </section>
 
-      {/* Search Card Container with clean elevated placement */}
-      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 md:-mt-12 relative z-20">
-        <FadeIn delay={0.1}>
-        <div className="rounded-2xl bg-white border p-4 md:p-6 shadow-2xl" style={{ borderColor: "var(--line)" }}>
+      {/* ── HERO SECTION ── */}
+      <section className="relative min-h-[88vh] flex flex-col justify-end overflow-hidden"
+        style={{ background: "linear-gradient(160deg, var(--blue-3) 0%, var(--blue) 55%, #102A4A 100%)" }}>
+
+        <HeroScenery />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto w-full px-4 md:px-8 pt-24 pb-8 md:pt-32 md:pb-10">
+          {/* Badge */}
+          <div className="anim-fade-up" style={{ animationDelay:"0.05s" }}>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-mono tracking-wide"
+              style={{ borderColor:"rgba(229,169,61,0.4)", color:"var(--marigold)", background:"rgba(229,169,61,0.08)" }}>
+              <span className="h-1.5 w-1.5 rounded-full anim-glow-pulse" style={{ background:"var(--marigold)" }} />
+              India's Railways · 13,000+ trains · 7,000+ stations
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1 className="f-serif font-bold text-white mt-5 leading-[1.08] anim-fade-up-md"
+            style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", textShadow:"0 2px 40px rgba(6,15,29,0.6)" }}>
+            Journey across India,<br />
+            <em className="not-italic" style={{ color:"var(--marigold)" }}>without the guesswork.</em>
+          </h1>
+
+          <p className="f-body mt-4 max-w-lg anim-fade-up" style={{ color:"rgba(199,210,221,0.92)", fontSize:"1.05rem", animationDelay:"0.22s", lineHeight:1.65 }}>
+            Honest seat availability. Transparent fares. A booking flow that confirms or refunds clearly — no silent debits, no dead ends.
+          </p>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap gap-3 mt-6 anim-fade-up" style={{ animationDelay:"0.3s" }}>
+            {[
+              { icon: ShieldCheck, label:"Confirmed daily", value:"1.2M+ tickets", color:"var(--green)" },
+              { icon: Clock, label:"Avg booking time", value:"Under 3 min", color:"var(--marigold)" },
+              { icon: BadgeCheck, label:"Payment success", value:"99.4% rate", color:"#60B8F4" },
+            ].map(({ icon: Icon, label, value, color }) => (
+              <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border"
+                style={{ background:"rgba(255,255,255,0.05)", borderColor:"rgba(255,255,255,0.1)", backdropFilter:"blur(8px)" }}>
+                <Icon size={15} style={{ color }} />
+                <div>
+                  <p className="f-mono text-xs" style={{ color:"rgba(255,255,255,0.5)" }}>{label}</p>
+                  <p className="f-body text-sm font-semibold text-white leading-tight">{value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Search card elevated into the hero bottom */}
+        <div className="relative z-20 max-w-5xl mx-auto w-full px-4 md:px-8 pb-0 -mb-16 md:-mb-20 anim-fade-up" style={{ animationDelay:"0.38s" }}>
+          <div className="rounded-3xl glass-card border p-5 md:p-7" style={{ borderColor:"rgba(15,42,69,0.12)", boxShadow:"var(--shadow-lg)" }}>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
             <Field label="From" icon={MapPin} value={from} onChange={setFrom} onLocate={handleLocate} />
             <button
@@ -745,20 +1020,47 @@ function SearchScreen({ onSearch, onFooterAction }) {
             ))}
           </div>
         </div>
-        </FadeIn>
-      </div>
+        </div>
+      </section>
 
-      {/* Full-width Panoramic End-to-End Moving Train Track - 100% Unobstructed & Visible */}
+      {/* Spacer for elevated search card */}
+      <div className="pt-24 md:pt-28" style={{ background:"var(--paper)" }} />
+
+      {/* Train track animation */}
       <EndToEndTrainTrack />
 
-      <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <TrackLine />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FadeIn delay={0.05}><InfoCard icon={ShieldCheck} title="Never a dead end" body="Every payment outcome — success, pending, failed — gets a clear next step. No more silent debits or lost money." /></FadeIn>
-          <FadeIn delay={0.15}><InfoCard icon={Clock} title="Sorted by time, by default" body="Results are ordered by departure time out of the box, with sort by duration and price plus filters one tap away." /></FadeIn>
-          <FadeIn delay={0.25}><InfoCard icon={CalendarDays} title="Live PNR & refunds" body="Track your booking, PNR status, chart preparation, coach-berth allotment and refund timeline in one place — My Trips." /></FadeIn>
+      {/* Feature cards */}
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-14 md:py-20">
+        <FadeIn className="text-center mb-10">
+          <p className="f-mono text-xs tracking-widest uppercase mb-2" style={{ color:"var(--marigold)" }}>Why RailYatra</p>
+          <h2 className="f-serif font-bold text-3xl md:text-4xl" style={{ color:"var(--blue)" }}>
+            Built for the modern traveller
+          </h2>
+          <p className="mt-3 max-w-md mx-auto text-base" style={{ color:"var(--steel)", lineHeight:1.7 }}>
+            Every detail redesigned so booking a train feels as effortless as buying a coffee.
+          </p>
+        </FadeIn>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            { icon: ShieldCheck, title:"Zero dead ends", body:"Every payment outcome — success, pending, failed — gets a clear next step. No silent debits, no lost money.", color:"var(--green)" },
+            { icon: Clock, title:"Time-sorted by default", body:"Results ordered by departure time out of the box. Filter by price, duration, class, or quota — one click.", color:"var(--marigold)" },
+            { icon: CalendarDays, title:"Live PNR & refunds", body:"Track PNR status, chart preparation, coach allotment and refund timeline in one place.", color:"#60B8F4" },
+          ].map(({ icon: Icon, title, body, color }, i) => (
+            <FadeIn key={title} delay={i * 0.1}>
+              <div className="rounded-2xl p-6 border h-full transition-all duration-300 group hover:-translate-y-1"
+                style={{ background:"white", borderColor:"var(--line)", boxShadow:"var(--shadow-sm)" }}>
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                  style={{ background:`color-mix(in srgb,${color} 12%,transparent)` }}>
+                  <Icon size={20} style={{ color }} />
+                </div>
+                <h3 className="f-display font-semibold text-base mb-2" style={{ color:"var(--ink)" }}>{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color:"var(--steel)" }}>{body}</p>
+              </div>
+            </FadeIn>
+          ))}
         </div>
       </div>
+
       <QuickTools />
       <StatsBand />
       <PopularRoutes onSearch={onSearch} />
@@ -1485,7 +1787,185 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 /* ---------------- EXPLORE SCREEN ---------------- */
 
 
+function ToolCard({ icon: Icon, title, body, onClick }) {
+  return (
+    <div onClick={onClick} className="rounded-xl border bg-white p-5 group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1" style={{ borderColor: "var(--line)" }}>
+      <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300 group-hover:bg-blue-50" style={{ background: "var(--paper-2)" }}>
+        <Icon size={20} className="transition-colors duration-300" style={{ color: "var(--blue)" }} />
+      </div>
+      <p className="font-semibold text-[15px]">{title}</p>
+      <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--steel)" }}>{body}</p>
+    </div>
+  );
+}
 
+/* ---------------- HELP & SUPPORT ---------------- */
+
+
+/* ---------------- ACCOUNT ---------------- */
+
+function SimpleInput({ label, icon: Icon, value }) {
+  return (
+    <div>
+      <label className="f-body text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>{label}</label>
+      <div className="mt-1.5 h-11 rounded-xl border flex items-center gap-2 px-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+        <Icon size={16} style={{ color: "var(--steel)" }} />
+        <input defaultValue={value} className="f-body flex-1 outline-none text-[15px] bg-transparent" style={{ color: "var(--ink)" }} />
+      </div>
+    </div>
+  );
+}
+
+function Modal({ title, isOpen, onClose, children }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/40 backdrop-blur-sm transition-opacity" onClick={onClose}>
+      <div 
+        className="bg-white w-full md:w-[480px] max-h-[90vh] md:max-h-[80vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col anim-fade-up overflow-hidden" 
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="h-14 px-5 border-b flex items-center justify-between" style={{ borderColor: "var(--line)" }}>
+          <h3 className="font-semibold text-lg" style={{ color: "var(--ink)" }}>{title}</h3>
+          <button onClick={onClose} className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <X size={16} style={{ color: "var(--steel)" }} />
+          </button>
+        </div>
+        <div className="p-5 overflow-y-auto">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileModal({ isOpen, onClose }) {
+  return (
+    <Modal title="Edit Profile" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-4">
+        <SimpleInput label="First Name" icon={User} value="Ananya" />
+        <SimpleInput label="Last Name" icon={User} value="Rao" />
+        <SimpleInput label="Mobile Number" icon={Phone} value="+91 98765 43210" />
+        <SimpleInput label="Email Address" icon={Mail} value="ananya.rao@example.com" />
+        <button className="mt-2 w-full h-12 rounded-xl f-body font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform active:scale-[0.99]" style={{ background: "var(--marigold)", color: "var(--blue)" }} onClick={onClose}>Save Changes</button>
+      </div>
+    </Modal>
+  );
+}
+
+function PassengersModal({ isOpen, onClose }) {
+  const passengers = [
+    { name: "Ananya Rao", age: 28, gender: "Female", pref: "Lower" },
+    { name: "Rohan Rao", age: 30, gender: "Male", pref: "Upper" },
+    { name: "Sita Devi", age: 58, gender: "Female", pref: "Lower" },
+    { name: "Arjun Rao", age: 8, gender: "Male", pref: "No Preference" },
+  ];
+  return (
+    <Modal title="Saved Passengers" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        {passengers.map((p, i) => (
+          <div key={i} className="p-3 border rounded-xl flex items-center justify-between bg-gray-50" style={{ borderColor: "var(--line)" }}>
+            <div>
+              <p className="font-semibold text-[15px]">{p.name}</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{p.age} yrs, {p.gender} • {p.pref} Berth</p>
+            </div>
+            <button className="text-sm font-medium transition-colors hover:text-blue-700" style={{ color: "var(--blue)" }}>Edit</button>
+          </div>
+        ))}
+        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
+          <User size={16} /> Add New Passenger
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function PaymentsModal({ isOpen, onClose }) {
+  return (
+    <Modal title="Payment Methods" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-green-100"><CreditCard size={18} className="text-green-700" /></div>
+          <div className="flex-1">
+            <p className="font-semibold text-[15px]">HDFC Bank Credit Card</p>
+            <p className="text-xs" style={{ color: "var(--steel)" }}>•••• 4242</p>
+          </div>
+        </div>
+        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-blue-100"><Landmark size={18} className="text-blue-700" /></div>
+          <div className="flex-1">
+            <p className="font-semibold text-[15px]">Google Pay</p>
+            <p className="text-xs" style={{ color: "var(--steel)" }}>ananya@okaxis</p>
+          </div>
+        </div>
+        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
+          <CreditCard size={16} /> Add Payment Method
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function KycModal({ isOpen, onClose }) {
+  return (
+    <Modal title="KYC / Aadhaar" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col items-center py-6 text-center">
+        <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+          <BadgeCheck size={32} className="text-green-600" />
+        </div>
+        <h4 className="font-semibold text-lg">Verified Successfully</h4>
+        <p className="text-sm mt-1 max-w-[250px]" style={{ color: "var(--steel)" }}>Your Aadhaar ending in <strong>8392</strong> is linked to your IRCTC account.</p>
+        <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+          Update Aadhaar
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
+function LanguageModal({ isOpen, onClose }) {
+  const [lang, setLang] = useState("English");
+  return (
+    <Modal title="Select Language" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-2">
+        {["English", "हिंदी (Hindi)", "తెలుగు (Telugu)", "தமிழ் (Tamil)", "বাংলা (Bengali)", "मराठी (Marathi)"].map(l => (
+          <button key={l} onClick={() => { setLang(l); setTimeout(onClose, 200); }} className="p-3 border rounded-xl text-left font-medium text-[15px] transition-colors hover:bg-gray-50 flex items-center justify-between" style={{ borderColor: lang === l ? "var(--blue)" : "var(--line)", background: lang === l ? "var(--blue-3)" : "transparent" }}>
+            <span>{l}</span>
+            {lang === l && <Check size={16} style={{ color: "var(--blue)" }} />}
+          </button>
+        ))}
+      </div>
+    </Modal>
+  );
+}
+
+function NotificationsModal({ isOpen, onClose }) {
+  const [toggles, setToggles] = useState({ sms: true, wa: true, push: false });
+  const items = [
+    { id: "sms", icon: MessageSquareText, title: "SMS Updates", desc: "PNR status and journey alerts via SMS." },
+    { id: "wa", icon: PhoneCall, title: "WhatsApp Updates", desc: "Get tickets directly on WhatsApp." },
+    { id: "push", icon: Bell, title: "Push Notifications", desc: "App alerts for Tatkal and availability." }
+  ];
+  return (
+    <Modal title="Notifications" isOpen={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3">
+        {items.map(n => (
+          <div key={n.id} onClick={() => setToggles(p => ({ ...p, [n.id]: !p[n.id] }))} className="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center"><n.icon size={18} style={{ color: "var(--blue)" }} /></div>
+              <div>
+                <p className="font-semibold text-[14px]">{n.title}</p>
+                <p className="text-[11px]" style={{ color: "var(--steel)" }}>{n.desc}</p>
+              </div>
+            </div>
+            <div className="w-11 h-6 rounded-full relative transition-colors duration-300" style={{ background: toggles[n.id] ? "var(--green)" : "var(--steel)" }}>
+              <div className="absolute top-1 h-4 w-4 bg-white rounded-full shadow-sm transition-all duration-300" style={{ left: toggles[n.id] ? "calc(100% - 20px)" : "4px" }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Modal>
+  );
+}
 
 
 /* ---------------- shared page hero ---------------- */

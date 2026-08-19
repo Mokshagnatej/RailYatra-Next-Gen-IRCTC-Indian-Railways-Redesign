@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import {
-  ChevronDown, ChevronUp, Search, PhoneCall, Mail, MessageSquareText
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
+  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
 } from 'lucide-react';
+import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
 
 function HelpScreen() {
