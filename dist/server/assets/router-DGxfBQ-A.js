@@ -3,7 +3,7 @@ import { HeadContent, Link, Outlet, Scripts, createFileRoute, createRootRouteWit
 import { jsx, jsxs } from "react/jsx-runtime";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C3UsUDcg.css";
+var styles_default = "/assets/styles-D7nG4F8F.css";
 //#endregion
 //#region src/routes/__root.tsx
 function NotFoundComponent() {
@@ -74,7 +74,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$1 = createRootRouteWithContext()({
+var Route$6 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -153,7 +153,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$1.useRouteContext();
+	const { queryClient } = Route$6.useRouteContext();
 	return /* @__PURE__ */ jsx(QueryClientProvider, {
 		client: queryClient,
 		children: /* @__PURE__ */ jsx(Outlet, {})
@@ -161,12 +161,149 @@ function RootComponent() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var $$splitComponentImporter = () => import("./routes-BXCHpVrO.js");
-var title = "RailYatra — Book Indian train tickets without the guesswork";
-var description = "Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place.";
+var $$splitComponentImporter$5 = () => import("./routes-D6LT6Em-.js");
+var title$5 = "RailYatra — Book Indian train tickets without the guesswork";
+var description$5 = "Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place.";
+var Route$5 = createFileRoute("/")({
+	head: () => ({ meta: [
+		{ title: title$5 },
+		{
+			name: "description",
+			content: description$5
+		},
+		{
+			property: "og:title",
+			content: title$5
+		},
+		{
+			property: "og:description",
+			content: description$5
+		},
+		{
+			property: "og:type",
+			content: "website"
+		},
+		{
+			name: "twitter:card",
+			content: "summary_large_image"
+		}
+	] }),
+	component: lazyRouteComponent($$splitComponentImporter$5, "component")
+});
 //#endregion
-//#region src/routeTree.gen.ts
-var rootRouteChildren = { IndexRoute: createFileRoute("/")({
+//#region src/routes/account.tsx
+var $$splitComponentImporter$4 = () => import("./account-DmNz1Bb6.js");
+var title$4 = "My Account — RailYatra | Profile, Passengers, KYC & Preferences";
+var description$4 = "Manage your passenger master list, linked payment methods, Aadhaar KYC verification, and booking preferences on RailYatra.";
+var Route$4 = createFileRoute("/account")({
+	head: () => ({ meta: [
+		{ title: title$4 },
+		{
+			name: "description",
+			content: description$4
+		},
+		{
+			property: "og:title",
+			content: title$4
+		},
+		{
+			property: "og:description",
+			content: description$4
+		},
+		{
+			property: "og:type",
+			content: "website"
+		}
+	] }),
+	component: lazyRouteComponent($$splitComponentImporter$4, "component")
+});
+//#endregion
+//#region src/routes/explore.tsx
+var $$splitComponentImporter$3 = () => import("./explore-CcxmOCKh.js");
+var title$3 = "Explore — RailYatra | Tourism Packages & Interactive Rail Tools";
+var description$3 = "Discover curated IRCTC Tourism packages, luxury train circuits, and interactive rail tools on RailYatra.";
+var Route$3 = createFileRoute("/explore")({
+	head: () => ({ meta: [
+		{ title: title$3 },
+		{
+			name: "description",
+			content: description$3
+		},
+		{
+			property: "og:title",
+			content: title$3
+		},
+		{
+			property: "og:description",
+			content: description$3
+		},
+		{
+			property: "og:type",
+			content: "website"
+		}
+	] }),
+	component: lazyRouteComponent($$splitComponentImporter$3, "component")
+});
+//#endregion
+//#region src/routes/help.tsx
+var $$splitComponentImporter$2 = () => import("./help-CrVdSBMe.js");
+var title$2 = "Help & Support — RailYatra | 24x7 Helpline, Grievances & FAQs";
+var description$2 = "Get 24x7 railway helpline support, track grievance status, and find answers for refunds, Tatkal rules, and booking queries on RailYatra.";
+var Route$2 = createFileRoute("/help")({
+	head: () => ({ meta: [
+		{ title: title$2 },
+		{
+			name: "description",
+			content: description$2
+		},
+		{
+			property: "og:title",
+			content: title$2
+		},
+		{
+			property: "og:description",
+			content: description$2
+		},
+		{
+			property: "og:type",
+			content: "website"
+		}
+	] }),
+	component: lazyRouteComponent($$splitComponentImporter$2, "component")
+});
+//#endregion
+//#region src/routes/results.tsx
+var $$splitComponentImporter$1 = () => import("./results-C1NWtttU.js");
+var title$1 = "Train Search Results — RailYatra | Availability & Multi-Class Fares";
+var description$1 = "Compare train schedules, real-time seat availability, confirmation probabilities, and book tickets on RailYatra.";
+var Route$1 = createFileRoute("/results")({
+	head: () => ({ meta: [
+		{ title: title$1 },
+		{
+			name: "description",
+			content: description$1
+		},
+		{
+			property: "og:title",
+			content: title$1
+		},
+		{
+			property: "og:description",
+			content: description$1
+		},
+		{
+			property: "og:type",
+			content: "website"
+		}
+	] }),
+	component: lazyRouteComponent($$splitComponentImporter$1, "component")
+});
+//#endregion
+//#region src/routes/trips.tsx
+var $$splitComponentImporter = () => import("./trips-BhQ4Uk6U.js");
+var title = "My Trips — RailYatra | E-Tickets, PNR Status & Live Tracking";
+var description = "Access upcoming journeys, digital QR e-tickets, live train running status, and track TDR refunds on RailYatra.";
+var Route = createFileRoute("/trips")({
 	head: () => ({ meta: [
 		{ title },
 		{
@@ -184,19 +321,45 @@ var rootRouteChildren = { IndexRoute: createFileRoute("/")({
 		{
 			property: "og:type",
 			content: "website"
-		},
-		{
-			name: "twitter:card",
-			content: "summary_large_image"
 		}
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")
-}).update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => Route$1
-}) };
-var routeTree = Route$1._addFileChildren(rootRouteChildren)._addFileTypes();
+});
+//#endregion
+//#region src/routeTree.gen.ts
+var rootRouteChildren = {
+	IndexRoute: Route$5.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => Route$6
+	}),
+	AccountRoute: Route$4.update({
+		id: "/account",
+		path: "/account",
+		getParentRoute: () => Route$6
+	}),
+	ExploreRoute: Route$3.update({
+		id: "/explore",
+		path: "/explore",
+		getParentRoute: () => Route$6
+	}),
+	HelpRoute: Route$2.update({
+		id: "/help",
+		path: "/help",
+		getParentRoute: () => Route$6
+	}),
+	ResultsRoute: Route$1.update({
+		id: "/results",
+		path: "/results",
+		getParentRoute: () => Route$6
+	}),
+	TripsRoute: Route.update({
+		id: "/trips",
+		path: "/trips",
+		getParentRoute: () => Route$6
+	})
+};
+var routeTree = Route$6._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

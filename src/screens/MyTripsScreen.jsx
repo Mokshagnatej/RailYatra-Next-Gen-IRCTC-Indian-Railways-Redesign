@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
+  Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
+  Check, X, ScanLine, Download, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, Filter, Star, Info
 } from 'lucide-react';
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
+import { Modal } from '../components/common/Shared';
 
 function TripsScreen() {
   const [tab, setTab] = useState("upcoming");

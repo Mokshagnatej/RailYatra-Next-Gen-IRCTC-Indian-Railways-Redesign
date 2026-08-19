@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag 
+  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag,
+  Search, Train, Wallet, Hotel, Check, ShieldCheck, ArrowRight
 } from 'lucide-react';
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
+import { Modal, ToolCard } from '../components/common/Shared';
 
 export default function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState("");

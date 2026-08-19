@@ -1971,13 +1971,45 @@ function NotificationsModal({ isOpen, onClose }) {
 /* ---------------- shared page hero ---------------- */
 
 
-/* ---------------- APP SHELL ---------------- */
+export default function App({ initialScreen }) {
+  const getInitialScreen = () => {
+    if (initialScreen) return initialScreen;
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname.replace(/^\//, "").toLowerCase();
+      if (["explore", "trips", "help", "account", "results", "booking"].includes(path)) {
+        return path;
+      }
+    }
+    return "search";
+  };
 
-export default function App() {
-  const [screen, setScreen] = useState("search");
+  const [screen, setScreenState] = useState(getInitialScreen);
   const [selection, setSelection] = useState(null);
   const [booking, setBooking] = useState(null);
   const [quickModal, setQuickModal] = useState(null);
+
+  const setScreen = (newScreen) => {
+    setScreenState(newScreen);
+    if (typeof window !== "undefined") {
+      const targetPath = newScreen === "search" ? "/" : `/${newScreen}`;
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({ screen: newScreen }, "", targetPath);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.replace(/^\//, "").toLowerCase();
+      if (["explore", "trips", "help", "account", "results", "booking"].includes(path)) {
+        setScreenState(path);
+      } else {
+        setScreenState("search");
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   const handleFooterAction = (action) => {
     if (action === "PNR Status") {

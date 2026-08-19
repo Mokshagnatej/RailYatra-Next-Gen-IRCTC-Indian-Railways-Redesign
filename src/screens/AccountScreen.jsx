@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
+  User, Users, CreditCard, BadgeCheck, Languages, Bell, LogOut, ChevronRight,
   Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
+  Filter, Star, Info, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, LifeBuoy, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight
 } from 'lucide-react';
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
+import { 
+  ProfileModal, PassengersModal, PaymentsModal, KycModal, LanguageModal, NotificationsModal 
+} from '../components/common/Shared';
 
 function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);

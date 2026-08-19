@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo as useMemo$1, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-import { AlertTriangle, ArrowLeftRight, BadgeCheck as BadgeCheck$1, Bell, CalendarDays, Check as Check$1, CheckCircle2, ChevronDown, ChevronRight, Clock, Compass, CreditCard, Download as Download$1, Home, Hotel as Hotel$1, Info, Landmark, LifeBuoy, Loader2, LocateFixed, Mail as Mail$1, MapPin, Phone, PhoneCall as PhoneCall$1, Printer, Search as Search$1, Share2, ShieldCheck, SlidersHorizontal, Sparkles, Ticket, Train as Train$1, User, Users as Users$1, Utensils, Wallet as Wallet$1, X as X$1 } from "lucide-react";
+import { AlertTriangle, ArrowLeftRight, BadgeCheck, Bell, CalendarDays, Check, CheckCircle2, ChevronDown, ChevronRight, ChevronUp, Clock, Compass, CreditCard, Download, Home, Hotel, Info, Landmark, Languages, LifeBuoy, Loader2, LocateFixed, LogOut, Mail, MapPin, MessageSquareText, Phone, PhoneCall, Printer, ScanLine, Search, Share2, ShieldCheck, SlidersHorizontal, Sparkles, Ticket, Train, User, Users, Utensils, Wallet, X } from "lucide-react";
 //#region src/components/ConfirmationScreen.jsx
 var COACHES = [
 	"B2",
@@ -63,7 +63,7 @@ function Row({ label, value, mono = true, strong }) {
 	});
 }
 function FauxQR({ seed, size = 92 }) {
-	const cells = useMemo$1(() => {
+	const cells = useMemo(() => {
 		const rnd = seeded(seed);
 		return Array.from({ length: 100 }).map(() => rnd(10) > 4);
 	}, [seed]);
@@ -192,7 +192,7 @@ function ConfirmationScreen({ booking, onTrips, onHome }) {
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "h-10 w-10 rounded-lg flex items-center justify-center",
 									style: { background: "var(--blue)" },
-									children: /* @__PURE__ */ jsx(Train$1, {
+									children: /* @__PURE__ */ jsx(Train, {
 										size: 18,
 										color: "var(--marigold)"
 									})
@@ -288,7 +288,7 @@ function ConfirmationScreen({ booking, onTrips, onHome }) {
 							children: [/* @__PURE__ */ jsxs("p", {
 								className: "f-display font-semibold text-sm mb-3 flex items-center gap-2",
 								style: { color: "var(--ink)" },
-								children: [/* @__PURE__ */ jsx(Users$1, {
+								children: [/* @__PURE__ */ jsx(Users, {
 									size: 15,
 									style: { color: "var(--blue)" }
 								}), " Passengers & berth allotment"]
@@ -404,7 +404,7 @@ function ConfirmationScreen({ booking, onTrips, onHome }) {
 									/* @__PURE__ */ jsxs("p", {
 										className: "f-display font-semibold text-sm mb-2 flex items-center gap-2",
 										style: { color: "var(--ink)" },
-										children: [/* @__PURE__ */ jsx(Wallet$1, {
+										children: [/* @__PURE__ */ jsx(Wallet, {
 											size: 15,
 											style: { color: "var(--blue)" }
 										}), " Fare breakdown"]
@@ -444,7 +444,7 @@ function ConfirmationScreen({ booking, onTrips, onHome }) {
 										borderColor: "var(--line)",
 										color: "var(--blue)"
 									},
-									children: [/* @__PURE__ */ jsx(Download$1, { size: 15 }), " Download e-ticket"]
+									children: [/* @__PURE__ */ jsx(Download, { size: 15 }), " Download e-ticket"]
 								}),
 								/* @__PURE__ */ jsxs("button", {
 									className: "flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border transition-transform active:scale-[0.98]",
@@ -1093,7 +1093,7 @@ var TOOLS = [
 	{
 		key: "live",
 		label: "Live Train Status",
-		icon: Train$1,
+		icon: Train,
 		placeholder: "Train number or name (e.g. 12951 or Rajdhani)",
 		cta: "Track train",
 		samples: [
@@ -1105,7 +1105,7 @@ var TOOLS = [
 	{
 		key: "fare",
 		label: "Fare Enquiry",
-		icon: Wallet$1,
+		icon: Wallet,
 		placeholder: "Route or train (e.g. NDLS to BCT)",
 		cta: "Show fare",
 		samples: [
@@ -1117,7 +1117,7 @@ var TOOLS = [
 	{
 		key: "seat",
 		label: "Seat Availability",
-		icon: Users$1,
+		icon: Users,
 		placeholder: "Train number and date (e.g. 12951)",
 		cta: "Check seats",
 		samples: [
@@ -1228,7 +1228,7 @@ function QuickTools() {
 							className: "flex-1 h-12 rounded-xl border flex items-center gap-2 px-3.5 bg-white transition-all focus-within:ring-2 focus-within:ring-blue-100",
 							style: { borderColor: "var(--line)" },
 							children: [
-								/* @__PURE__ */ jsx(Search$1, {
+								/* @__PURE__ */ jsx(Search, {
 									size: 17,
 									style: { color: "var(--blue)" }
 								}),
@@ -1506,7 +1506,7 @@ function PopularRoutes({ onSearch }) {
 								className: "flex items-center gap-2 f-mono text-xs font-semibold",
 								style: { color: "var(--blue)" },
 								children: [
-									/* @__PURE__ */ jsx(Train$1, {
+									/* @__PURE__ */ jsx(Train, {
 										size: 12,
 										style: { color: "var(--marigold)" }
 									}),
@@ -1570,7 +1570,7 @@ var SERVICES = [
 		body: "General, Tatkal, Premium Tatkal, Ladies, Senior Citizen, Divyangjan and Defence quotas. Live seat pressure shown on every date before you pick one. Supports up to 6 passengers per booking."
 	},
 	{
-		icon: Hotel$1,
+		icon: Hotel,
 		title: "Retiring rooms & stays",
 		body: "Book station retiring rooms at 900+ stations and IRCTC-partnered hotels alongside your ticket. AC/non-AC rooms and dorms available, with 4-hour and 12-hour stay options."
 	},
@@ -1590,7 +1590,7 @@ var SERVICES = [
 		body: "TDR filing, refund timeline, and bank settlement stage shown day by day. 98.4% of eligible refunds settled within 5 working days — never a black box."
 	},
 	{
-		icon: PhoneCall$1,
+		icon: PhoneCall,
 		title: "Help that answers",
 		body: "24×7 helpline (139), email support, in-app chat, and a grievance tracker with a reference number and SLA clock. Average first response under 4 hours."
 	}
@@ -1752,7 +1752,7 @@ var TRUST = [
 		v: "Availability cached and refreshed every 30 seconds across 13,000+ trains."
 	},
 	{
-		icon: BadgeCheck$1,
+		icon: BadgeCheck,
 		k: "Verified refunds",
 		v: "98.4% of eligible refunds settled within 5 working days. Track every step under My Trips."
 	}
@@ -1906,6 +1906,387 @@ function PageHero({ eyebrow, title, sub, small }) {
 				})
 			]
 		})
+	});
+}
+//#endregion
+//#region src/components/common/Shared.jsx
+function Modal$1({ title, isOpen, onClose, children }) {
+	if (!isOpen) return null;
+	return /* @__PURE__ */ jsx("div", {
+		className: "fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/40 backdrop-blur-sm transition-opacity",
+		onClick: onClose,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "bg-white w-full md:w-[480px] max-h-[90vh] md:max-h-[80vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col anim-fade-up overflow-hidden",
+			onClick: (e) => e.stopPropagation(),
+			children: [/* @__PURE__ */ jsxs("div", {
+				className: "h-14 px-5 border-b flex items-center justify-between",
+				style: { borderColor: "var(--line)" },
+				children: [/* @__PURE__ */ jsx("h3", {
+					className: "font-semibold text-lg",
+					style: { color: "var(--ink)" },
+					children: title
+				}), /* @__PURE__ */ jsx("button", {
+					onClick: onClose,
+					className: "h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors",
+					children: /* @__PURE__ */ jsx(X, {
+						size: 16,
+						style: { color: "var(--steel)" }
+					})
+				})]
+			}), /* @__PURE__ */ jsx("div", {
+				className: "p-5 overflow-y-auto",
+				children
+			})]
+		})
+	});
+}
+function SimpleInput({ label, icon: Icon, value }) {
+	return /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
+		className: "f-body text-xs font-semibold uppercase tracking-wide",
+		style: { color: "var(--steel)" },
+		children: label
+	}), /* @__PURE__ */ jsxs("div", {
+		className: "mt-1.5 h-11 rounded-xl border flex items-center gap-2 px-3 bg-gray-50",
+		style: { borderColor: "var(--line)" },
+		children: [/* @__PURE__ */ jsx(Icon, {
+			size: 16,
+			style: { color: "var(--steel)" }
+		}), /* @__PURE__ */ jsx("input", {
+			defaultValue: value,
+			className: "f-body flex-1 outline-none text-[15px] bg-transparent",
+			style: { color: "var(--ink)" }
+		})]
+	})] });
+}
+function ProfileModal({ isOpen, onClose }) {
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "Edit Profile",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-col gap-4",
+			children: [
+				/* @__PURE__ */ jsx(SimpleInput, {
+					label: "First Name",
+					icon: User,
+					value: "Ananya"
+				}),
+				/* @__PURE__ */ jsx(SimpleInput, {
+					label: "Last Name",
+					icon: User,
+					value: "Rao"
+				}),
+				/* @__PURE__ */ jsx(SimpleInput, {
+					label: "Mobile Number",
+					icon: Phone,
+					value: "+91 98765 43210"
+				}),
+				/* @__PURE__ */ jsx(SimpleInput, {
+					label: "Email Address",
+					icon: Mail,
+					value: "ananya.rao@example.com"
+				}),
+				/* @__PURE__ */ jsx("button", {
+					className: "mt-2 w-full h-12 rounded-xl f-body font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform active:scale-[0.99]",
+					style: {
+						background: "var(--marigold)",
+						color: "var(--blue)"
+					},
+					onClick: onClose,
+					children: "Save Changes"
+				})
+			]
+		})
+	});
+}
+function PassengersModal({ isOpen, onClose }) {
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "Saved Passengers",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-col gap-3",
+			children: [[
+				{
+					name: "Ananya Rao",
+					age: 28,
+					gender: "Female",
+					pref: "Lower"
+				},
+				{
+					name: "Rohan Rao",
+					age: 30,
+					gender: "Male",
+					pref: "Upper"
+				},
+				{
+					name: "Sita Devi",
+					age: 58,
+					gender: "Female",
+					pref: "Lower"
+				},
+				{
+					name: "Arjun Rao",
+					age: 8,
+					gender: "Male",
+					pref: "No Preference"
+				}
+			].map((p, i) => /* @__PURE__ */ jsxs("div", {
+				className: "p-3 border rounded-xl flex items-center justify-between bg-gray-50",
+				style: { borderColor: "var(--line)" },
+				children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
+					className: "font-semibold text-[15px]",
+					children: p.name
+				}), /* @__PURE__ */ jsxs("p", {
+					className: "text-xs mt-0.5",
+					style: { color: "var(--steel)" },
+					children: [
+						p.age,
+						" yrs, ",
+						p.gender,
+						" • ",
+						p.pref,
+						" Berth"
+					]
+				})] }), /* @__PURE__ */ jsx("button", {
+					className: "text-sm font-medium transition-colors hover:text-blue-700",
+					style: { color: "var(--blue)" },
+					children: "Edit"
+				})]
+			}, i)), /* @__PURE__ */ jsxs("button", {
+				className: "mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50",
+				style: {
+					borderColor: "var(--line)",
+					color: "var(--blue)"
+				},
+				children: [/* @__PURE__ */ jsx(User, { size: 16 }), " Add New Passenger"]
+			})]
+		})
+	});
+}
+function PaymentsModal({ isOpen, onClose }) {
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "Payment Methods",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-col gap-3",
+			children: [
+				/* @__PURE__ */ jsxs("div", {
+					className: "p-4 border rounded-xl flex items-center gap-3 bg-gray-50",
+					style: { borderColor: "var(--line)" },
+					children: [/* @__PURE__ */ jsx("div", {
+						className: "h-10 w-10 rounded-lg flex items-center justify-center bg-green-100",
+						children: /* @__PURE__ */ jsx(CreditCard, {
+							size: 18,
+							className: "text-green-700"
+						})
+					}), /* @__PURE__ */ jsxs("div", {
+						className: "flex-1",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "font-semibold text-[15px]",
+							children: "HDFC Bank Credit Card"
+						}), /* @__PURE__ */ jsx("p", {
+							className: "text-xs",
+							style: { color: "var(--steel)" },
+							children: "•••• 4242"
+						})]
+					})]
+				}),
+				/* @__PURE__ */ jsxs("div", {
+					className: "p-4 border rounded-xl flex items-center gap-3 bg-gray-50",
+					style: { borderColor: "var(--line)" },
+					children: [/* @__PURE__ */ jsx("div", {
+						className: "h-10 w-10 rounded-lg flex items-center justify-center bg-blue-100",
+						children: /* @__PURE__ */ jsx(Landmark, {
+							size: 18,
+							className: "text-blue-700"
+						})
+					}), /* @__PURE__ */ jsxs("div", {
+						className: "flex-1",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "font-semibold text-[15px]",
+							children: "Google Pay"
+						}), /* @__PURE__ */ jsx("p", {
+							className: "text-xs",
+							style: { color: "var(--steel)" },
+							children: "ananya@okaxis"
+						})]
+					})]
+				}),
+				/* @__PURE__ */ jsxs("button", {
+					className: "mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50",
+					style: {
+						borderColor: "var(--line)",
+						color: "var(--blue)"
+					},
+					children: [/* @__PURE__ */ jsx(CreditCard, { size: 16 }), " Add Payment Method"]
+				})
+			]
+		})
+	});
+}
+function KycModal({ isOpen, onClose }) {
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "KYC / Aadhaar",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-col items-center py-6 text-center",
+			children: [
+				/* @__PURE__ */ jsx("div", {
+					className: "h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4",
+					children: /* @__PURE__ */ jsx(BadgeCheck, {
+						size: 32,
+						className: "text-green-600"
+					})
+				}),
+				/* @__PURE__ */ jsx("h4", {
+					className: "font-semibold text-lg",
+					children: "Verified Successfully"
+				}),
+				/* @__PURE__ */ jsxs("p", {
+					className: "text-sm mt-1 max-w-[250px]",
+					style: { color: "var(--steel)" },
+					children: [
+						"Your Aadhaar ending in ",
+						/* @__PURE__ */ jsx("strong", { children: "8392" }),
+						" is linked to your IRCTC account."
+					]
+				}),
+				/* @__PURE__ */ jsx("button", {
+					className: "mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors",
+					style: { borderColor: "var(--line)" },
+					children: "Update Aadhaar"
+				})
+			]
+		})
+	});
+}
+function LanguageModal({ isOpen, onClose }) {
+	const [lang, setLang] = useState("English");
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "Select Language",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsx("div", {
+			className: "flex flex-col gap-2",
+			children: [
+				"English",
+				"हिंदी (Hindi)",
+				"తెలుగు (Telugu)",
+				"தமிழ் (Tamil)",
+				"বাংলা (Bengali)",
+				"मराठी (Marathi)"
+			].map((l) => /* @__PURE__ */ jsxs("button", {
+				onClick: () => {
+					setLang(l);
+					setTimeout(onClose, 200);
+				},
+				className: "p-3 border rounded-xl text-left font-medium text-[15px] transition-colors hover:bg-gray-50 flex items-center justify-between",
+				style: {
+					borderColor: lang === l ? "var(--blue)" : "var(--line)",
+					background: lang === l ? "var(--blue-3)" : "transparent"
+				},
+				children: [/* @__PURE__ */ jsx("span", { children: l }), lang === l && /* @__PURE__ */ jsx(Check, {
+					size: 16,
+					style: { color: "var(--blue)" }
+				})]
+			}, l))
+		})
+	});
+}
+function NotificationsModal({ isOpen, onClose }) {
+	const [toggles, setToggles] = useState({
+		sms: true,
+		wa: true,
+		push: false
+	});
+	return /* @__PURE__ */ jsx(Modal$1, {
+		title: "Notifications",
+		isOpen,
+		onClose,
+		children: /* @__PURE__ */ jsx("div", {
+			className: "flex flex-col gap-3",
+			children: [
+				{
+					id: "sms",
+					icon: MessageSquareText,
+					title: "SMS Updates",
+					desc: "PNR status and journey alerts via SMS."
+				},
+				{
+					id: "wa",
+					icon: PhoneCall,
+					title: "WhatsApp Updates",
+					desc: "Get tickets directly on WhatsApp."
+				},
+				{
+					id: "push",
+					icon: Bell,
+					title: "Push Notifications",
+					desc: "App alerts for Tatkal and availability."
+				}
+			].map((n) => /* @__PURE__ */ jsxs("div", {
+				onClick: () => setToggles((p) => ({
+					...p,
+					[n.id]: !p[n.id]
+				})),
+				className: "flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors",
+				style: { borderColor: "var(--line)" },
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "flex items-center gap-3",
+					children: [/* @__PURE__ */ jsx("div", {
+						className: "h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center",
+						children: /* @__PURE__ */ jsx(n.icon, {
+							size: 18,
+							style: { color: "var(--blue)" }
+						})
+					}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
+						className: "font-semibold text-[14px]",
+						children: n.title
+					}), /* @__PURE__ */ jsx("p", {
+						className: "text-[11px]",
+						style: { color: "var(--steel)" },
+						children: n.desc
+					})] })]
+				}), /* @__PURE__ */ jsx("div", {
+					className: "w-11 h-6 rounded-full relative transition-colors duration-300",
+					style: { background: toggles[n.id] ? "var(--green)" : "var(--steel)" },
+					children: /* @__PURE__ */ jsx("div", {
+						className: "absolute top-1 h-4 w-4 bg-white rounded-full shadow-sm transition-all duration-300",
+						style: { left: toggles[n.id] ? "calc(100% - 20px)" : "4px" }
+					})
+				})]
+			}, n.id))
+		})
+	});
+}
+function ToolCard({ icon: Icon, title, body, onClick }) {
+	return /* @__PURE__ */ jsxs("div", {
+		onClick,
+		className: "rounded-xl border bg-white p-5 group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1",
+		style: { borderColor: "var(--line)" },
+		children: [
+			/* @__PURE__ */ jsx("div", {
+				className: "h-10 w-10 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300 group-hover:bg-blue-50",
+				style: { background: "var(--paper-2)" },
+				children: /* @__PURE__ */ jsx(Icon, {
+					size: 20,
+					className: "transition-colors duration-300",
+					style: { color: "var(--blue)" }
+				})
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "font-semibold text-[15px]",
+				children: title
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "text-xs mt-1 leading-relaxed",
+				style: { color: "var(--steel)" },
+				children: body
+			})
+		]
 	});
 }
 //#endregion
@@ -2344,7 +2725,7 @@ function ExploreScreen() {
 					}, p.name))
 				})]
 			}),
-			/* @__PURE__ */ jsxs(Modal, {
+			/* @__PURE__ */ jsxs(Modal$1, {
 				isOpen: !!activeModal,
 				onClose: () => setActiveModal(null),
 				title: activeModal?.title || activeModal?.name,
@@ -3179,7 +3560,7 @@ function TripsScreen() {
 					})
 				]
 			}),
-			/* @__PURE__ */ jsx(Modal, {
+			/* @__PURE__ */ jsx(Modal$1, {
 				isOpen: activeModal === "live_tracking",
 				onClose: () => setActiveModal(null),
 				title: "Live Tracking",
@@ -3278,7 +3659,7 @@ function TripsScreen() {
 					})]
 				})
 			}),
-			/* @__PURE__ */ jsx(Modal, {
+			/* @__PURE__ */ jsx(Modal$1, {
 				isOpen: activeModal === "cancel_ticket",
 				onClose: () => setActiveModal(null),
 				title: "Cancel Ticket",
@@ -3349,7 +3730,7 @@ function TripsScreen() {
 					]
 				})
 			}),
-			/* @__PURE__ */ jsx(Modal, {
+			/* @__PURE__ */ jsx(Modal$1, {
 				isOpen: activeModal === "ticket_details",
 				onClose: () => setActiveModal(null),
 				title: "E-Ticket Details",
@@ -3398,7 +3779,7 @@ function TripsScreen() {
 											className: "w-16 h-px bg-white/30 my-1 relative",
 											children: /* @__PURE__ */ jsx("div", {
 												className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-												children: /* @__PURE__ */ jsx(Train$1, {
+												children: /* @__PURE__ */ jsx(Train, {
 													size: 12,
 													className: "text-white/80"
 												})
@@ -3603,6 +3984,7 @@ function AccountScreen({ onLogout }) {
 //#region src/screens/HelpScreen.jsx
 function HelpScreen() {
 	const [openFaq, setOpenFaq] = useState(0);
+	const [query, setQuery] = useState("");
 	const faqs = [
 		{
 			q: "My money was debited but I didn't get a ticket. What now?",
@@ -3637,6 +4019,11 @@ function HelpScreen() {
 			a: "Use the e-Catering service available during booking or on My Trips after booking. Select your delivery station from 500+ FSSAI-approved partner restaurants. Meals are delivered to your seat by restaurant staff at the station. Minimum order time is 2 hours before the train arrives at the station."
 		}
 	];
+	const filteredFaqs = useMemo(() => {
+		if (!query.trim()) return faqs;
+		const q = query.toLowerCase();
+		return faqs.filter((f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q));
+	}, [query]);
 	return /* @__PURE__ */ jsxs("div", {
 		style: { background: "var(--paper)" },
 		className: "min-h-screen f-body",
@@ -3650,7 +4037,8 @@ function HelpScreen() {
 				className: "max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10",
 				children: [
 					/* @__PURE__ */ jsxs("a", {
-						className: "rounded-xl bg-white border p-4 flex items-center gap-3",
+						href: "tel:139",
+						className: "rounded-xl bg-white border p-4 flex items-center gap-3 hover:shadow-md transition-shadow",
 						style: { borderColor: "var(--line)" },
 						children: [/* @__PURE__ */ jsx("div", {
 							className: "h-10 w-10 rounded-full flex items-center justify-center",
@@ -3669,7 +4057,8 @@ function HelpScreen() {
 						})] })]
 					}),
 					/* @__PURE__ */ jsxs("a", {
-						className: "rounded-xl bg-white border p-4 flex items-center gap-3",
+						href: "mailto:care@irctc.co.in",
+						className: "rounded-xl bg-white border p-4 flex items-center gap-3 hover:shadow-md transition-shadow",
 						style: { borderColor: "var(--line)" },
 						children: [/* @__PURE__ */ jsx("div", {
 							className: "h-10 w-10 rounded-full flex items-center justify-center",
@@ -3687,8 +4076,9 @@ function HelpScreen() {
 							children: "Email support"
 						})] })]
 					}),
-					/* @__PURE__ */ jsxs("a", {
-						className: "rounded-xl bg-white border p-4 flex items-center gap-3",
+					/* @__PURE__ */ jsxs("button", {
+						onClick: () => alert("Grievance tracking portal active · Enter reference number on RailMadad"),
+						className: "rounded-xl bg-white border p-4 flex items-center gap-3 text-left hover:shadow-md transition-shadow",
 						style: { borderColor: "var(--line)" },
 						children: [/* @__PURE__ */ jsx("div", {
 							className: "h-10 w-10 rounded-full flex items-center justify-center",
@@ -3713,28 +4103,51 @@ function HelpScreen() {
 				children: [
 					/* @__PURE__ */ jsxs("div", {
 						className: "relative mb-6",
-						children: [/* @__PURE__ */ jsx(Search, {
-							size: 16,
-							className: "absolute left-3 top-1/2 -translate-y-1/2",
-							style: { color: "var(--steel)" }
-						}), /* @__PURE__ */ jsx("input", {
-							placeholder: "Search help articles — refunds, PNR, Tatkal, KYC…",
-							className: "w-full h-12 rounded-xl border pl-10 pr-4 text-sm outline-none bg-white",
-							style: { borderColor: "var(--line)" }
-						})]
+						children: [
+							/* @__PURE__ */ jsx(Search, {
+								size: 16,
+								className: "absolute left-3.5 top-1/2 -translate-y-1/2",
+								style: { color: "var(--steel)" }
+							}),
+							/* @__PURE__ */ jsx("input", {
+								placeholder: "Search help articles — refunds, PNR, Tatkal, KYC…",
+								value: query,
+								onChange: (e) => setQuery(e.target.value),
+								className: "w-full h-12 rounded-xl border pl-10 pr-4 text-sm outline-none bg-white shadow-sm",
+								style: { borderColor: "var(--line)" }
+							}),
+							query && /* @__PURE__ */ jsx("button", {
+								onClick: () => setQuery(""),
+								className: "absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs",
+								children: "✕"
+							})
+						]
 					}),
-					/* @__PURE__ */ jsx("p", {
-						className: "f-display font-semibold mb-3",
-						children: "Frequently asked"
+					/* @__PURE__ */ jsxs("div", {
+						className: "flex justify-between items-center mb-3",
+						children: [/* @__PURE__ */ jsx("p", {
+							className: "f-display font-semibold",
+							children: "Frequently asked questions"
+						}), query && /* @__PURE__ */ jsxs("span", {
+							className: "text-xs text-gray-500",
+							children: [filteredFaqs.length, " results"]
+						})]
 					}),
 					/* @__PURE__ */ jsx("div", {
 						className: "rounded-xl border bg-white overflow-hidden",
 						style: { borderColor: "var(--line)" },
-						children: faqs.map((f, i) => /* @__PURE__ */ jsxs("div", {
-							style: { borderBottom: i < faqs.length - 1 ? `1px solid var(--line)` : "none" },
+						children: filteredFaqs.length === 0 ? /* @__PURE__ */ jsxs("div", {
+							className: "p-8 text-center text-sm text-gray-500",
+							children: [
+								"No matching help articles found for \"",
+								query,
+								"\"."
+							]
+						}) : filteredFaqs.map((f, i) => /* @__PURE__ */ jsxs("div", {
+							style: { borderBottom: i < filteredFaqs.length - 1 ? `1px solid var(--line)` : "none" },
 							children: [/* @__PURE__ */ jsxs("button", {
 								onClick: () => setOpenFaq(openFaq === i ? -1 : i),
-								className: "w-full flex items-center justify-between gap-4 px-5 py-4 text-left",
+								className: "w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-gray-50/70 transition-colors",
 								children: [/* @__PURE__ */ jsx("span", {
 									className: "text-sm font-medium",
 									children: f.q
@@ -5082,7 +5495,7 @@ function TrainLoader({ label }) {
 			children: /* @__PURE__ */ jsx("div", {
 				className: "absolute",
 				style: { animation: "train-cross 1.8s linear infinite" },
-				children: /* @__PURE__ */ jsx(Train$1, {
+				children: /* @__PURE__ */ jsx(Train, {
 					size: 26,
 					style: { color: "var(--blue)" }
 				})
@@ -5095,7 +5508,7 @@ function TrainLoader({ label }) {
 	});
 }
 function ConfettiBurst() {
-	const pieces = useMemo$1(() => Array.from({ length: 14 }).map((_, i) => ({
+	const pieces = useMemo(() => Array.from({ length: 14 }).map((_, i) => ({
 		left: 6 + i * 90 / 14 + i % 3 * 2,
 		delay: i % 7 * .15,
 		color: [
@@ -5617,7 +6030,7 @@ function TopNav({ screen, setScreen }) {
 					children: [/* @__PURE__ */ jsx("div", {
 						className: "h-9 w-9 rounded-xl flex items-center justify-center shadow-md transition-transform group-hover:scale-105",
 						style: { background: "var(--marigold)" },
-						children: /* @__PURE__ */ jsx(Train$1, {
+						children: /* @__PURE__ */ jsx(Train, {
 							size: 18,
 							color: "var(--blue)"
 						})
@@ -5746,7 +6159,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
 			if (cb) cb();
 		}, 600);
 	};
-	return /* @__PURE__ */ jsxs(Modal$1, {
+	return /* @__PURE__ */ jsxs(Modal, {
 		isOpen: !!modal,
 		onClose,
 		title: modal.type === "pnr" ? "PNR Status Enquiry" : modal.type === "trains_between_stations" ? "Trains Between Stations" : modal.type === "fare_enquiry" ? "Fare Enquiry Calculator" : modal.type === "live" ? "Live Train Running Status" : modal.type === "seat" ? "Seat Availability Check" : modal.type === "cancel_tdr" ? "Cancel Ticket & TDR Refund" : modal.type === "retiring_rooms" ? "Station Retiring Rooms" : modal.type === "e_catering" ? "e-Catering Onboard Meal Booking" : "IRCTC Railway Service",
@@ -6013,7 +6426,7 @@ function Footer({ onAction }) {
 							children: [/* @__PURE__ */ jsx("div", {
 								className: "h-9 w-9 rounded-xl flex items-center justify-center",
 								style: { background: "var(--marigold)" },
-								children: /* @__PURE__ */ jsx(Train$1, {
+								children: /* @__PURE__ */ jsx(Train, {
 									size: 18,
 									color: "var(--blue)"
 								})
@@ -6371,7 +6784,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
 										color: "var(--marigold)"
 									},
 									{
-										icon: BadgeCheck$1,
+										icon: BadgeCheck,
 										label: "Payment success",
 										value: "99.4% rate",
 										color: "#60B8F4"
@@ -6644,7 +7057,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
 										background: "var(--marigold)",
 										color: "var(--blue)"
 									},
-									children: [/* @__PURE__ */ jsx(Search$1, { size: 18 }), " Search trains"]
+									children: [/* @__PURE__ */ jsx(Search, { size: 18 }), " Search trains"]
 								}),
 								/* @__PURE__ */ jsx("div", {
 									className: "mt-4 flex flex-wrap gap-2",
@@ -6785,7 +7198,7 @@ function Field({ label, icon: Icon, value, onChange, onLocate }) {
 			setLocating(false);
 		}
 	};
-	const filtered = useMemo$1(() => {
+	const filtered = useMemo(() => {
 		if (!search) return (stationsData_default || []).slice(0, 35);
 		const q = search.toLowerCase().trim();
 		return (stationsData_default || []).filter((s) => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q) || s.state.toLowerCase().includes(q) || s.zoneCode && s.zoneCode.toLowerCase().includes(q)).slice(0, 35);
@@ -6901,7 +7314,7 @@ function Field({ label, icon: Icon, value, onChange, onLocate }) {
 						className: "flex items-center gap-3",
 						children: [/* @__PURE__ */ jsx("div", {
 							className: `w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${station.isJunction ? "bg-amber-100 text-amber-900" : "bg-slate-100 text-slate-700"}`,
-							children: /* @__PURE__ */ jsx(Train$1, { size: 15 })
+							children: /* @__PURE__ */ jsx(Train, { size: 15 })
 						}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsxs("div", {
 							className: "flex items-center gap-1.5",
 							children: [/* @__PURE__ */ jsx("span", {
@@ -6972,7 +7385,7 @@ function ResultsScreen({ onBook, onBack }) {
 	const [trainTypes, setTrainTypes] = useState([]);
 	const [classesF, setClassesF] = useState([]);
 	const toggle = (arr, setArr, v) => setArr(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
-	const filtered = useMemo$1(() => {
+	const filtered = useMemo(() => {
 		let list = [...TRAINS];
 		if (trainTypes.length) list = list.filter((t) => trainTypes.includes(t.type));
 		if (classesF.length) list = list.filter((t) => Object.keys(t.classes).some((c) => classesF.includes(c)));
@@ -7369,7 +7782,7 @@ function ResultsScreen({ onBook, onBack }) {
 								children: "Filters"
 							}), /* @__PURE__ */ jsx("button", {
 								onClick: () => setFiltersOpen(false),
-								children: /* @__PURE__ */ jsx(X$1, { size: 20 })
+								children: /* @__PURE__ */ jsx(X, { size: 20 })
 							})]
 						}),
 						FilterPanel,
@@ -7463,7 +7876,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 								border: `1.5px solid ${i <= step ? "var(--blue)" : "var(--line)"}`,
 								transform: i === step ? "scale(1.1)" : "scale(1)"
 							},
-							children: i < step ? /* @__PURE__ */ jsx(Check$1, { size: 14 }) : i + 1
+							children: i < step ? /* @__PURE__ */ jsx(Check, { size: 14 }) : i + 1
 						}), /* @__PURE__ */ jsx("span", {
 							className: "text-[11px] font-medium",
 							style: { color: i <= step ? "var(--ink)" : "var(--steel)" },
@@ -7661,7 +8074,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 									}), /* @__PURE__ */ jsxs("div", {
 										className: "mt-1.5 h-11 rounded-lg border flex items-center gap-2 px-3",
 										style: { borderColor: "var(--line)" },
-										children: [/* @__PURE__ */ jsx(Mail$1, {
+										children: [/* @__PURE__ */ jsx(Mail, {
 											size: 14,
 											style: { color: "var(--steel)" }
 										}), /* @__PURE__ */ jsx("input", {
@@ -8072,7 +8485,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 									/* @__PURE__ */ jsxs("button", {
 										className: "flex-1 h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border",
 										style: { borderColor: "var(--line)" },
-										children: [/* @__PURE__ */ jsx(Download$1, { size: 15 }), " Ticket"]
+										children: [/* @__PURE__ */ jsx(Download, { size: 15 }), " Ticket"]
 									}),
 									/* @__PURE__ */ jsxs("button", {
 										className: "flex-1 h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border",
@@ -8097,7 +8510,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 		})
 	});
 }
-function Modal$1({ title, isOpen, onClose, children }) {
+function Modal({ title, isOpen, onClose, children }) {
 	if (!isOpen) return null;
 	return /* @__PURE__ */ jsx("div", {
 		className: "fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/40 backdrop-blur-sm transition-opacity",
@@ -8115,7 +8528,7 @@ function Modal$1({ title, isOpen, onClose, children }) {
 				}), /* @__PURE__ */ jsx("button", {
 					onClick: onClose,
 					className: "h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors",
-					children: /* @__PURE__ */ jsx(X$1, {
+					children: /* @__PURE__ */ jsx(X, {
 						size: 16,
 						style: { color: "var(--steel)" }
 					})
@@ -8127,11 +8540,49 @@ function Modal$1({ title, isOpen, onClose, children }) {
 		})
 	});
 }
-function App() {
-	const [screen, setScreen] = useState("search");
+function App({ initialScreen }) {
+	const getInitialScreen = () => {
+		if (initialScreen) return initialScreen;
+		if (typeof window !== "undefined") {
+			const path = window.location.pathname.replace(/^\//, "").toLowerCase();
+			if ([
+				"explore",
+				"trips",
+				"help",
+				"account",
+				"results",
+				"booking"
+			].includes(path)) return path;
+		}
+		return "search";
+	};
+	const [screen, setScreenState] = useState(getInitialScreen);
 	const [selection, setSelection] = useState(null);
 	const [booking, setBooking] = useState(null);
 	const [quickModal, setQuickModal] = useState(null);
+	const setScreen = (newScreen) => {
+		setScreenState(newScreen);
+		if (typeof window !== "undefined") {
+			const targetPath = newScreen === "search" ? "/" : `/${newScreen}`;
+			if (window.location.pathname !== targetPath) window.history.pushState({ screen: newScreen }, "", targetPath);
+		}
+	};
+	useEffect(() => {
+		const handlePopState = () => {
+			const path = window.location.pathname.replace(/^\//, "").toLowerCase();
+			if ([
+				"explore",
+				"trips",
+				"help",
+				"account",
+				"results",
+				"booking"
+			].includes(path)) setScreenState(path);
+			else setScreenState("search");
+		};
+		window.addEventListener("popstate", handlePopState);
+		return () => window.removeEventListener("popstate", handlePopState);
+	}, []);
 	const handleFooterAction = (action) => {
 		if (action === "PNR Status") setQuickModal({ type: "pnr" });
 		else if (action === "Train Between Stations") setQuickModal({ type: "trains_between_stations" });
@@ -8206,7 +8657,4 @@ function App() {
 	});
 }
 //#endregion
-//#region src/routes/index.tsx?tsr-split=component
-var SplitComponent = App;
-//#endregion
-export { SplitComponent as component };
+export { App as t };
