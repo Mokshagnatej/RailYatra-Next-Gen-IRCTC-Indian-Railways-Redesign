@@ -213,3 +213,37 @@
 .train-track-texture {
   background: repeating-linear-gradient(90deg, #475569 0 8px, transparent 8px 18px);
 }
+
+/* Cultural pattern & warm hero animations */
+@keyframes dot-network-pulse {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+@keyframes dot-network-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes warm-orb-drift {
+  0% { transform: translate(-50%, -50%) translateX(0) translateY(0); }
+  100% { transform: translate(-50%, -50%) translateX(12px) translateY(-8px); }
+}
+
+@keyframes glow-border {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(229, 169, 61, 0.1),
+                0 24px 48px -12px rgba(229, 169, 61, 0.12),
+                0 8px 24px rgba(15, 42, 69, 0.06);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(229, 169, 61, 0.25),
+                0 24px 48px -12px rgba(229, 169, 61, 0.2),
+                0 8px 24px rgba(15, 42, 69, 0.08);
+  }
+}
+
+@keyframes rangoli-reveal {
+  from { opacity: 0; transform: scale(0.9) rotate(-5deg); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); }
+}

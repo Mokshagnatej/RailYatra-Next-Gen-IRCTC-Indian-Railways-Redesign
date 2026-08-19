@@ -15,6 +15,7 @@ import stationsData from "../data/stationsData.json";
 import stationList from "../data/stationList.json";
 import ExploreScreen from "../screens/ExploreScreen";
 import PageHero from "./common/PageHero";
+import { RangoliOverlay, DotNetwork, WarmGlowOrbs, WarmGradientWave } from "./common/CulturalPatterns.jsx";
 
 import TripsScreen from "../screens/MyTripsScreen";
 
@@ -85,7 +86,7 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 .ticket-notch::before{ left:-8px; }
 .ticket-notch::after{ right:-8px; }
 
-/* Hero star field */
+/* Hero star field (legacy) */
 .star-field{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
 .star{ position:absolute; border-radius:50%; background:white; }
 
@@ -96,11 +97,25 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 .reveal-delay-2{ transition-delay: 0.2s; }
 .reveal-delay-3{ transition-delay: 0.3s; }
 
-/* glass card */
+/* glass card — warm hero glassmorphism */
 .glass-card{
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.glass-hero-card{
+  background: rgba(255,255,255,0.68);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(229,169,61,0.22);
+  box-shadow: 0 0 0 1px rgba(229,169,61,0.1), 0 24px 48px -12px rgba(229,169,61,0.12), 0 8px 24px rgba(15,42,69,0.06);
+  animation: glow-border 4s ease-in-out infinite;
+}
+.glass-stat-badge{
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229,169,61,0.18);
 }
 
 @keyframes train-cross{
@@ -188,6 +203,22 @@ input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0
 @keyframes slide-in-up{
   from{ opacity:0; transform:translateY(32px); }
   to{ opacity:1; transform:translateY(0); }
+}
+@keyframes dot-network-pulse{
+  0%,100%{ opacity:0; transform:scale(0.8); }
+  50%{ opacity:0.5; transform:scale(1.4); }
+}
+@keyframes dot-network-float{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-2px); }
+}
+@keyframes warm-orb-drift{
+  0%{ transform:translate(-50%,-50%) translateX(0) translateY(0); }
+  100%{ transform:translate(-50%,-50%) translateX(12px) translateY(-8px); }
+}
+@keyframes glow-border{
+  0%,100%{ box-shadow: 0 0 0 1px rgba(229,169,61,0.1), 0 24px 48px -12px rgba(229,169,61,0.12), 0 8px 24px rgba(15,42,69,0.06); }
+  50%{ box-shadow: 0 0 0 1px rgba(229,169,61,0.25), 0 24px 48px -12px rgba(229,169,61,0.2), 0 8px 24px rgba(15,42,69,0.08); }
 }
 .anim-fade-up{ animation: fade-up 0.6s cubic-bezier(.16,1,.3,1) both; }
 .anim-fade-up-md{ animation: fade-up-md 0.75s cubic-bezier(.16,1,.3,1) both; }
@@ -327,104 +358,22 @@ function FadeIn({ children, delay = 0, className = "", hero = false }) {
   );
 }
 
-/* ── Scenic SVG hero illustration ── */
+/* ── Warm Light Hero Scenery (Cultural + Futuristic) ── */
 function HeroScenery() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {/* Star field */}
-      {[
-        [8,12,1.5,2],[14,22,1,3],[22,8,2,1.5],[32,18,1,2.5],[40,6,1.8,2],
-        [50,14,1.2,3],[58,9,1.5,1.5],[66,20,2,2],[74,5,1,2.5],[82,16,1.5,3],
-        [88,11,2,1.5],[94,7,1.2,2],[5,40,1,3],[18,35,1.5,2],[28,45,2,1.5],
-        [45,38,1,2],[62,42,1.5,2.5],[78,36,1.2,2],[92,44,1.8,3],[35,28,1,1.5],
-        [55,32,1.5,2],[70,25,1.2,3],[85,30,1,2],[12,52,2,1.5],[68,55,1.5,2],
-      ].map(([x, y, r, dur], i) => (
-        <div key={i} style={{
-          position:"absolute", left:`${x}%`, top:`${y}%`,
-          width: r*2, height: r*2, borderRadius:"50%", background:"white",
-          animation:`star-twinkle ${dur}s ${i*0.3}s ease-in-out infinite`,
-          opacity:0.4,
-        }} />
-      ))}
+      {/* Warm gradient wave backdrop */}
+      <WarmGradientWave />
 
-      {/* Distant mountains */}
-      <svg viewBox="0 0 1440 560" preserveAspectRatio="none"
-        style={{ position:"absolute", bottom:0, left:0, width:"100%", height:"90%" }}>
-        <defs>
-          <linearGradient id="sky-fade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#060F1D" stopOpacity="0" />
-            <stop offset="100%" stopColor="#060F1D" stopOpacity="0.6" />
-          </linearGradient>
-          <linearGradient id="mtn-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0D2035" />
-            <stop offset="100%" stopColor="#091728" />
-          </linearGradient>
-          <linearGradient id="hill-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0F2A45" />
-            <stop offset="100%" stopColor="#0A1F35" />
-          </linearGradient>
-          <linearGradient id="fg-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0D2235" />
-            <stop offset="100%" stopColor="#060F1D" />
-          </linearGradient>
-          <linearGradient id="marigold-glow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E5A93D" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#E5A93D" stopOpacity="0" />
-          </linearGradient>
-        </defs>
+      {/* Railway network dot animation */}
+      <DotNetwork count={18} />
 
-        {/* Moon glow */}
-        <circle cx="1100" cy="90" r="55" fill="#FEF9E7" opacity="0.06" />
-        <circle cx="1100" cy="90" r="34" fill="#FEF9E7" opacity="0.09" />
-        <circle cx="1100" cy="90" r="20" fill="#FEFCE8" opacity="0.18" />
+      {/* Warm floating golden orbs */}
+      <WarmGlowOrbs count={7} />
 
-        {/* Far mountains */}
-        <path d="M0 340 L90 200 L180 270 L280 160 L380 240 L480 140 L580 220 L680 170 L780 230 L880 120 L980 200 L1080 130 L1180 210 L1280 155 L1380 195 L1440 175 L1440 560 L0 560Z"
-          fill="url(#mtn-grad)" opacity="0.9" />
-
-        {/* Snow caps */}
-        <path d="M480 140 L510 185 L450 185Z" fill="white" opacity="0.07" />
-        <path d="M880 120 L912 168 L848 168Z" fill="white" opacity="0.07" />
-        <path d="M1080 130 L1108 172 L1052 172Z" fill="white" opacity="0.07" />
-
-        {/* Mid hills */}
-        <path d="M0 390 Q120 310 240 360 Q360 290 480 355 Q600 310 720 370 Q840 300 960 365 Q1080 315 1200 375 Q1320 335 1440 380 L1440 560 L0 560Z"
-          fill="url(#hill-grad)" />
-
-        {/* Foreground */}
-        <path d="M0 440 Q180 410 360 445 Q540 415 720 450 Q900 420 1080 455 Q1260 425 1440 445 L1440 560 L0 560Z"
-          fill="url(#fg-grad)" />
-
-        {/* Track bed */}
-        <rect x="0" y="495" width="1440" height="65" fill="#060F1D" />
-        {/* Rail left */}
-        <rect x="0" y="500" width="1440" height="4" rx="2" fill="#1B4470" opacity="0.8" />
-        {/* Rail right */}
-        <rect x="0" y="516" width="1440" height="4" rx="2" fill="#1B4470" opacity="0.8" />
-        {/* Sleepers */}
-        {Array.from({length:36}).map((_,i) => (
-          <rect key={i} x={i*42} y="498" width="18" height="26" rx="2" fill="#0D2235" />
-        ))}
-
-        {/* Tree silhouettes */}
-        {[[60,430],[140,420],[260,435],[340,425],[420,432],[900,428],[1000,418],[1100,430],[1200,422],[1320,435],[1400,425]].map(([x,y],i) => (
-          <g key={i} transform={`translate(${x},${y})`}>
-            <rect x="-2" y="20" width="4" height="18" fill="#051525" />
-            <ellipse cx="0" cy="10" rx="9" ry="22" fill="#071E32" />
-          </g>
-        ))}
-
-        {/* Marigold glow at horizon */}
-        <rect x="0" y="420" width="1440" height="140" fill="url(#marigold-glow)" />
-
-        {/* Track lights — glowing dots */}
-        {[80,200,360,520,680,840,1000,1160,1320].map((x,i) => (
-          <circle key={i} cx={x} cy="502" r="2.5" fill="#E5A93D" opacity="0.5" />
-        ))}
-
-        {/* Sky fade overlay */}
-        <rect x="0" y="0" width="1440" height="560" fill="url(#sky-fade)" />
-      </svg>
+      {/* Cultural rangoli overlays — subtle decorative corners */}
+      <RangoliOverlay position="top-right" size={340} opacity={0.04} />
+      <RangoliOverlay position="bottom-left" size={280} opacity={0.035} />
     </div>
   );
 }
@@ -447,9 +396,19 @@ function TopNav({ screen, setScreen }) {
     { key: "help", label: "Help", icon: LifeBuoy },
   ];
 
-  const navBg = scrolled || !isHome
+  /* Light hero: warm frosted glass when on hero, solid cream on scroll.
+     Non-home pages: dark navy nav (unchanged). */
+  const onLightHero = isHome && !scrolled;
+  const navBg = !isHome
     ? "rgba(9,28,49,0.97)"
-    : "transparent";
+    : scrolled
+      ? "rgba(255,249,240,0.96)"
+      : "rgba(255,255,255,0.15)";
+
+  const textColor = onLightHero ? "var(--blue)" : !isHome ? "rgba(255,255,255,0.82)" : "var(--blue)";
+  const textInactive = onLightHero ? "rgba(15,42,69,0.6)" : !isHome ? "rgba(255,255,255,0.65)" : "rgba(15,42,69,0.6)";
+  const hamburgerColor = onLightHero ? "var(--blue)" : !isHome ? "rgba(255,255,255,0.8)" : "var(--blue)";
+  const accountBorder = onLightHero ? "rgba(15,42,69,0.15)" : !isHome ? "rgba(255,255,255,0.2)" : "rgba(15,42,69,0.15)";
 
   return (
     <>
@@ -463,9 +422,10 @@ function TopNav({ screen, setScreen }) {
       <header className="sticky top-[33px] z-40 transition-all duration-300"
         style={{
           background: navBg,
-          backdropFilter: scrolled || !isHome ? "blur(16px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
-          boxShadow: scrolled ? "0 4px 32px rgba(6,15,29,0.4)" : "none",
+          backdropFilter: scrolled || !isHome ? "blur(16px)" : onLightHero ? "blur(12px)" : "none",
+          WebkitBackdropFilter: scrolled || !isHome ? "blur(16px)" : onLightHero ? "blur(12px)" : "none",
+          borderBottom: scrolled && isHome ? "1px solid rgba(192,131,33,0.12)" : scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+          boxShadow: scrolled && isHome ? "0 4px 24px rgba(192,131,33,0.08)" : scrolled ? "0 4px 32px rgba(6,15,29,0.4)" : "none",
         }}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-[66px] flex items-center justify-between gap-4">
 
@@ -476,7 +436,7 @@ function TopNav({ screen, setScreen }) {
               style={{ background: "var(--marigold)" }}>
               <Train size={18} color="var(--blue)" />
             </div>
-            <span className="f-serif font-bold text-white text-xl">
+            <span className="f-serif font-bold text-xl" style={{ color: "var(--blue)" }}>
               Rail<span style={{ color: "var(--marigold)" }}>Yatra</span>
             </span>
           </button>
@@ -488,9 +448,9 @@ function TopNav({ screen, setScreen }) {
               const active = screen === it.key || (it.key === "search" && isHome);
               return (
                 <button key={it.key} onClick={() => setScreen(it.key)}
-                  className="f-body flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                  className="f-body flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium transition-all duration-200"
                   style={{
-                    color: active ? "var(--blue)" : "rgba(255,255,255,0.82)",
+                    color: active ? "var(--blue)" : textInactive,
                     background: active ? "var(--marigold)" : "transparent",
                     fontWeight: active ? 600 : 400,
                   }}>
@@ -503,10 +463,10 @@ function TopNav({ screen, setScreen }) {
           {/* CTA area */}
           <div className="flex items-center gap-2">
             <button onClick={() => setScreen("account")}
-              className="hidden md:flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium border transition-all duration-200 hover:bg-white/10"
-              style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.85)" }}>
+              className="hidden md:flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium border transition-all duration-200"
+              style={{ borderColor: accountBorder, color: textColor }}>
               <User size={15} />
-              <span className={screen === "account" ? "text-[var(--marigold)]" : ""}>Account</span>
+              <span className={screen === "account" ? "text-[var(--marigold)]" : ""}>{screen === "account" ? "Account" : "Account"}</span>
             </button>
             <button onClick={() => { setScreen("search"); setMobileMenuOpen(false); }}
               className="h-10 px-5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 active:scale-[0.97] shadow-md"
@@ -519,7 +479,7 @@ function TopNav({ screen, setScreen }) {
               aria-label="Menu">
               {[0,1,2].map(i => (
                 <span key={i} className="block h-0.5 w-5 rounded-full transition-all"
-                  style={{ background: "rgba(255,255,255,0.8)", transformOrigin:"center",
+                  style={{ background: hamburgerColor, transformOrigin:"center",
                     transform: mobileMenuOpen && i===0 ? "rotate(45deg) translate(3px,3px)" :
                                mobileMenuOpen && i===1 ? "scaleX(0)" :
                                mobileMenuOpen && i===2 ? "rotate(-45deg) translate(3px,-3px)" : "none" }} />
@@ -530,7 +490,10 @@ function TopNav({ screen, setScreen }) {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden px-4 pb-4 border-t" style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(9,28,49,0.98)" }}>
+          <div className="md:hidden px-4 pb-4 border-t" style={{
+            borderColor: isHome ? "rgba(192,131,33,0.12)" : "rgba(255,255,255,0.08)",
+            background: isHome ? "rgba(255,249,240,0.98)" : "rgba(9,28,49,0.98)"
+          }}>
             <div className="grid grid-cols-2 gap-2 pt-3">
               {[...items, { key:"account", label:"Account", icon:User }].map((it) => {
                 const Icon = it.icon;
@@ -538,7 +501,10 @@ function TopNav({ screen, setScreen }) {
                 return (
                   <button key={it.key} onClick={() => { setScreen(it.key); setMobileMenuOpen(false); }}
                     className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium transition-all"
-                    style={{ color: active ? "var(--blue)" : "rgba(255,255,255,0.8)", background: active ? "var(--marigold)" : "rgba(255,255,255,0.06)" }}>
+                    style={{
+                      color: active ? "var(--blue)" : isHome ? "var(--blue)" : "rgba(255,255,255,0.8)",
+                      background: active ? "var(--marigold)" : isHome ? "rgba(15,42,69,0.04)" : "rgba(255,255,255,0.06)"
+                    }}>
                     <Icon size={16} /> {it.label}
                   </button>
                 );
@@ -885,9 +851,9 @@ function SearchScreen({ onSearch, onFooterAction }) {
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
 
-      {/* ── HERO SECTION ── */}
+      {/* ── HERO SECTION (Warm Light Theme) ── */}
       <section className="relative min-h-[88vh] flex flex-col justify-end overflow-hidden"
-        style={{ background: "linear-gradient(160deg, var(--blue-3) 0%, var(--blue) 55%, #102A4A 100%)" }}>
+        style={{ background: "linear-gradient(160deg, #FFF9F0 0%, #FEF3E2 40%, #F7F4EC 100%)" }}>
 
         <HeroScenery />
 
@@ -896,45 +862,44 @@ function SearchScreen({ onSearch, onFooterAction }) {
           {/* Badge */}
           <div className="anim-fade-up" style={{ animationDelay:"0.05s" }}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-mono tracking-wide"
-              style={{ borderColor:"rgba(229,169,61,0.4)", color:"var(--marigold)", background:"rgba(229,169,61,0.08)" }}>
+              style={{ borderColor:"rgba(192,131,33,0.3)", color:"var(--marigold-2)", background:"rgba(229,169,61,0.08)" }}>
               <span className="h-1.5 w-1.5 rounded-full anim-glow-pulse" style={{ background:"var(--marigold)" }} />
               India's Railways · 13,000+ trains · 7,000+ stations
             </span>
           </div>
 
           {/* Headline */}
-          <h1 className="f-serif font-bold text-white mt-5 leading-[1.08] anim-fade-up-md"
-            style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", textShadow:"0 2px 40px rgba(6,15,29,0.6)" }}>
+          <h1 className="f-serif font-bold mt-5 leading-[1.08] anim-fade-up-md"
+            style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", color:"var(--blue)" }}>
             Journey across India,<br />
-            <em className="not-italic" style={{ color:"var(--marigold)" }}>without the guesswork.</em>
+            <em className="not-italic" style={{ color:"var(--marigold-2)" }}>without the guesswork.</em>
           </h1>
 
-          <p className="f-body mt-4 max-w-lg anim-fade-up" style={{ color:"rgba(199,210,221,0.92)", fontSize:"1.05rem", animationDelay:"0.22s", lineHeight:1.65 }}>
+          <p className="f-body mt-4 max-w-lg anim-fade-up" style={{ color:"var(--steel)", fontSize:"1.05rem", animationDelay:"0.22s", lineHeight:1.65 }}>
             Honest seat availability. Transparent fares. A booking flow that confirms or refunds clearly — no silent debits, no dead ends.
           </p>
 
-          {/* Stats row */}
+          {/* Stats row — warm glassmorphism */}
           <div className="flex flex-wrap gap-3 mt-6 anim-fade-up" style={{ animationDelay:"0.3s" }}>
             {[
               { icon: ShieldCheck, label:"Confirmed daily", value:"1.2M+ tickets", color:"var(--green)" },
-              { icon: Clock, label:"Avg booking time", value:"Under 3 min", color:"var(--marigold)" },
-              { icon: BadgeCheck, label:"Payment success", value:"99.4% rate", color:"#60B8F4" },
+              { icon: Clock, label:"Avg booking time", value:"Under 3 min", color:"var(--marigold-2)" },
+              { icon: BadgeCheck, label:"Payment success", value:"99.4% rate", color:"var(--blue-2)" },
             ].map(({ icon: Icon, label, value, color }) => (
-              <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border"
-                style={{ background:"rgba(255,255,255,0.05)", borderColor:"rgba(255,255,255,0.1)", backdropFilter:"blur(8px)" }}>
+              <div key={label} className="glass-stat-badge flex items-center gap-2.5 px-4 py-2.5 rounded-2xl">
                 <Icon size={15} style={{ color }} />
                 <div>
-                  <p className="f-mono text-xs" style={{ color:"rgba(255,255,255,0.5)" }}>{label}</p>
-                  <p className="f-body text-sm font-semibold text-white leading-tight">{value}</p>
+                  <p className="f-mono text-xs" style={{ color:"var(--steel)" }}>{label}</p>
+                  <p className="f-body text-sm font-semibold leading-tight" style={{ color:"var(--ink)" }}>{value}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Search card elevated into the hero bottom */}
+        {/* Search card — glassmorphism with warm glow */}
         <div className="relative z-20 max-w-5xl mx-auto w-full px-4 md:px-8 pb-0 -mb-16 md:-mb-20 anim-fade-up" style={{ animationDelay:"0.38s" }}>
-          <div className="rounded-3xl glass-card border p-5 md:p-7" style={{ borderColor:"rgba(15,42,69,0.12)", boxShadow:"var(--shadow-lg)" }}>
+          <div className="rounded-3xl glass-hero-card p-5 md:p-7">
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
             <Field label="From" icon={MapPin} value={from} onChange={setFrom} onLocate={handleLocate} />
             <button
