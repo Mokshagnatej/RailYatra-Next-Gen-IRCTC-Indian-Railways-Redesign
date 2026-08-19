@@ -31,17 +31,18 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build:pages
         env:
+          BUILD_SPA: "true"
           VITE_BASE_PATH: /UI-UX-Design-Event/
 
-      - name: Add SPA fallback
-        run: cp dist/client/index.html dist/client/404.html
+      - name: Add SPA fallback for GitHub Pages
+        run: cp dist/index.html dist/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/client
+          path: ./dist
 
   deploy:
     environment:

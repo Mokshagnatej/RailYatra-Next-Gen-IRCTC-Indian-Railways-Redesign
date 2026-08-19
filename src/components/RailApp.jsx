@@ -1972,18 +1972,25 @@ function NotificationsModal({ isOpen, onClose }) {
 
 
 export default function App({ initialScreen }) {
-  const getInitialScreen = () => {
-    if (initialScreen) return initialScreen;
-    if (typeof window !== "undefined") {
-      const path = window.location.pathname.replace(/^\//, "").toLowerCase();
-      if (["explore", "trips", "help", "account", "results", "booking"].includes(path)) {
-        return path;
-      }
+  const getBasePath = () => {
+    if (typeof window === "undefined") return "";
+    return window.location.pathname.startsWith("/UI-UX-Design-Event") ? "/UI-UX-Design-Event" : "";
+  };
+
+  const getScreenFromPath = () => {
+    if (typeof window === "undefined") return "search";
+    const basePath = getBasePath();
+    const cleanPath = window.location.pathname
+      .replace(basePath, "")
+      .replace(/^\/+|\/+$/g, "")
+      .toLowerCase();
+    if (["explore", "trips", "help", "account", "results", "booking"].includes(cleanPath)) {
+      return cleanPath;
     }
     return "search";
   };
 
-  const [screen, setScreenState] = useState(getInitialScreen);
+  const [screen, setScreenState] = useState(() => initialScreen || getScreenFromPath());
   const [selection, setSelection] = useState(null);
   const [booking, setBooking] = useState(null);
   const [quickModal, setQuickModal] = useState(null);
@@ -1991,7 +1998,8 @@ export default function App({ initialScreen }) {
   const setScreen = (newScreen) => {
     setScreenState(newScreen);
     if (typeof window !== "undefined") {
-      const targetPath = newScreen === "search" ? "/" : `/${newScreen}`;
+      const basePath = getBasePath();
+      const targetPath = newScreen === "search" ? `${basePath}/` : `${basePath}/${newScreen}`;
       if (window.location.pathname !== targetPath) {
         window.history.pushState({ screen: newScreen }, "", targetPath);
       }
@@ -2000,12 +2008,7 @@ export default function App({ initialScreen }) {
 
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname.replace(/^\//, "").toLowerCase();
-      if (["explore", "trips", "help", "account", "results", "booking"].includes(path)) {
-        setScreenState(path);
-      } else {
-        setScreenState("search");
-      }
+      setScreenState(getScreenFromPath());
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);

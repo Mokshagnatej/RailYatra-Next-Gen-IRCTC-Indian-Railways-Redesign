@@ -1,1 +1,0 @@
-import{t as e}from"./index-WfbjFy7d.js";import{t}from"./RailApp-CQZ9LX7g.js";var n=e(),r=()=>(0,n.jsx)(t,{initialScreen:`trips`});export{r as component};
