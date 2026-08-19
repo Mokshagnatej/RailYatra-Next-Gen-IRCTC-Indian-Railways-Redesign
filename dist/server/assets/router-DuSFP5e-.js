@@ -3,7 +3,7 @@ import { HeadContent, Link, Outlet, Scripts, createFileRoute, createRootRouteWit
 import { jsx, jsxs } from "react/jsx-runtime";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DhSEY6f_.css";
+var styles_default = "/assets/styles-CjrRbb8_.css";
 //#endregion
 //#region src/routes/__root.tsx
 function NotFoundComponent() {
@@ -161,7 +161,7 @@ function RootComponent() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var $$splitComponentImporter = () => import("./routes-Bz8CUgwU.js");
+var $$splitComponentImporter = () => import("./routes-CAj9LRUc.js");
 var title = "RailYatra — Book Indian train tickets without the guesswork";
 var description = "Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place.";
 //#endregion

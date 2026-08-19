@@ -3,17 +3,17 @@ var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/Users/honeyreddy/Documents/UI:UX design/UI-UX-Design-Event/src/routes/__root.tsx",
 		children: ["/"],
-		preloads: ["/assets/index-6pIbZIa-.js"],
+		preloads: ["/assets/index-CNpEzAkI.js"],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-6pIbZIa-.js"
+			src: "/assets/index-CNpEzAkI.js"
 		} }]
 	},
 	"/": {
 		filePath: "/Users/honeyreddy/Documents/UI:UX design/UI-UX-Design-Event/src/routes/index.tsx",
 		children: void 0,
-		preloads: ["/assets/routes-C07jBJP6.js"]
+		preloads: ["/assets/routes-Bcr45EVT.js"]
 	}
 } });
 //#endregion
