@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
-  PhoneCall, Mail, MessageSquareText, Search, ChevronUp
+import React, { useState } from 'react';
+import {
+  ChevronDown, ChevronUp, Search, PhoneCall, Mail, MessageSquareText
 } from 'lucide-react';
-import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
+
 function HelpScreen() {
   const [openFaq, setOpenFaq] = useState(0);
   const faqs = [
@@ -59,4 +57,5 @@ function HelpScreen() {
     </div>
   );
 }
+
 export default HelpScreen;

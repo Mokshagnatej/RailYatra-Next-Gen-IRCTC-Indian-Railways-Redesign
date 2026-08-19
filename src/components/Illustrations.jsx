@@ -80,19 +80,16 @@ export function StationIllustration() {
     <svg viewBox="0 0 340 170" className="w-full h-auto" aria-hidden="true">
       <rect x="18" y="34" width="304" height="12" rx="6" fill="var(--blue)" />
       {[40, 300].map((x) => <rect key={x} x={x} y="46" width="8" height="86" fill="var(--blue-2)" opacity="0.8" />)}
-      {/* station clock */}
       <circle cx="170" cy="66" r="18" fill="#F5F2E9" stroke="var(--blue)" strokeWidth="3" />
       <line x1="170" y1="66" x2="170" y2="56" stroke="var(--blue)" strokeWidth="2.5" strokeLinecap="round"
         style={{ transformOrigin: "170px 66px", animation: "wheel-spin 8s linear infinite" }} />
       <line x1="170" y1="66" x2="180" y2="66" stroke="var(--marigold-2)" strokeWidth="2" strokeLinecap="round"
         style={{ transformOrigin: "170px 66px", animation: "wheel-spin 48s linear infinite" }} />
-      {/* board */}
       <rect x="52" y="58" width="84" height="34" rx="5" fill="var(--blue)" />
       {[0, 1, 2].map((i) => (
         <rect key={i} x="60" y={65 + i * 9} width={i === 1 ? 44 : 60} height="4" rx="2" fill="var(--marigold)"
           opacity="0.85" style={{ animation: `signal-blink ${2 + i * 0.6}s ease-in-out infinite` }} />
       ))}
-      {/* travellers */}
       {[[215, "var(--marigold)"], [240, "var(--green)"], [262, "var(--blue-2)"]].map(([x, c], i) => (
         <g key={x} style={{ animation: `bob ${2.6 + i * 0.4}s ease-in-out infinite` }}>
           <circle cx={x} cy="98" r="7" fill={c} />
@@ -100,7 +97,6 @@ export function StationIllustration() {
           <rect x={Number(x) + 9} y="118" width="10" height="13" rx="2" fill="var(--blue)" opacity="0.55" />
         </g>
       ))}
-      {/* platform */}
       <rect x="0" y="132" width="340" height="8" fill="var(--blue)" opacity="0.2" />
       <rect x="0" y="146" width="340" height="4" fill="#8FA3B5" />
       {Array.from({ length: 17 }).map((_, i) => <rect key={i} x={i * 21} y="150" width="10" height="4" fill="#8FA3B5" opacity="0.55" />)}

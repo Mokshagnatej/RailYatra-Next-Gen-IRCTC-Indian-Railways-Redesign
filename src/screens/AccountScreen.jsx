@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
-  Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
-  Users, BadgeCheck, Languages, LogOut
+import React, { useState } from 'react';
+import {
+  User, CreditCard, Bell, ChevronRight, LogOut,
+  BadgeCheck, Languages, Users
 } from 'lucide-react';
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
-import { ProfileModal, PassengersModal, PaymentsModal, KycModal, LanguageModal, NotificationsModal } from '../components/common/Shared';
+
 function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);
 
@@ -40,14 +39,8 @@ function AccountScreen({ onLogout }) {
           <LogOut size={15} /> Log out
         </button>
       </div>
-
-      <ProfileModal isOpen={activeModal === "profile"} onClose={() => setActiveModal(null)} />
-      <PassengersModal isOpen={activeModal === "passengers"} onClose={() => setActiveModal(null)} />
-      <PaymentsModal isOpen={activeModal === "payments"} onClose={() => setActiveModal(null)} />
-      <KycModal isOpen={activeModal === "kyc"} onClose={() => setActiveModal(null)} />
-      <LanguageModal isOpen={activeModal === "language"} onClose={() => setActiveModal(null)} />
-      <NotificationsModal isOpen={activeModal === "notifications"} onClose={() => setActiveModal(null)} />
     </div>
   );
 }
+
 export default AccountScreen;

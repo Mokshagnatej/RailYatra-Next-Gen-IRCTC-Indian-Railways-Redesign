@@ -1,13 +1,12 @@
 import React, { useMemo } from "react";
 import {
-  Download, Share2, Printer, Train, MapPin, CalendarDays, Users, Ticket,
+  Download, Share2, Printer, Train, Users, Ticket,
   ShieldCheck, Clock, CheckCircle2, Utensils, Bell, ChevronRight, Info, Wallet,
 } from "lucide-react";
 
 const COACHES = ["B2", "B4", "A1", "S6", "C3"];
 const BERTHS = ["Lower", "Middle", "Upper", "Side Lower", "Side Upper"];
 
-/* deterministic pseudo-random so a given PNR always renders the same ticket */
 function seeded(seed) {
   let s = 0;
   for (let i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) % 100000;
@@ -30,17 +29,15 @@ export function buildBooking(selection, passengers) {
     cls: selection.cls,
     fare: selection.fare,
     date: "Tue, 25 Aug 2026",
-    passengers: passengers
-      .filter((p) => true)
-      .map((p, i) => ({
-        name: p.name?.trim() ? p.name : `Passenger ${i + 1}`,
-        age: p.age?.trim() ? p.age : "—",
-        gender: p.gender,
-        coach,
-        seat: 8 + rnd(60),
-        berth: BERTHS[rnd(BERTHS.length)],
-        status: "CNF",
-      })),
+    passengers: passengers.map((p, i) => ({
+      name: p.name?.trim() ? p.name : `Passenger ${i + 1}`,
+      age: p.age?.trim() ? p.age : "—",
+      gender: p.gender,
+      coach,
+      seat: 8 + rnd(60),
+      berth: BERTHS[rnd(BERTHS.length)],
+      status: "CNF",
+    })),
   };
 }
 
@@ -48,14 +45,11 @@ function Row({ label, value, mono = true, strong }) {
   return (
     <div className="flex items-baseline justify-between gap-4 py-1.5">
       <span className="text-xs" style={{ color: "var(--steel)" }}>{label}</span>
-      <span className={`${mono ? "f-mono" : ""} text-sm ${strong ? "font-semibold" : "font-medium"}`} style={{ color: "var(--ink)" }}>
-        {value}
-      </span>
+      <span className={`${mono ? "f-mono" : ""} text-sm ${strong ? "font-semibold" : "font-medium"}`} style={{ color: "var(--ink)" }}>{value}</span>
     </div>
   );
 }
 
-/* Decorative faux-QR built from the PNR so the stub feels like a real e-ticket */
 function FauxQR({ seed, size = 92 }) {
   const cells = useMemo(() => {
     const rnd = seeded(seed);
@@ -64,9 +58,7 @@ function FauxQR({ seed, size = 92 }) {
   return (
     <div className="rounded-lg p-2 bg-white" style={{ border: "1px solid var(--line)" }}>
       <div className="grid grid-cols-10" style={{ width: size, height: size }}>
-        {cells.map((on, i) => (
-          <span key={i} style={{ background: on ? "var(--blue)" : "transparent" }} />
-        ))}
+        {cells.map((on, i) => (<span key={i} style={{ background: on ? "var(--blue)" : "transparent" }} />))}
       </div>
     </div>
   );
@@ -87,7 +79,6 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
 
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20">
-      {/* success banner */}
       <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
         <div className="max-w-4xl mx-auto px-4 md:px-6 pt-12 pb-24 text-center relative">
           <div className="mx-auto h-14 w-14 rounded-full flex items-center justify-center mb-4" style={{ background: "var(--green)" }}>
@@ -98,9 +89,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
           </div>
           <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold)" }}>Booking confirmed</p>
           <h1 className="f-display text-3xl md:text-4xl font-semibold text-white mt-2">Your seats are booked.</h1>
-          <p className="text-sm mt-2" style={{ color: "#C7D2DD" }}>
-            An e-ticket has been sent to your registered email and mobile number. Carry a government photo ID while travelling.
-          </p>
+          <p className="text-sm mt-2" style={{ color: "#C7D2DD" }}>An e-ticket has been sent to your registered email and mobile. Carry a government photo ID while travelling.</p>
           <div className="mt-5 inline-flex items-center gap-3 rounded-full px-5 py-2.5" style={{ background: "rgba(255,255,255,0.1)" }}>
             <span className="text-xs uppercase tracking-wide" style={{ color: "#C7D2DD" }}>PNR</span>
             <span className="f-mono text-lg font-semibold" style={{ color: "var(--marigold)" }}>
@@ -110,8 +99,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
         </div>
       </section>
 
-      {/* ticket stub */}
-      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-16 relative z-10 anim-fade-up">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-16 relative z-10">
         <div className="rounded-2xl bg-white border overflow-hidden" style={{ borderColor: "var(--line)", boxShadow: "var(--shadow-lg)" }}>
           <div className="p-5 md:p-6 flex flex-wrap items-start justify-between gap-4" style={{ background: "var(--paper-2)" }}>
             <div className="flex items-center gap-3">
@@ -123,12 +111,9 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
                 <p className="f-mono text-xs mt-0.5" style={{ color: "var(--steel)" }}>#{t.no} · {t.type} · Class {booking.cls}</p>
               </div>
             </div>
-            <span className="px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>
-              CONFIRMED
-            </span>
+            <span className="px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>CONFIRMED</span>
           </div>
 
-          {/* journey band */}
           <div className="p-5 md:p-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-dashed" style={{ borderColor: "var(--line)" }}>
             <div>
               <p className="f-mono text-2xl font-semibold" style={{ color: "var(--ink)" }}>{t.dep}</p>
@@ -147,7 +132,6 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
             </div>
           </div>
 
-          {/* passengers */}
           <div className="p-5 md:p-6">
             <p className="f-display font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
               <Users size={15} style={{ color: "var(--blue)" }} /> Passengers & berth allotment
@@ -170,9 +154,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
                       <td className="py-2.5 f-mono text-xs" style={{ color: "var(--steel)" }}>{p.age} / {p.gender}</td>
                       <td className="py-2.5 f-mono text-xs font-semibold" style={{ color: "var(--blue)" }}>{p.coach}</td>
                       <td className="py-2.5 f-mono text-xs" style={{ color: "var(--ink)" }}>{p.seat} · {p.berth}</td>
-                      <td className="py-2.5">
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>{p.status}</span>
-                      </td>
+                      <td className="py-2.5"><span className="px-2 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>{p.status}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -180,14 +162,12 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
             </div>
           </div>
 
-          {/* stub footer: QR + fare */}
           <div className="p-5 md:p-6 border-t border-dashed grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
             <div className="flex items-center gap-4">
               <FauxQR seed={booking.pnr} />
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Scan at boarding</p>
                 <p className="f-mono text-xs mt-1" style={{ color: "var(--ink)" }}>TXN {booking.txnId}</p>
-                <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>Booked {booking.bookedAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
               </div>
             </div>
             <div className="rounded-xl border bg-white p-4" style={{ borderColor: "var(--line)" }}>
@@ -203,77 +183,11 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
             </div>
           </div>
 
-          {/* actions */}
           <div className="p-5 md:p-6 border-t flex flex-wrap gap-2" style={{ borderColor: "var(--line)" }}>
-            <button onClick={() => window.print()} className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border transition-transform active:scale-[0.98]" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
-              <Download size={15} /> Download e-ticket
-            </button>
-            <button className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border transition-transform active:scale-[0.98]" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
-              <Share2 size={15} /> Share
-            </button>
-            <button className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border transition-transform active:scale-[0.98]" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
-              <Printer size={15} /> Print
-            </button>
-            <button onClick={onTrips} className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm transition-transform active:scale-[0.98]" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
-              View in My Trips
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* journey timeline */}
-      <div className="max-w-4xl mx-auto px-4 md:px-6 mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-xl border bg-white p-5" style={{ borderColor: "var(--line)" }}>
-          <p className="f-display font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: "var(--ink)" }}>
-            <Clock size={15} style={{ color: "var(--blue)" }} /> What happens next
-          </p>
-          <div className="space-y-4">
-            {timeline.map((s, i) => (
-              <div key={s.label} className="flex gap-3">
-                <div className="flex flex-col items-center">
-                  <span className="h-3 w-3 rounded-full mt-1" style={{ background: s.done ? "var(--green)" : "var(--line)" }} />
-                  {i < timeline.length - 1 && <span className="w-[2px] flex-1 mt-1" style={{ background: "var(--line)" }} />}
-                </div>
-                <div className="pb-1">
-                  <p className="text-sm font-medium" style={{ color: "var(--ink)" }}>{s.label}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{s.detail}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="rounded-xl border bg-white p-5" style={{ borderColor: "var(--line)" }}>
-            <p className="f-display font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
-              <Info size={15} style={{ color: "var(--blue)" }} /> Boarding & ID
-            </p>
-            <Row label="Boarding station" value={`${t.from} · ${t.dep}`} mono={false} />
-            <Row label="Quota" value="General" mono={false} />
-            <Row label="Chart status" value="Not prepared" mono={false} />
-            <Row label="Cancellation" value="Free until 48h before" mono={false} />
-          </div>
-          <div className="rounded-xl border p-5" style={{ borderColor: "var(--line)", background: "var(--paper-2)" }}>
-            <p className="f-display font-semibold text-sm mb-3" style={{ color: "var(--ink)" }}>Add to your journey</p>
-            {[
-              { icon: Utensils, label: "Order e-Catering to your seat", detail: "Meals at 12 stations en route" },
-              { icon: Bell, label: "Get arrival & delay alerts", detail: "SMS and push, free" },
-              { icon: ShieldCheck, label: "Travel insurance", detail: "₹0.45 per passenger" },
-            ].map((a) => {
-              const Icon = a.icon;
-              return (
-                <button key={a.label} className="w-full flex items-center gap-3 py-2.5 text-left border-b last:border-b-0" style={{ borderColor: "var(--line)" }}>
-                  <span className="h-8 w-8 rounded-lg bg-white flex items-center justify-center" style={{ color: "var(--blue)" }}>
-                    <Icon size={15} />
-                  </span>
-                  <span className="flex-1">
-                    <span className="block text-sm font-medium" style={{ color: "var(--ink)" }}>{a.label}</span>
-                    <span className="block text-xs" style={{ color: "var(--steel)" }}>{a.detail}</span>
-                  </span>
-                  <ChevronRight size={16} style={{ color: "var(--steel)" }} />
-                </button>
-              );
-            })}
+            <button onClick={() => window.print()} className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border" style={{ borderColor: "var(--line)", color: "var(--blue)" }}><Download size={15} /> Download</button>
+            <button className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border" style={{ borderColor: "var(--line)", color: "var(--blue)" }}><Share2 size={15} /> Share</button>
+            <button className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 border" style={{ borderColor: "var(--line)", color: "var(--blue)" }}><Printer size={15} /> Print</button>
+            <button onClick={onTrips} className="flex-1 min-w-[140px] h-11 rounded-lg font-semibold text-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>View in My Trips</button>
           </div>
         </div>
       </div>
