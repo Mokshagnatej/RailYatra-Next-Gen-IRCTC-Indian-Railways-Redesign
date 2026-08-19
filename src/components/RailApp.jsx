@@ -5,7 +5,7 @@ import {
   Download, Share2, Home, Ticket, Compass, LifeBuoy, User, X, Train,
   MapPin, CalendarDays, Phone, Mail, HelpCircle, FileText, ChevronUp,
   BadgeCheck, Wallet, Languages, Bell, LogOut, Hotel, Sparkles, PhoneCall,
-  MessageSquareText, PackageSearch, Landmark, ScanLine, Activity
+  MessageSquareText, PackageSearch, Landmark, ScanLine, Activity, LocateFixed
 } from "lucide-react";
 import ConfirmationScreen, { buildBooking } from "./ConfirmationScreen.jsx";
 import {
@@ -1082,6 +1082,33 @@ function SearchScreen({ onSearch, onFooterAction }) {
   const availabilityHint = { "23 Aug": "green", "24 Aug": "amber", "25 Aug": "green", "26 Aug": "green", "27 Aug": "red", "28 Aug": "green", "29 Aug": "amber", "30 Aug": "green", "31 Aug": "green", "01 Sep": "amber" };
   const dayNames = { "23 Aug": "Sat", "24 Aug": "Sun", "25 Aug": "Mon", "26 Aug": "Tue", "27 Aug": "Wed", "28 Aug": "Thu", "29 Aug": "Fri", "30 Aug": "Sat", "31 Aug": "Sun", "01 Sep": "Mon" };
 
+  const handleLocate = () => {
+    return new Promise((resolve) => {
+      // Helper to simulate setting nearest station
+      const mockLocation = () => {
+        setTimeout(() => {
+          setFrom("KSR Bengaluru (SBC)"); // Mock nearest station
+          resolve();
+        }, 1200);
+      };
+
+      if (!navigator.geolocation) {
+        mockLocation();
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          mockLocation();
+        },
+        (error) => {
+          console.warn("Geolocation blocked/failed (often happens in iframe previews), using fallback.", error);
+          mockLocation();
+        }
+      );
+    });
+  };
+
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
       <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
@@ -1114,7 +1141,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
         <FadeIn delay={0.1}>
         <div className="rounded-2xl bg-white border p-4 md:p-6 shadow-2xl" style={{ borderColor: "var(--line)" }}>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 items-end">
-            <Field label="From" icon={MapPin} value={from} onChange={setFrom} />
+            <Field label="From" icon={MapPin} value={from} onChange={setFrom} onLocate={handleLocate} />
             <button
               onClick={() => { setFrom(to); setTo(from); }}
               aria-label="Swap stations"
@@ -1223,9 +1250,10 @@ function SearchScreen({ onSearch, onFooterAction }) {
   );
 }
 
-function Field({ label, icon: Icon, value, onChange }) {
+function Field({ label, icon: Icon, value, onChange, onLocate }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [locating, setLocating] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -1235,6 +1263,18 @@ function Field({ label, icon: Icon, value, onChange }) {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
+
+  const handleLocateClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!onLocate) return;
+    setLocating(true);
+    try {
+      await onLocate();
+    } finally {
+      setLocating(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     if (!search) return (stationsData || []).slice(0, 35);
@@ -1275,6 +1315,20 @@ function Field({ label, icon: Icon, value, onChange }) {
           }}
           placeholder={value}
           className="f-body flex-1 outline-none text-[15px] bg-transparent" style={{ color: "var(--ink)" }} />
+        {onLocate && (
+          <button 
+            type="button"
+            onClick={handleLocateClick}
+            className="p-1.5 hover:bg-slate-100 rounded-md transition-colors"
+            title="Use current location"
+          >
+            {locating ? (
+              <Loader2 size={16} className="animate-spin" style={{ color: "var(--blue)" }} />
+            ) : (
+              <LocateFixed size={16} style={{ color: "var(--blue)" }} />
+            )}
+          </button>
+        )}
       </div>
       
       {open && (
