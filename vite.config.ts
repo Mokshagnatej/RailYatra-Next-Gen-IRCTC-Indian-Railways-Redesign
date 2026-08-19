@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  base: process.env.VITE_BASE_PATH || "/",
   plugins: [
     tanstackStart({
       server: { entry: "server" }

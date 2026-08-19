@@ -14,6 +14,8 @@ An ambitious, human-centered UI/UX transformation of the Indian Railways Caterin
 
 [Features](#-key-features--modules) • [Live Demo](#-live-demo--preview) • [Design System](#-design-system--tokens) • [Architecture](#-architecture--directory-structure) • [Getting Started](#-getting-started) • [Tech Stack](#-technology-stack)
 
+**Live Site:** https://mokshagnatej.github.io/UI-UX-Design-Event/
+
 </div>
 
 ---
@@ -27,6 +29,12 @@ Millions of passengers book train tickets across India every day. However, tradi
 4. **Outdated visual aesthetics**: Cluttered banner ads, dense tables, and lack of mobile-responsive touchpoints.
 
 **RailYatra solves this** with an ultra-clean, intuitive, single-page reactive architecture featuring honest seat availability indicators, animated real-time rail radar, instant modal tools, and a frictionless booking engine.
+
+---
+
+## 🌐 Live Demo & Preview
+
+- **GitHub Pages:** https://mokshagnatej.github.io/UI-UX-Design-Event/
 
 ---
 
