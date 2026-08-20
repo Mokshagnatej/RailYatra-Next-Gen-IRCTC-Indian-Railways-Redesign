@@ -261,7 +261,7 @@ export function PopularRoutes({ onSearch }) {
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {ROUTES.map((r, i) => (
           <Reveal key={r.code} delay={i * 0.06}>
-          <button onClick={onSearch}
+          <button onClick={() => onSearch({ from: r.from, to: r.to, date: "25-Aug-2026", cls: "All classes", quota: "General", passengers: { adults: 1, children: 0, infants: 0 } })}
             className="w-full text-left rounded-2xl border bg-white p-5 transition-all duration-250 hover:-translate-y-1.5 group"
             style={{ borderColor: "var(--line)", boxShadow:"0 1px 4px rgba(15,42,69,0.06)" }}>
             <div className="flex items-center justify-between">

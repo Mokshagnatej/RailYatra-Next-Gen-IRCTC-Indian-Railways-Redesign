@@ -16,6 +16,7 @@ import stationList from "../data/stationList.json";
 import ExploreScreen from "../screens/ExploreScreen";
 import PageHero from "./common/PageHero";
 import { RangoliOverlay, DotNetwork, WarmGlowOrbs, WarmGradientWave } from "./common/CulturalPatterns.jsx";
+import { searchTrains, getPNRStatus, getLiveTrainStatus } from "../lib/api.ts";
 
 import TripsScreen from "../screens/MyTripsScreen";
 
@@ -522,15 +523,25 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
   const [trainInput, setTrainInput] = useState("12951");
   const [activeTab, setActiveTab] = useState("result");
   const [loading, setLoading] = useState(false);
+  const [pnrData, setPnrData] = useState(null);
+  const [liveData, setLiveData] = useState(null);
 
   if (!modal) return null;
 
-  const handleSimulate = (cb) => {
+  const handleFetch = async (type) => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (cb) cb();
-    }, 600);
+    try {
+      if (type === 'pnr') {
+        const data = await getPNRStatus(pnrInput);
+        setPnrData(data);
+      } else if (type === 'live') {
+        const data = await getLiveTrainStatus(trainInput, "1");
+        setLiveData(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
   };
 
   return (
@@ -557,7 +568,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
               className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm font-mono font-semibold outline-none"
             />
             <button 
-              onClick={() => handleSimulate()}
+              onClick={() => handleFetch('pnr')}
               disabled={loading}
               className="h-12 px-5 rounded-xl text-white font-semibold text-sm bg-blue-900 hover:bg-blue-800"
             >
@@ -565,18 +576,25 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
             </button>
           </div>
 
-          <div className="p-4 rounded-xl border bg-green-50/60 border-green-200">
-            <div className="flex justify-between items-center pb-2 border-b border-green-200 mb-2">
-              <span className="font-mono text-xs font-bold text-green-900">PNR {pnrInput || "4517228091"}</span>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">CONFIRMED (CNF)</span>
+          {pnrData ? (
+            <div className="p-4 rounded-xl border bg-green-50/60 border-green-200">
+              <div className="flex justify-between items-center pb-2 border-b border-green-200 mb-2">
+                <span className="font-mono text-xs font-bold text-green-900">PNR {pnrData.pnr}</span>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">{pnrData.chartStatus}</span>
+              </div>
+              <div className="space-y-1.5 text-xs text-gray-700">
+                <div className="flex justify-between"><span>Train:</span><span className="font-semibold">{pnrData.trainNo} {pnrData.trainName}</span></div>
+                <div className="flex justify-between"><span>Route:</span><span className="font-semibold">{pnrData.from} → {pnrData.to}</span></div>
+                {pnrData.passengers && pnrData.passengers.map((p, i) => (
+                  <div key={i} className="flex justify-between"><span>Passenger {p.no}:</span><span className="font-semibold text-blue-900">{p.currentStatus} (Booking: {p.bookingStatus})</span></div>
+                ))}
+              </div>
             </div>
-            <div className="space-y-1.5 text-xs text-gray-700">
-              <div className="flex justify-between"><span>Train:</span><span className="font-semibold">12951 Mumbai Rajdhani Express</span></div>
-              <div className="flex justify-between"><span>Route:</span><span className="font-semibold">New Delhi (NDLS) → Mumbai Central (BCT)</span></div>
-              <div className="flex justify-between"><span>Passenger 1:</span><span className="font-semibold text-blue-900">Coach B2 · Berth 41 (Lower Berth)</span></div>
-              <div className="flex justify-between"><span>Chart Status:</span><span className="font-semibold text-green-700">Chart Prepared</span></div>
+          ) : (
+            <div className="p-4 rounded-xl border bg-gray-50 border-gray-200 text-center text-sm text-gray-500">
+              Enter PNR to see details
             </div>
-          </div>
+          )}
           <button onClick={onClose} className="w-full h-11 rounded-xl border font-semibold text-sm hover:bg-gray-50">Done</button>
         </div>
       )}
@@ -593,7 +611,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
               className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm font-semibold outline-none"
             />
             <button 
-              onClick={() => handleSimulate()}
+              onClick={() => handleFetch('live')}
               disabled={loading}
               className="h-12 px-5 rounded-xl text-white font-semibold text-sm bg-blue-900 hover:bg-blue-800"
             >
@@ -601,18 +619,24 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
             </button>
           </div>
 
-          <div className="p-4 rounded-xl border bg-blue-50/70 border-blue-200">
-            <div className="flex justify-between items-center pb-2 border-b border-blue-200 mb-2">
-              <span className="font-bold text-xs text-blue-950">{trainInput || "12951"} Rajdhani Express</span>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">ON TIME · +0 MIN</span>
+          {liveData ? (
+            <div className="p-4 rounded-xl border bg-blue-50/70 border-blue-200">
+              <div className="flex justify-between items-center pb-2 border-b border-blue-200 mb-2">
+                <span className="font-bold text-xs text-blue-950">{liveData.trainNo} Live Status</span>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">{liveData.status.toUpperCase()}</span>
+              </div>
+              <div className="space-y-1.5 text-xs text-gray-700">
+                <div className="flex justify-between"><span>Start Date:</span><span className="font-semibold">{liveData.startDate}</span></div>
+                <div className="flex justify-between"><span>Current Station:</span><span className="font-semibold">{liveData.currentStation}</span></div>
+                <div className="flex justify-between"><span>Delay:</span><span className="font-semibold text-red-600">{liveData.delay}</span></div>
+                <div className="flex justify-between"><span>Last Updated:</span><span className="font-semibold">{liveData.lastUpdated}</span></div>
+              </div>
             </div>
-            <div className="space-y-1.5 text-xs text-gray-700">
-              <div className="flex justify-between"><span>Current Status:</span><span className="font-semibold text-green-700">Cruising at 130 km/h</span></div>
-              <div className="flex justify-between"><span>Current Station:</span><span className="font-semibold">Departed Sawai Madhopur (20:42)</span></div>
-              <div className="flex justify-between"><span>Next Stoppage:</span><span className="font-semibold text-blue-900">Kota Jn (22:15) · Platform 1</span></div>
-              <div className="flex justify-between"><span>Destination Arrival:</span><span className="font-semibold">Tomorrow 08:35 AM (BCT)</span></div>
+          ) : (
+            <div className="p-4 rounded-xl border bg-gray-50 border-gray-200 text-center text-sm text-gray-500">
+              Enter Train Number to track status
             </div>
-          </div>
+          )}
           <button onClick={onClose} className="w-full h-11 rounded-xl border font-semibold text-sm hover:bg-gray-50">Close</button>
         </div>
       )}
@@ -970,7 +994,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
             </div>
           </div>
 
-          <button onClick={onSearch}
+          <button onClick={() => onSearch({ from, to, date, cls, quota, passengers })}
             className="mt-5 w-full h-12 rounded-xl f-body font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform active:scale-[0.99]"
             style={{ background: "var(--marigold)", color: "var(--blue)" }}>
             <Search size={18} /> Search trains
@@ -1226,7 +1250,9 @@ function InfoCard({ icon: Icon, title, body }) {
 
 /* ---------------- RESULTS SCREEN ---------------- */
 
-function ResultsScreen({ onBook, onBack }) {
+function ResultsScreen({ searchParams, onBook, onBack }) {
+  const [trains, setTrains] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("Departure");
   const [expanded, setExpanded] = useState(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1235,8 +1261,24 @@ function ResultsScreen({ onBook, onBack }) {
 
   const toggle = (arr, setArr, v) => setArr(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
 
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    const from = searchParams?.from || "NDLS";
+    const to = searchParams?.to || "BCT";
+    const date = searchParams?.date || "25-Aug-2026";
+    
+    searchTrains(from, to, date).then(data => {
+      if(mounted) {
+        setTrains(data);
+        setLoading(false);
+      }
+    });
+    return () => { mounted = false; };
+  }, [searchParams]);
+
   const filtered = useMemo(() => {
-    let list = [...TRAINS];
+    let list = [...trains];
     if (trainTypes.length) list = list.filter((t) => trainTypes.includes(t.type));
     if (classesF.length) list = list.filter((t) => Object.keys(t.classes).some((c) => classesF.includes(c)));
     if (sort === "Departure") list.sort((a, b) => a.dep.localeCompare(b.dep));
@@ -1342,7 +1384,16 @@ function ResultsScreen({ onBook, onBack }) {
           </div>
 
           <div className="space-y-3">
-            {filtered.map((t, ti) => (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20 rounded-xl bg-white border" style={{ borderColor: "var(--line)" }}>
+                <Loader2 size={32} className="animate-spin mb-4" style={{ color: "var(--blue)" }} />
+                <p className="f-body text-sm font-medium" style={{ color: "var(--steel)" }}>Fetching real-time train availability...</p>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 rounded-xl bg-white border" style={{ borderColor: "var(--line)" }}>
+                <p className="f-body text-sm font-medium" style={{ color: "var(--steel)" }}>No trains found matching your criteria.</p>
+              </div>
+            ) : filtered.map((t, ti) => (
               <FadeIn key={t.no} delay={ti * 0.06}>
               <div className="rounded-xl border bg-white overflow-hidden transition-shadow hover:shadow-md" style={{ borderColor: "var(--line)" }}>
                 <div className="p-4">
@@ -1953,6 +2004,7 @@ export default function App({ initialScreen }) {
   };
 
   const [screen, setScreenState] = useState(() => initialScreen || getScreenFromPath());
+  const [searchParams, setSearchParams] = useState(null);
   const [selection, setSelection] = useState(null);
   const [booking, setBooking] = useState(null);
   const [quickModal, setQuickModal] = useState(null);
@@ -2013,9 +2065,10 @@ export default function App({ initialScreen }) {
       <style>{FONT_IMPORT}</style>
       <TopNav screen={screen} setScreen={setScreen} />
 
-      {screen === "search" && <SearchScreen onSearch={() => setScreen("results")} onFooterAction={handleFooterAction} />}
+      {screen === "search" && <SearchScreen onSearch={(params) => { setSearchParams(params); setScreen("results"); }} onFooterAction={handleFooterAction} />}
       {screen === "results" && (
         <ResultsScreen
+          searchParams={searchParams}
           onBack={() => setScreen("search")}
           onBook={(sel) => { setSelection(sel); setScreen("booking"); }}
         />
