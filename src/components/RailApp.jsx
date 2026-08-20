@@ -1987,7 +1987,15 @@ function NotificationsModal({ isOpen, onClose }) {
 export default function App({ initialScreen }) {
   const getBasePath = () => {
     if (typeof window === "undefined") return "";
-    return window.location.pathname.startsWith("/UI-UX-Design-Event") ? "/UI-UX-Design-Event" : "";
+    const base = (import.meta.env?.BASE_URL || "").replace(/\/$/, "");
+    if (base && window.location.pathname.startsWith(base)) return base;
+    if (window.location.pathname.startsWith("/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign")) {
+      return "/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign";
+    }
+    if (window.location.pathname.startsWith("/UI-UX-Design-Event")) {
+      return "/UI-UX-Design-Event";
+    }
+    return "";
   };
 
   const getScreenFromPath = () => {

@@ -14,7 +14,7 @@ An ambitious, human-centered UI/UX transformation of the Indian Railways Caterin
 
 [Features](#-key-features--modules) • [Live Demo](#-live-demo--preview) • [Design System](#-design-system--tokens) • [Architecture](#-architecture--directory-structure) • [Getting Started](#-getting-started) • [Tech Stack](#-technology-stack)
 
-**Live Site:** [https://Mokshagnatej.github.io/UI-UX-Design-Event/](https://Mokshagnatej.github.io/UI-UX-Design-Event/)
+**Live Site:** [https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/](https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/)
 
 </div>
 
@@ -34,7 +34,7 @@ Millions of passengers book train tickets across India every day. However, tradi
 
 ## 🌐 Live Demo & Preview
 
-- **GitHub Pages:** [https://Mokshagnatej.github.io/UI-UX-Design-Event/](https://Mokshagnatej.github.io/UI-UX-Design-Event/)
+- **GitHub Pages:** [https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/](https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/)
 
 ---
 
@@ -187,8 +187,8 @@ UI-UX-Design-Event/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/UI-UX-Design-Event.git
-   cd UI-UX-Design-Event
+   git clone https://github.com/Mokshagnatej/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign.git
+   cd RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign
    ```
 
 2. **Install dependencies**:
