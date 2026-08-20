@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -33,7 +33,6 @@ jobs:
       - name: Build
         run: npm run build:pages
         env:
-          BUILD_SPA: "true"
           VITE_BASE_PATH: /UI-UX-Design-Event/
 
       - name: Add SPA fallback for GitHub Pages
