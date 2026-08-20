@@ -34,15 +34,15 @@ function HelpScreen() {
       <PageHero eyebrow="Help & Support" title="Surfaced, not buried." sub="Refund status, complaint tracking and FAQs — moved from three clicks deep to a top-level page." />
 
       <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <a href="tel:139" className="rounded-xl bg-white border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
+        <a href="tel:139" className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
           <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "var(--green-bg)" }}><PhoneCall size={17} style={{ color: "var(--green)" }} /></div>
           <div><p className="text-sm font-semibold">139</p><p className="text-xs" style={{ color: "var(--steel)" }}>24×7 helpline</p></div>
         </a>
-        <a href="mailto:care@irctc.co.in" className="rounded-xl bg-white border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
+        <a href="mailto:care@irctc.co.in" className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
           <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "var(--amber-bg)" }}><Mail size={17} style={{ color: "var(--amber)" }} /></div>
           <div><p className="text-sm font-semibold">care@irctc.co.in</p><p className="text-xs" style={{ color: "var(--steel)" }}>Email support</p></div>
         </a>
-        <button onClick={() => alert("Grievance tracking portal active · Enter reference number on RailMadad")} className="rounded-xl bg-white border p-4 flex items-center gap-3 text-left hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
+        <button onClick={() => alert("Grievance tracking portal active · Enter reference number on RailMadad")} className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 text-left hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
           <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "#EAE3F5" }}><MessageSquareText size={17} style={{ color: "#6D4FA8" }} /></div>
           <div><p className="text-sm font-semibold">Track a complaint</p><p className="text-xs" style={{ color: "var(--steel)" }}>By reference number</p></div>
         </button>
@@ -55,7 +55,7 @@ function HelpScreen() {
             placeholder="Search help articles — refunds, PNR, Tatkal, KYC…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full h-12 rounded-xl border pl-10 pr-4 text-sm outline-none bg-white shadow-sm" 
+            className="w-full h-12 rounded-xl border pl-10 pr-4 text-sm outline-none bg-[var(--surface)] shadow-sm" 
             style={{ borderColor: "var(--line)" }} 
           />
           {query && (
@@ -68,7 +68,7 @@ function HelpScreen() {
           <p className="f-display font-semibold">Frequently asked questions</p>
           {query && <span className="text-xs text-gray-500">{filteredFaqs.length} results</span>}
         </div>
-        <div className="rounded-xl border bg-white overflow-hidden" style={{ borderColor: "var(--line)" }}>
+        <div className="rounded-xl border bg-[var(--surface)] overflow-hidden" style={{ borderColor: "var(--line)" }}>
           {filteredFaqs.length === 0 ? (
             <div className="p-8 text-center text-sm text-gray-500">
               No matching help articles found for "{query}".
@@ -76,7 +76,7 @@ function HelpScreen() {
           ) : (
             filteredFaqs.map((f, i) => (
               <div key={f.q} style={{ borderBottom: i < filteredFaqs.length - 1 ? `1px solid var(--line)` : "none" }}>
-                <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-gray-50/70 transition-colors">
+                <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-[var(--paper-2)]/70 transition-colors">
                   <span className="text-sm font-medium">{f.q}</span>
                   {openFaq === i ? <ChevronUp size={16} className="flex-shrink-0" style={{ color: "var(--steel)" }} /> : <ChevronDown size={16} className="flex-shrink-0" style={{ color: "var(--steel)" }} />}
                 </button>

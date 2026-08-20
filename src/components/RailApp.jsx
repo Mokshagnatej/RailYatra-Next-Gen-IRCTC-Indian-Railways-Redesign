@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useBookingStore } from "../lib/store.ts";
 import {
   ArrowLeftRight, Search, SlidersHorizontal, ChevronDown, ChevronRight,
   Check, Clock, Users, CreditCard, ShieldCheck, AlertTriangle, Loader2,
@@ -9,12 +10,18 @@ import {
 } from "lucide-react";
 import ConfirmationScreen, { buildBooking } from "./ConfirmationScreen.jsx";
 import {
-  QuickTools, StatsBand, PopularRoutes, Services, HowItWorks, TrustStrip, FAQ,
+  QuickTools, StatsBand, PopularRoutes, Services, HowItWorks, TrustStrip, FAQ, DestinationDiscovery,
 } from "./HomeSections.jsx";
 import stationsData from "../data/stationsData.json";
 import stationList from "../data/stationList.json";
 import ExploreScreen from "../screens/ExploreScreen";
 import PageHero from "./common/PageHero";
+import LiveJourneyDashboard from "./features/LiveJourneyDashboard.jsx";
+import { useJourneyStore } from "../lib/store.ts";
+import AuthModal from "./common/AuthModal.jsx";
+import { useAuthStore } from "../lib/store.ts";
+import CinematicStory from "./features/CinematicStory.jsx";
+import CinematicHeroScenery from "./common/CinematicHero.jsx";
 import { RangoliOverlay, DotNetwork, WarmGlowOrbs, WarmGradientWave } from "./common/CulturalPatterns.jsx";
 import { searchTrains, getPNRStatus, getLiveTrainStatus } from "../lib/api.ts";
 
@@ -44,196 +51,7 @@ import EndToEndTrainTrack from "../components/features/animation/EndToEndTrainTr
              station to another and handing them a paper-trail of that.
 ------------------------------------------------------------------*/
 
-const FONT_IMPORT = `
-:root{
-  --ink:#1B1A18; --paper:#F7F4EC; --paper-2:#EFEADC;
-  --blue:#0F2A45; --blue-2:#1B4470; --blue-3:#060F1D;
-  --marigold:#E5A93D; --marigold-2:#C08321; --marigold-dim:rgba(229,169,61,0.12);
-  --green:#1F7A4C; --green-bg:#E9F4EE;
-  --amber:#C9861F; --amber-bg:#FCF2E1;
-  --red:#C23B32; --red-bg:#FBEBE9;
-  --steel:#6D7681; --line:#E2DCCD;
-  --shadow-lg: 0 28px 56px -24px rgba(9,28,49,0.34), 0 4px 14px -6px rgba(9,28,49,0.12);
-  --shadow-sm: 0 1px 2px rgba(9,28,49,0.04), 0 6px 16px -10px rgba(9,28,49,0.18);
-  --shadow-hover: 0 18px 34px -18px rgba(9,28,49,0.30);
-  --shadow-gold: 0 0 0 1px rgba(229,169,61,0.25), 0 8px 32px -8px rgba(229,169,61,0.28);
-}
-html{ scroll-behavior:smooth; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
-::selection{ background: rgba(229,169,61,0.32); }
-.f-display{ letter-spacing:-0.02em; }
-.f-serif{ font-family:'Fraunces',Georgia,serif; letter-spacing:-0.02em; }
-button, a, input, select{ outline-color: var(--marigold); }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible{
-  outline:2px solid var(--marigold); outline-offset:2px; border-radius:10px;
-}
-input, select, button{ transition: border-color .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, transform .18s ease; }
-input:focus, select:focus{ border-color: var(--blue) !important; box-shadow: 0 0 0 3px rgba(15,42,69,0.08); }
-.paper-texture{ position:relative; }
-::-webkit-scrollbar{ height:6px; width:6px; }
-::-webkit-scrollbar-thumb{ background: #CFC7B4; border-radius:8px; }
-::-webkit-scrollbar-track{ background: transparent; }
-.f-display{font-family:'Inter',system-ui,sans-serif; letter-spacing:-0.02em;}
-.f-body{font-family:'Inter',system-ui,sans-serif;}
-.f-mono{font-family:'IBM Plex Mono',monospace;}
-.paper-texture{
-  background-image: radial-gradient(circle, rgba(15,42,69,0.045) 1px, transparent 1px);
-  background-size: 18px 18px;
-}
-.ticket-notch{ position: relative; }
-.ticket-notch::before, .ticket-notch::after{
-  content:''; position:absolute; top:50%; width:16px; height:16px; border-radius:9999px;
-  background: var(--paper); transform: translateY(-50%);
-}
-.ticket-notch::before{ left:-8px; }
-.ticket-notch::after{ right:-8px; }
-
-/* Hero star field (legacy) */
-.star-field{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
-.star{ position:absolute; border-radius:50%; background:white; }
-
-/* Scroll-reveal */
-.reveal{ opacity:0; transform:translateY(22px); transition: opacity 0.65s cubic-bezier(.2,.8,.2,1), transform 0.65s cubic-bezier(.2,.8,.2,1); }
-.reveal.visible{ opacity:1; transform:translateY(0); }
-.reveal-delay-1{ transition-delay: 0.1s; }
-.reveal-delay-2{ transition-delay: 0.2s; }
-.reveal-delay-3{ transition-delay: 0.3s; }
-
-/* glass card — warm hero glassmorphism */
-.glass-card{
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-.glass-hero-card{
-  background: rgba(255,255,255,0.68);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(229,169,61,0.22);
-  box-shadow: 0 0 0 1px rgba(229,169,61,0.1), 0 24px 48px -12px rgba(229,169,61,0.12), 0 8px 24px rgba(15,42,69,0.06);
-  animation: glow-border 4s ease-in-out infinite;
-}
-.glass-stat-badge{
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(229,169,61,0.18);
-}
-
-@keyframes train-cross{
-  0%{ transform: translateX(-10%); }
-  100%{ transform: translateX(110%); }
-}
-@keyframes train-down{
-  0%{ transform: translateY(-10vh); }
-  100%{ transform: translateY(110vh); }
-}
-@keyframes train-chug{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-1.5px); }
-}
-@keyframes float-cloud{
-  0%{ transform: translateX(0); }
-  100%{ transform: translateX(-40px); }
-}
-@keyframes signal-blink{
-  0%,100%{ opacity: 1; }
-  50%{ opacity: 0.35; }
-}
-@keyframes fade-up{
-  from{ opacity: 0; transform: translateY(18px); }
-  to{ opacity: 1; transform: translateY(0); }
-}
-@keyframes fade-up-md{
-  from{ opacity: 0; transform: translateY(28px); }
-  to{ opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse-dot{
-  0%{ box-shadow: 0 0 0 0 rgba(31,122,76,0.45); }
-  70%{ box-shadow: 0 0 0 7px rgba(31,122,76,0); }
-  100%{ box-shadow: 0 0 0 0 rgba(31,122,76,0); }
-}
-@keyframes draw-check{
-  from{ stroke-dashoffset: 24; }
-  to{ stroke-dashoffset: 0; }
-}
-@keyframes confetti-fall{
-  0%{ transform: translateY(-12px) rotate(0deg); opacity: 0; }
-  10%{ opacity: 1; }
-  100%{ transform: translateY(120px) rotate(280deg); opacity: 0; }
-}
-@keyframes wheel-spin{
-  from{ transform: rotate(0deg); }
-  to{ transform: rotate(360deg); }
-}
-@keyframes shimmer{
-  0%{ background-position: -200px 0; }
-  100%{ background-position: 200px 0; }
-}
-@keyframes smoke-rise{
-  0%{ transform: translateY(0) scale(0.6); opacity: 0.55; }
-  100%{ transform: translateY(-26px) scale(1.4); opacity: 0; }
-}
-@keyframes dash-move{
-  to{ stroke-dashoffset: -22; }
-}
-@keyframes bob{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-6px); }
-}
-@keyframes bob-slow{
-  0%,100%{ transform: translateY(0) rotate(-1deg); }
-  50%{ transform: translateY(-9px) rotate(1deg); }
-}
-@keyframes ripple{
-  0%{ transform: scale(0.6); opacity: 0.35; }
-  100%{ transform: scale(1.6); opacity: 0; }
-}
-@keyframes glow-pulse{
-  0%,100%{ opacity:0.5; transform:scale(1); }
-  50%{ opacity:1; transform:scale(1.08); }
-}
-@keyframes star-twinkle{
-  0%,100%{ opacity:0.15; }
-  50%{ opacity:0.9; }
-}
-@keyframes gradient-shift{
-  0%{ background-position:0% 50%; }
-  50%{ background-position:100% 50%; }
-  100%{ background-position:0% 50%; }
-}
-@keyframes slide-in-up{
-  from{ opacity:0; transform:translateY(32px); }
-  to{ opacity:1; transform:translateY(0); }
-}
-@keyframes dot-network-pulse{
-  0%,100%{ opacity:0; transform:scale(0.8); }
-  50%{ opacity:0.5; transform:scale(1.4); }
-}
-@keyframes dot-network-float{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-2px); }
-}
-@keyframes warm-orb-drift{
-  0%{ transform:translate(-50%,-50%) translateX(0) translateY(0); }
-  100%{ transform:translate(-50%,-50%) translateX(12px) translateY(-8px); }
-}
-@keyframes glow-border{
-  0%,100%{ box-shadow: 0 0 0 1px rgba(229,169,61,0.1), 0 24px 48px -12px rgba(229,169,61,0.12), 0 8px 24px rgba(15,42,69,0.06); }
-  50%{ box-shadow: 0 0 0 1px rgba(229,169,61,0.25), 0 24px 48px -12px rgba(229,169,61,0.2), 0 8px 24px rgba(15,42,69,0.08); }
-}
-.anim-fade-up{ animation: fade-up 0.6s cubic-bezier(.16,1,.3,1) both; }
-.anim-fade-up-md{ animation: fade-up-md 0.75s cubic-bezier(.16,1,.3,1) both; }
-.anim-pulse-dot{ animation: pulse-dot 2s infinite; }
-.anim-bob{ animation: bob 3.5s ease-in-out infinite; }
-.anim-bob-slow{ animation: bob-slow 5s ease-in-out infinite; }
-.anim-glow-pulse{ animation: glow-pulse 3s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce){
-  .anim-fade-up,.anim-fade-up-md,.anim-pulse-dot,.anim-bob,.anim-bob-slow,.anim-glow-pulse,
-  .reveal,[style*="animation"]{ animation: none !important; transition: none !important; }
-  .reveal{ opacity:1; transform:none; }
-  .opacity-0{ opacity:1 !important; }
-}
-`;
+// FONT_IMPORT migrated to styles.css
 
 /* ---------------- sample data (enriched with running days, pantry, distance) ---------------- */
 
@@ -359,29 +177,16 @@ function FadeIn({ children, delay = 0, className = "", hero = false }) {
   );
 }
 
-/* ── Warm Light Hero Scenery (Cultural + Futuristic) ── */
+/* ── Cinematic Hero Scenery ── */
 function HeroScenery() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {/* Warm gradient wave backdrop */}
-      <WarmGradientWave />
-
-      {/* Railway network dot animation */}
-      <DotNetwork count={18} />
-
-      {/* Warm floating golden orbs */}
-      <WarmGlowOrbs count={7} />
-
-      {/* Cultural rangoli overlays — subtle decorative corners */}
-      <RangoliOverlay position="top-right" size={340} opacity={0.04} />
-      <RangoliOverlay position="bottom-left" size={280} opacity={0.035} />
-    </div>
-  );
+  return <CinematicHeroScenery />;
 }
 
 function TopNav({ screen, setScreen }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const { isAuthenticated, user, logout, addJourney } = useAuthStore();
   const isHome = ["search","results","booking","confirmation"].includes(screen);
 
   useEffect(() => {
@@ -460,12 +265,13 @@ function TopNav({ screen, setScreen }) {
 
           {/* CTA area */}
           <div className="flex items-center gap-2">
-            <button onClick={() => setScreen("account")}
+            <button onClick={() => isAuthenticated ? logout() : setAuthModalOpen(true)}
               className="hidden md:flex items-center gap-2 px-4 h-10 rounded-xl text-sm font-medium border transition-all duration-200"
               style={{ borderColor: accountBorder, color: textColor }}>
               <User size={15} />
-              <span className={screen === "account" ? "text-[var(--marigold)]" : ""}>{screen === "account" ? "Account" : "Account"}</span>
+              <span className={screen === "account" ? "text-[var(--marigold)]" : ""}>{isAuthenticated ? user?.name : "Sign In"}</span>
             </button>
+            {authModalOpen && <AuthModal onClose={() => setAuthModalOpen(false)} />}
             <button onClick={() => { setScreen("search"); setMobileMenuOpen(false); }}
               className="h-10 px-5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 active:scale-[0.97] shadow-md"
               style={{ background: "var(--marigold)", color: "var(--blue)" }}>
@@ -786,12 +592,8 @@ function Footer({ onAction }) {
 /* ---------------- SEARCH SCREEN ---------------- */
 
 function SearchScreen({ onSearch, onFooterAction }) {
-  const [from, setFrom] = useState("New Delhi (NDLS)");
-  const [to, setTo] = useState("Mumbai Central (BCT)");
-  const [date, setDate] = useState("Tue, 25 Aug");
-  const [cls, setCls] = useState("All classes");
-  const [quota, setQuota] = useState("General");
-  const [passengers, setPassengers] = useState({ adults: 1, children: 0, infants: 0 });
+  const { from, setFrom, to, setTo, date, setDate, cls, setCls, quota, setQuota, passengers, setPassengers } = useBookingStore();
+  const { mode } = useJourneyStore();
   const [flexDates, setFlexDates] = useState(false);
 
   const dateStrip = ["23 Aug", "24 Aug", "25 Aug", "26 Aug", "27 Aug", "28 Aug", "29 Aug", "30 Aug", "31 Aug", "01 Sep"];
@@ -876,6 +678,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
       <section className="relative min-h-[88vh] flex flex-col justify-end overflow-hidden"
         style={{ background: "linear-gradient(160deg, #FFF9F0 0%, #FEF3E2 40%, #F7F4EC 100%)" }}>
 
+        {mode === "journey" && <LiveJourneyDashboard />}
         <HeroScenery />
 
         {/* Content */}
@@ -1047,9 +850,11 @@ function SearchScreen({ onSearch, onFooterAction }) {
         </div>
       </div>
 
+      <CinematicStory />
       <QuickTools />
       <StatsBand />
       <PopularRoutes onSearch={onSearch} />
+      <DestinationDiscovery />
       <Services />
       <HowItWorks />
       <TrustStrip />
@@ -1510,7 +1315,9 @@ const STEPS = ["Passengers", "Payment", "Confirmation"];
 
 function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
   const [step, setStep] = useState(0);
-  const [payState, setPayState] = useState("idle"); // idle | processing | verifying | success | failed
+  const [payState, setPayState] = useState("idle"); // idle | otp | processing | verifying | success | failed
+  const [otp, setOtp] = useState("");
+  const [selectedMethod, setSelectedMethod] = useState(null);
   const [passengers, setPassengers] = useState([{ name: "", age: "", gender: "M" }]);
 
   const fare = selection.fare;
@@ -2070,7 +1877,7 @@ export default function App({ initialScreen }) {
 
   return (
     <div className="f-body" style={{ minHeight: "100vh" }}>
-      <style>{FONT_IMPORT}</style>
+      
       <TopNav screen={screen} setScreen={setScreen} />
 
       {screen === "search" && <SearchScreen onSearch={(params) => { setSearchParams(params); setScreen("results"); }} onFooterAction={handleFooterAction} />}
@@ -2086,7 +1893,7 @@ export default function App({ initialScreen }) {
           selection={selection}
           onBack={() => setScreen("results")}
           onDone={() => setScreen("trips")}
-          onConfirmed={(b) => { setBooking(b); setScreen("confirmation"); window.scrollTo({ top: 0 }); }}
+          onConfirmed={(b) => { setBooking(b); addJourney(b); setScreen("confirmation"); window.scrollTo({ top: 0 }); }}
         />
       )}
       {screen === "confirmation" && booking && (

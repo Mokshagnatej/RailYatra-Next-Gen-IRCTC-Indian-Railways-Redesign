@@ -113,7 +113,7 @@ export function QuickTools() {
 
   return (
     <section className="max-w-4xl mx-auto px-4 md:px-6 mt-10">
-      <div className="rounded-2xl border bg-white overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
+      <div className="rounded-2xl border bg-[var(--surface)] overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
         <div className="flex overflow-x-auto border-b bg-gray-50/50" style={{ borderColor: "var(--line)" }}>
           {TOOLS.map((t) => {
             const on = t.key === tab;
@@ -134,7 +134,7 @@ export function QuickTools() {
         </div>
         <div className="p-5 md:p-6">
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 h-12 rounded-xl border flex items-center gap-2 px-3.5 bg-white transition-all focus-within:ring-2 focus-within:ring-blue-100" style={{ borderColor: "var(--line)" }}>
+            <div className="flex-1 h-12 rounded-xl border flex items-center gap-2 px-3.5 bg-[var(--surface)] transition-all focus-within:ring-2 focus-within:ring-blue-100" style={{ borderColor: "var(--line)" }}>
               <Search size={17} style={{ color: "var(--blue)" }} />
               <input 
                 value={value} 
@@ -262,7 +262,7 @@ export function PopularRoutes({ onSearch }) {
         {ROUTES.map((r, i) => (
           <Reveal key={r.code} delay={i * 0.06}>
           <button onClick={() => onSearch({ from: r.from, to: r.to, date: "25-Aug-2026", cls: "All classes", quota: "General", passengers: { adults: 1, children: 0, infants: 0 } })}
-            className="w-full text-left rounded-2xl border bg-white p-5 transition-all duration-250 hover:-translate-y-1.5 group"
+            className="w-full text-left rounded-2xl border bg-[var(--surface)] p-5 transition-all duration-250 hover:-translate-y-1.5 group"
             style={{ borderColor: "var(--line)", boxShadow:"0 1px 4px rgba(15,42,69,0.06)" }}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 f-mono text-xs font-semibold" style={{ color: "var(--blue)" }}>
@@ -315,7 +315,7 @@ export function Services() {
           const Icon = s.icon;
           return (
             <Reveal key={s.title} delay={i * 0.06} style={{ borderColor: "var(--line)" }}
-              className="h-full rounded-xl border bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+              className="h-full rounded-xl border bg-[var(--surface)] p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
               <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3" style={{ background: "var(--paper-2)" }}>
                 <Icon size={18} style={{ color: "var(--blue)" }} />
               </div>
@@ -352,7 +352,7 @@ export function HowItWorks() {
           <div className="hidden md:block absolute top-[2.25rem] left-[12.5%] right-[12.5%] h-px" style={{ background:"linear-gradient(90deg,var(--marigold),var(--green))", opacity:0.3 }} />
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.1}
-              className="rounded-2xl border bg-white p-6 relative transition-all duration-300 hover:-translate-y-2 group"
+              className="rounded-2xl border bg-[var(--surface)] p-6 relative transition-all duration-300 hover:-translate-y-2 group"
               style={{ borderColor: "var(--line)", boxShadow:"0 1px 4px rgba(15,42,69,0.06)" }}>
               <div className="h-11 w-11 rounded-full flex items-center justify-center mb-4 f-mono text-sm font-bold transition-colors group-hover:scale-110"
                 style={{ background:"var(--blue)", color:"var(--marigold)" }}>{s.n}</div>
@@ -384,7 +384,7 @@ export function TrustStrip() {
           const Icon = t.icon;
           return (
             <Reveal key={t.k} delay={i * 0.08} className="flex gap-3">
-              <div className="h-9 w-9 rounded-lg flex-shrink-0 flex items-center justify-center bg-white" style={{ color: "var(--green)" }}>
+              <div className="h-9 w-9 rounded-lg flex-shrink-0 flex items-center justify-center bg-[var(--surface)]" style={{ color: "var(--green)" }}>
                 <Icon size={17} />
               </div>
               <div>
@@ -419,7 +419,7 @@ export function FAQ() {
     <section className="max-w-3xl mx-auto px-4 md:px-6 mt-14 pb-16">
       <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Questions</p>
       <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>The things people actually ask</h2>
-      <div className="mt-5 rounded-xl border bg-white overflow-hidden" style={{ borderColor: "var(--line)" }}>
+      <div className="mt-5 rounded-xl border bg-[var(--surface)] overflow-hidden" style={{ borderColor: "var(--line)" }}>
         {FAQS.map((f, i) => {
           const on = open === i;
           return (
@@ -435,6 +435,47 @@ export function FAQ() {
             </div>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- destination discovery ---------------- */
+
+const DESTINATIONS = [
+  { title: "Mountains", subtitle: "Himalayan Railways & Escapes", imgUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop" },
+  { title: "Coast", subtitle: "Konkan & Southern Shores", imgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" },
+  { title: "Culture", subtitle: "Temples & Heritage Circuits", imgUrl: "https://images.unsplash.com/photo-1560179406-1c6c60e0dcb6?q=80&w=800&auto=format&fit=crop" },
+  { title: "Cities", subtitle: "Metros & Urban Connections", imgUrl: "https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=800&auto=format&fit=crop" },
+];
+
+export function DestinationDiscovery() {
+  return (
+    <section className="max-w-6xl mx-auto px-4 md:px-6 mt-20">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Explore</p>
+          <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Find your next journey</h2>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {DESTINATIONS.map((dest, i) => (
+          <div key={dest.title} className="group relative rounded-2xl overflow-hidden cursor-pointer h-64 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <img 
+              src={dest.imgUrl} 
+              alt={dest.title} 
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+            />
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            
+            <div className="absolute bottom-0 left-0 right-0 p-5">
+              <h3 className="f-serif font-bold text-xl text-white mb-1">{dest.title}</h3>
+              <p className="f-body text-sm text-white/80">{dest.subtitle}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

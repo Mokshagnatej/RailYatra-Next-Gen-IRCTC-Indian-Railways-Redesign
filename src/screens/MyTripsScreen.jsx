@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Ticket, Search, Clock, CheckCircle2, ChevronRight, AlertCircle, RefreshCw, X, MapPin, Train, ShieldCheck, Check, ScanLine, Download } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
+import { useAuthStore } from '../lib/store.ts';
 import { Modal } from '../components/common/Shared';
 import { DotNetwork } from '../components/common/CulturalPatterns.jsx';
 
@@ -11,6 +12,7 @@ export default function MyTripsScreen() {
   const [pnrResult, setPnrResult] = useState(null);
   const [activeModal, setActiveModal] = useState(null);
   const [isCancelled, setIsCancelled] = useState(false);
+  const { journeys, isAuthenticated } = useAuthStore();
 
   const checkPnr = () => {
     if (!pnr) return;
@@ -50,7 +52,7 @@ export default function MyTripsScreen() {
       </div>
       <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, PNR status, and refund tracking — consolidated from four scattered pages on the old site." />
       <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-20">
-        <div className="flex gap-1 bg-white rounded-xl border p-1 w-fit mb-6" style={{ borderColor: "var(--line)" }}>
+        <div className="flex gap-1 bg-[var(--surface)] rounded-xl border p-1 w-fit mb-6" style={{ borderColor: "var(--line)" }}>
           {tabs.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className="px-4 h-10 rounded-lg text-sm font-medium f-body transition-colors"
@@ -61,34 +63,43 @@ export default function MyTripsScreen() {
         </div>
 
         {tab === "upcoming" && (
-          <div onClick={() => setActiveModal('ticket_details')} className="rounded-xl border bg-white overflow-hidden mb-16 ticket-notch cursor-pointer hover:shadow-lg transition-shadow" style={{ borderColor: "var(--line)" }}>
-            <div className="p-5 flex items-center justify-between transition-colors duration-500" style={{ background: isCancelled ? "var(--red-bg)" : "var(--green-bg)" }}>
-              <div>
-                <p className="f-display font-semibold text-sm">Mumbai Rajdhani · #12951</p>
-                <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>25 Aug · 16:35 NDLS → 08:35 BCT · 3A</p>
+          <div className="mb-16">
+            {!isAuthenticated || journeys.length === 0 ? (
+              <div className="p-8 text-center bg-[var(--surface)] rounded-xl border border-dashed border-slate-300 text-[var(--steel)]">
+                {!isAuthenticated ? "Sign in to view your bookings." : "No upcoming journeys found."}
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--green)", color: "white" }}>
-                {isCancelled ? "Cancelled" : "Confirmed"}
-              </span>
-            </div>
-            <div className="border-t border-dashed p-5 flex flex-wrap gap-6 items-center" style={{ borderColor: "var(--line)" }}>
-              <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</p><p className="f-mono text-sm font-semibold">8462 097 315</p></div>
-              {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Coach / Seat</p><p className="f-mono text-sm font-semibold">B4 / 22 SL</p></div>}
-              {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Live status</p><p className="text-sm font-semibold" style={{ color: "var(--green)" }}>On time</p></div>}
-              {isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Refund Status</p><p className="text-sm font-semibold" style={{ color: "var(--amber)" }}>Processing</p></div>}
-              
-              {!isCancelled && (
-                <div className="ml-auto flex gap-2">
-                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('live_tracking'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>Live tracking</button>
-                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('cancel_ticket'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Cancel</button>
+            ) : (
+              journeys.map((b, idx) => (
+                <div key={idx} onClick={() => setActiveModal('ticket_details')} className="rounded-xl border bg-[var(--surface)] overflow-hidden mb-6 ticket-notch cursor-pointer hover:shadow-lg transition-shadow" style={{ borderColor: "var(--line)" }}>
+                  <div className="p-5 flex items-center justify-between transition-colors duration-500" style={{ background: isCancelled ? "var(--red-bg)" : "var(--green-bg)" }}>
+                    <div>
+                      <p className="f-display font-semibold text-sm">{b.train.name} · #{b.train.no}</p>
+                      <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>{b.date} · {b.train.dep} {b.train.from} → {b.train.arr} {b.train.to} · {b.passengers[0].class}</p>
+                    </div>
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--green)", color: "white" }}>
+                      {isCancelled ? "Cancelled" : "Confirmed"}
+                    </span>
+                  </div>
+                  <div className="border-t border-dashed p-5 flex flex-wrap gap-6 items-center" style={{ borderColor: "var(--line)" }}>
+                    <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</p><p className="f-mono text-sm font-semibold">{b.pnr}</p></div>
+                    {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Coach / Seat</p><p className="f-mono text-sm font-semibold">B4 / 22 SL</p></div>}
+                    {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Live status</p><p className="text-sm font-semibold" style={{ color: "var(--green)" }}>On time</p></div>}
+                    
+                    {!isCancelled && (
+                      <div className="ml-auto flex gap-2">
+                        <button onClick={(e) => { e.stopPropagation(); setActiveModal('live_tracking'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>Live tracking</button>
+                        <button onClick={(e) => { e.stopPropagation(); setActiveModal('cancel_ticket'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Cancel</button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
+              ))
+            )}
           </div>
         )}
 
         {tab === "pnr" && (
-          <div className="rounded-xl border bg-white p-5 mb-16" style={{ borderColor: "var(--line)" }}>
+          <div className="rounded-xl border bg-[var(--surface)] p-5 mb-16" style={{ borderColor: "var(--line)" }}>
             <p className="f-display font-semibold mb-1">Check PNR status</p>
             <p className="text-sm mb-4" style={{ color: "var(--steel)" }}>10-digit number printed on your ticket / SMS.</p>
             <div className="flex gap-2">
@@ -114,7 +125,7 @@ export default function MyTripsScreen() {
         )}
 
         {tab === "refunds" && (
-          <div className="rounded-xl border bg-white p-5 mb-16" style={{ borderColor: "var(--line)" }}>
+          <div className="rounded-xl border bg-[var(--surface)] p-5 mb-16" style={{ borderColor: "var(--line)" }}>
             <p className="f-display font-semibold mb-1">Refund status — TDR REF 20260812-441</p>
             <p className="text-sm mb-5" style={{ color: "var(--steel)" }}>Filed for a waitlisted passenger cancelled after chart preparation. Refunds are decided by the concerned zonal railway, typically within 60 days.</p>
             <div className="space-y-0">
@@ -193,7 +204,7 @@ export default function MyTripsScreen() {
           <h3 className="text-center font-semibold text-lg mb-1">Confirm Cancellation</h3>
           <p className="text-center text-sm mb-6" style={{ color: "var(--steel)" }}>Are you sure you want to cancel your ticket for Mumbai Rajdhani?</p>
           
-          <div className="rounded-xl border p-4 mb-6 bg-gray-50" style={{ borderColor: "var(--line)" }}>
+          <div className="rounded-xl border p-4 mb-6 bg-[var(--paper-2)]" style={{ borderColor: "var(--line)" }}>
             <div className="flex justify-between text-sm mb-2">
               <span style={{ color: "var(--steel)" }}>Ticket Fare</span>
               <span className="font-semibold">₹2,840</span>
@@ -210,7 +221,7 @@ export default function MyTripsScreen() {
           </div>
           
           <div className="flex gap-3 mt-auto">
-            <button onClick={() => setActiveModal(null)} className="flex-1 h-12 rounded-xl font-semibold border hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>Keep Ticket</button>
+            <button onClick={() => setActiveModal(null)} className="flex-1 h-12 rounded-xl font-semibold border hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>Keep Ticket</button>
             <button onClick={handleCancelTicket} className="flex-1 h-12 rounded-xl font-semibold text-white hover:bg-red-600 transition-colors" style={{ background: "var(--red)" }}>Confirm Cancel</button>
           </div>
         </div>
@@ -250,7 +261,7 @@ export default function MyTripsScreen() {
               </div>
             </div>
             
-            <div className="p-5 bg-white">
+            <div className="p-5 bg-[var(--surface)]">
               <p className="text-[11px] uppercase tracking-wide mb-3" style={{ color: "var(--steel)" }}>Passenger Details</p>
               <div className="flex justify-between items-center py-2 border-b" style={{ borderColor: "var(--line)" }}>
                 <div>
@@ -272,7 +283,7 @@ export default function MyTripsScreen() {
             </div>
           </div>
           
-          <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
+          <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>
             <Download size={16} /> Download PDF
           </button>
         </div>

@@ -101,7 +101,7 @@ export default function ExploreScreen() {
               {searchQuery ? `Showing ${filteredTrending.length} matching destinations` : "Curated packages from IRCTC Tourism — train travel included."}
             </p>
           </div>
-          <span className="text-xs px-2.5 py-1 rounded-full border bg-white text-gray-500 font-medium hidden sm:inline-block">
+          <span className="text-xs px-2.5 py-1 rounded-full border bg-[var(--surface)] text-gray-500 font-medium hidden sm:inline-block">
             Hover to pause · Click card for details
           </span>
         </div>
@@ -136,7 +136,7 @@ export default function ExploreScreen() {
                   <span className="text-[11px] font-bold f-mono px-2.5 py-1 rounded-full text-white bg-black/50 backdrop-blur-md border border-white/20">
                     {p.days}
                   </span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/90 text-slate-900">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/90 text-[var(--ink)]">
                     Popular
                   </span>
                 </div>
@@ -148,7 +148,7 @@ export default function ExploreScreen() {
                       <span className="text-[10px] text-white/60 block">Starting from</span>
                       <span className="text-white font-extrabold text-base">{p.price}</span>
                     </div>
-                    <button className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white text-white hover:text-blue-900 backdrop-blur-md transition-all">
+                    <button className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[var(--surface)]/20 hover:bg-[var(--surface)] text-white hover:text-blue-900 backdrop-blur-md transition-all">
                       View Tour
                     </button>
                   </div>
@@ -174,7 +174,7 @@ export default function ExploreScreen() {
         </div>
         
         {filteredPackages.length === 0 ? (
-          <div className="rounded-2xl border p-10 text-center bg-white shadow-sm">
+          <div className="rounded-2xl border p-10 text-center bg-[var(--surface)] shadow-sm">
             <p className="font-semibold text-gray-700">No packages found matching "{searchQuery}"</p>
             <p className="text-xs text-gray-500 mt-1">Try searching for "Goa", "Kashmir", "Heritage", or "Bharat Gaurav"</p>
             <button onClick={() => setSearchQuery("")} className="mt-4 px-4 py-2 rounded-xl text-xs font-semibold shadow-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
@@ -211,8 +211,8 @@ export default function ExploreScreen() {
                     </div>
                     <p className="text-xs text-gray-600 mb-3 leading-relaxed">{p.desc}</p>
                     <div className="flex flex-wrap gap-2 text-[11px] text-gray-500 mb-4">
-                      {p.accommodation && <span className="px-2 py-0.5 rounded bg-white border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🏨 {p.accommodation}</span>}
-                      {p.meals && <span className="px-2 py-0.5 rounded bg-white border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🍽️ {p.meals}</span>}
+                      {p.accommodation && <span className="px-2 py-0.5 rounded bg-[var(--surface)] border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🏨 {p.accommodation}</span>}
+                      {p.meals && <span className="px-2 py-0.5 rounded bg-[var(--surface)] border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🍽️ {p.meals}</span>}
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t mt-auto" style={{ borderColor: "rgba(15,42,69,0.06)" }}>
@@ -242,7 +242,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.trains.from} 
                   onChange={(e) => setToolState({ ...toolState, trains: { ...toolState.trains, from: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="NDLS">New Delhi (NDLS)</option>
                   <option value="BCT">Mumbai Central (BCT)</option>
@@ -256,7 +256,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.trains.to} 
                   onChange={(e) => setToolState({ ...toolState, trains: { ...toolState.trains, to: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="BCT">Mumbai Central (BCT)</option>
                   <option value="NDLS">New Delhi (NDLS)</option>
@@ -275,7 +275,7 @@ export default function ExploreScreen() {
                   { no: "12953", name: "August Kranti Rajdhani", dep: "17:15", arr: "10:05", dur: "16h 50m", days: "Daily", classes: ["1A", "2A", "3A", "3E"] },
                   { no: "22221", name: "CSMT Rajdhani Express", dep: "16:55", arr: "11:15", dur: "18h 20m", days: "Mon, Wed, Fri", classes: ["1A", "2A", "3A"] }
                 ].map((t) => (
-                  <div key={t.no} className="p-3 rounded-xl border bg-gray-50/70 hover:bg-blue-50/50 transition-colors">
+                  <div key={t.no} className="p-3 rounded-xl border bg-[var(--paper-2)]/70 hover:bg-blue-50/50 transition-colors">
                     <div className="flex justify-between items-start">
                       <div>
                         <span className="f-mono text-xs font-bold text-blue-700 mr-2">{t.no}</span>
@@ -286,7 +286,7 @@ export default function ExploreScreen() {
                     <div className="flex items-center justify-between text-xs text-gray-600 mt-2">
                       <span>Dep: <strong>{t.dep}</strong> → Arr: <strong>{t.arr}</strong> ({t.dur})</span>
                       <div className="flex gap-1">
-                        {t.classes.map(c => <span key={c} className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">{c}</span>)}
+                        {t.classes.map(c => <span key={c} className="px-1.5 py-0.5 rounded bg-[var(--surface)] border text-[10px] font-mono">{c}</span>)}
                       </div>
                     </div>
                   </div>
@@ -305,7 +305,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.fare.classType} 
                   onChange={(e) => setToolState({ ...toolState, fare: { ...toolState.fare, classType: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="SL">Sleeper (SL)</option>
                   <option value="3E">AC 3-Tier Economy (3E)</option>
@@ -319,7 +319,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.fare.quota} 
                   onChange={(e) => setToolState({ ...toolState, fare: { ...toolState.fare, quota: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="General">General Quota</option>
                   <option value="Tatkal">Tatkal (Premium)</option>
@@ -362,7 +362,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.room.station} 
                   onChange={(e) => setToolState({ ...toolState, room: { ...toolState.room, station: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="NDLS">New Delhi (NDLS)</option>
                   <option value="BCT">Mumbai Central (BCT)</option>
@@ -375,7 +375,7 @@ export default function ExploreScreen() {
                 <select 
                   value={toolState.room.hours} 
                   onChange={(e) => setToolState({ ...toolState, room: { ...toolState.room, hours: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-gray-50 text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
                   <option value="12 hrs">12 Hours Slot</option>
                   <option value="24 hrs">24 Hours Full Day</option>
@@ -390,7 +390,7 @@ export default function ExploreScreen() {
                 { name: "Standard AC Double Room", beds: "2 Single Beds (2 Guests)", tariff: "₹950 / 12h", available: "5 Rooms Free", rating: "4.1 ★" },
                 { name: "AC Dormitory Bed", beds: "Individual Pod with Locker", tariff: "₹380 / 12h", available: "14 Beds Free", rating: "4.2 ★" }
               ].map((r) => (
-                <div key={r.name} className="p-3.5 rounded-xl border bg-gray-50 flex items-center justify-between hover:border-blue-300 transition-colors">
+                <div key={r.name} className="p-3.5 rounded-xl border bg-[var(--paper-2)] flex items-center justify-between hover:border-blue-300 transition-colors">
                   <div>
                     <p className="font-bold text-sm text-gray-900">{r.name}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{r.beds} · {r.rating}</p>
@@ -443,11 +443,11 @@ export default function ExploreScreen() {
             )}
             
             <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="rounded-xl border p-3 bg-gray-50">
+              <div className="rounded-xl border p-3 bg-[var(--paper-2)]">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Meals Included</p>
                 <p className="text-xs font-semibold text-gray-800 mt-0.5">{activeModal.meals || "Breakfast & Dinner"}</p>
               </div>
-              <div className="rounded-xl border p-3 bg-gray-50">
+              <div className="rounded-xl border p-3 bg-[var(--paper-2)]">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Accommodation</p>
                 <p className="text-xs font-semibold text-gray-800 mt-0.5">{activeModal.accommodation || "3-Star Hotel / Resort"}</p>
               </div>
@@ -457,7 +457,7 @@ export default function ExploreScreen() {
               <button onClick={() => { alert(`Thank you! Booking inquiry initiated for ${activeModal.name}. Our IRCTC tourism executive will contact you shortly.`); setActiveModal(null); }} className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-[0.98]" style={{ background: "var(--blue)" }}>
                 Book This Package
               </button>
-              <button onClick={() => setActiveModal(null)} className="px-5 h-12 rounded-xl font-semibold text-sm border text-gray-700 hover:bg-gray-50">
+              <button onClick={() => setActiveModal(null)} className="px-5 h-12 rounded-xl font-semibold text-sm border text-gray-700 hover:bg-[var(--paper-2)]">
                 Close
               </button>
             </div>
