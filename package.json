@@ -3,6 +3,7 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
+  "homepage": "https://Mokshagnatej.github.io/UI-UX-Design-Event/",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
