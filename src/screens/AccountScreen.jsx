@@ -9,6 +9,7 @@ import PageHero from '../components/common/PageHero';
 import { 
   ProfileModal, PassengersModal, PaymentsModal, KycModal, LanguageModal, NotificationsModal 
 } from '../components/common/Shared';
+import { RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
 
 function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);
@@ -22,7 +23,8 @@ function AccountScreen({ onLogout }) {
     { id: "notifications", icon: Bell, label: "Notifications", detail: "SMS + push enabled" },
   ];
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+      <RangoliOverlay position="top-right" size={200} opacity={0.03} />
       <PageHero eyebrow="Account" title="Ananya Rao" sub="Member since 2019 · IRCTC ID: ananya.rao" small />
       <div className="max-w-2xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-16">
         <div className="rounded-xl border bg-white overflow-hidden" style={{ borderColor: "var(--line)" }}>

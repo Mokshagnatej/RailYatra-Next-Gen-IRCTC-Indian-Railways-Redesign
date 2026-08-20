@@ -1,0 +1,1 @@
+import{t as e}from"./index-CsHPYNyE.js";import{t}from"./RailApp-CReV3UEq.js";var n=e(),r=()=>(0,n.jsx)(t,{initialScreen:`help`});export{r as component};

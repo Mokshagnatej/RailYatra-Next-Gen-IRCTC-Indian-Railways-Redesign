@@ -3,6 +3,7 @@ import {
   Download, Share2, Printer, Train, MapPin, CalendarDays, Users, Ticket,
   ShieldCheck, Clock, CheckCircle2, Utensils, Bell, ChevronRight, Info, Wallet,
 } from "lucide-react";
+import { WarmGradientWave } from "./common/CulturalPatterns.jsx";
 
 const COACHES = ["B2", "B4", "A1", "S6", "C3"];
 const BERTHS = ["Lower", "Middle", "Upper", "Side Lower", "Side Upper"];
@@ -88,22 +89,23 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
   return (
     <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20">
       {/* success banner */}
-      <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
-        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-12 pb-24 text-center relative">
+      <section className="relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FFF9F0 0%, #FEF3E2 40%, #F7F4EC 100%)" }}>
+        <WarmGradientWave />
+        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-12 pb-24 text-center relative z-10">
           <div className="mx-auto h-14 w-14 rounded-full flex items-center justify-center mb-4" style={{ background: "var(--green)" }}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
               <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
                 style={{ strokeDasharray: 24, strokeDashoffset: 24, animation: "draw-check 0.5s 0.2s ease-out forwards" }} />
             </svg>
           </div>
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold)" }}>Booking confirmed</p>
-          <h1 className="f-display text-3xl md:text-4xl font-semibold text-white mt-2">Your seats are booked.</h1>
-          <p className="text-sm mt-2" style={{ color: "#C7D2DD" }}>
+          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Booking confirmed</p>
+          <h1 className="f-display text-3xl md:text-4xl font-semibold mt-2" style={{ color: "var(--blue)" }}>Your seats are booked.</h1>
+          <p className="text-sm mt-2 max-w-lg mx-auto" style={{ color: "var(--steel)" }}>
             An e-ticket has been sent to your registered email and mobile number. Carry a government photo ID while travelling.
           </p>
-          <div className="mt-5 inline-flex items-center gap-3 rounded-full px-5 py-2.5" style={{ background: "rgba(255,255,255,0.1)" }}>
-            <span className="text-xs uppercase tracking-wide" style={{ color: "#C7D2DD" }}>PNR</span>
-            <span className="f-mono text-lg font-semibold" style={{ color: "var(--marigold)" }}>
+          <div className="mt-5 inline-flex items-center gap-3 rounded-full px-5 py-2.5 bg-white border" style={{ borderColor: "var(--line)", boxShadow: "var(--shadow-sm)" }}>
+            <span className="text-xs uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</span>
+            <span className="f-mono text-lg font-semibold" style={{ color: "var(--ink)" }}>
               {booking.pnr.slice(0, 3)} {booking.pnr.slice(3, 6)} {booking.pnr.slice(6)}
             </span>
           </div>

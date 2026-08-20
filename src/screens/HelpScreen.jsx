@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
+import { RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
 
 function HelpScreen() {
   const [openFaq, setOpenFaq] = useState(0);
@@ -28,7 +29,8 @@ function HelpScreen() {
   }, [query]);
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+      <RangoliOverlay position="top-left" size={200} opacity={0.03} />
       <PageHero eyebrow="Help & Support" title="Surfaced, not buried." sub="Refund status, complaint tracking and FAQs — moved from three clicks deep to a top-level page." />
 
       <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">

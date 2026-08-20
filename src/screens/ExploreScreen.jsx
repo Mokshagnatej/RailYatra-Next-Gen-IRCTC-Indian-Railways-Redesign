@@ -7,6 +7,7 @@ import {
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
 import { Modal, ToolCard } from '../components/common/Shared';
+import { WarmGradientWave, RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
 
 export default function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,12 +50,16 @@ export default function ExploreScreen() {
   }, [searchQuery, packages]);
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20">
-      <section className="relative overflow-hidden paper-texture" style={{ background: "linear-gradient(180deg, var(--blue) 0%, var(--blue-2) 100%)" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 pt-10 pb-20 md:pt-12 md:pb-24">
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold)" }}>Explore</p>
-          <h1 className="f-display text-3xl md:text-4xl font-semibold text-white mt-2 max-w-xl">Beyond booking a seat.</h1>
-          <p className="text-sm mt-2 max-w-lg mb-8" style={{ color: "#C7D2DD" }}>Interactive rail planning tools and curated IRCTC Tourism packages for your next journey.</p>
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20 relative">
+      <RangoliOverlay position="bottom-right" size={240} opacity={0.03} />
+      <RangoliOverlay position="bottom-left" size={240} opacity={0.03} />
+
+      <section className="relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FFF9F0 0%, #FEF3E2 40%, #F7F4EC 100%)" }}>
+        <WarmGradientWave />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-10 pb-20 md:pt-12 md:pb-24">
+          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Explore</p>
+          <h1 className="f-display text-3xl md:text-4xl font-semibold mt-2 max-w-xl" style={{ color: "var(--blue)" }}>Beyond booking a seat.</h1>
+          <p className="text-sm mt-2 max-w-lg mb-8" style={{ color: "var(--steel)" }}>Interactive rail planning tools and curated IRCTC Tourism packages for your next journey.</p>
           
           <div className="relative max-w-lg">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -65,8 +70,8 @@ export default function ExploreScreen() {
               placeholder="Search packages, destinations or tour types..." 
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="block w-full pl-11 pr-10 py-3.5 rounded-xl border-none outline-none f-body shadow-lg text-sm"
-              style={{ color: "var(--ink)", background: "white" }}
+              className="block w-full pl-11 pr-10 py-3.5 rounded-xl border-none outline-none f-body shadow-sm text-sm transition-shadow focus:shadow-md"
+              style={{ color: "var(--ink)", background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(192,131,33,0.15)" }}
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")} className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600">
@@ -169,10 +174,10 @@ export default function ExploreScreen() {
         </div>
         
         {filteredPackages.length === 0 ? (
-          <div className="rounded-2xl border p-10 text-center bg-white">
+          <div className="rounded-2xl border p-10 text-center bg-white shadow-sm">
             <p className="font-semibold text-gray-700">No packages found matching "{searchQuery}"</p>
             <p className="text-xs text-gray-500 mt-1">Try searching for "Goa", "Kashmir", "Heritage", or "Bharat Gaurav"</p>
-            <button onClick={() => setSearchQuery("")} className="mt-4 px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white">
+            <button onClick={() => setSearchQuery("")} className="mt-4 px-4 py-2 rounded-xl text-xs font-semibold shadow-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
               Clear Search
             </button>
           </div>
@@ -182,8 +187,8 @@ export default function ExploreScreen() {
               <div 
                 onClick={() => setActiveModal({ ...p, type: "package_detail" })} 
                 key={p.name} 
-                className="rounded-2xl border bg-white overflow-hidden flex flex-col sm:flex-row group cursor-pointer transition-all duration-300 hover:shadow-xl hover:border-blue-200" 
-                style={{ borderColor: "var(--line)" }}
+                className="rounded-2xl border overflow-hidden flex flex-col sm:flex-row group cursor-pointer transition-all duration-300 hover:shadow-xl" 
+                style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.6)", backdropFilter: "blur(12px)" }}
               >
                 <div className="h-48 sm:h-auto sm:w-48 relative overflow-hidden flex-shrink-0">
                   <img 
@@ -202,20 +207,20 @@ export default function ExploreScreen() {
                 <div className="p-5 flex flex-col justify-between flex-1">
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-1.5">
-                      <h3 className="f-body font-bold text-[16px] text-gray-900 group-hover:text-blue-600 transition-colors">{p.name}</h3>
+                      <h3 className="f-body font-bold text-[16px] transition-colors" style={{ color: "var(--blue)" }}>{p.name}</h3>
                     </div>
                     <p className="text-xs text-gray-600 mb-3 leading-relaxed">{p.desc}</p>
                     <div className="flex flex-wrap gap-2 text-[11px] text-gray-500 mb-4">
-                      {p.accommodation && <span className="px-2 py-0.5 rounded bg-gray-100 font-medium">🏨 {p.accommodation}</span>}
-                      {p.meals && <span className="px-2 py-0.5 rounded bg-gray-100 font-medium">🍽️ {p.meals}</span>}
+                      {p.accommodation && <span className="px-2 py-0.5 rounded bg-white border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🏨 {p.accommodation}</span>}
+                      {p.meals && <span className="px-2 py-0.5 rounded bg-white border font-medium" style={{ borderColor: "rgba(192,131,33,0.15)" }}>🍽️ {p.meals}</span>}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
+                  <div className="flex items-center justify-between pt-3 border-t mt-auto" style={{ borderColor: "rgba(15,42,69,0.06)" }}>
                     <div>
                       <span className="text-[10px] text-gray-400 block uppercase font-medium">All-Inclusive</span>
-                      <span className="f-mono text-base font-extrabold text-blue-900">{p.price}</span>
+                      <span className="f-mono text-base font-extrabold" style={{ color: "var(--ink)" }}>{p.price}</span>
                     </div>
-                    <button className="text-xs font-bold px-4 py-2 rounded-xl text-white shadow-sm transition-all" style={{ background: "var(--blue)" }}>
+                    <button className="text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition-all hover:opacity-90" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
                       View Details
                     </button>
                   </div>

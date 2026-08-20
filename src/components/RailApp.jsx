@@ -396,19 +396,16 @@ function TopNav({ screen, setScreen }) {
     { key: "help", label: "Help", icon: LifeBuoy },
   ];
 
-  /* Light hero: warm frosted glass when on hero, solid cream on scroll.
-     Non-home pages: dark navy nav (unchanged). */
+  /* Light theme globally: warm frosted glass when on top of hero, solid cream otherwise. */
   const onLightHero = isHome && !scrolled;
-  const navBg = !isHome
-    ? "rgba(9,28,49,0.97)"
-    : scrolled
-      ? "rgba(255,249,240,0.96)"
-      : "rgba(255,255,255,0.15)";
+  const navBg = onLightHero
+    ? "rgba(255,255,255,0.15)"
+    : "rgba(255,249,240,0.98)";
 
-  const textColor = onLightHero ? "var(--blue)" : !isHome ? "rgba(255,255,255,0.82)" : "var(--blue)";
-  const textInactive = onLightHero ? "rgba(15,42,69,0.6)" : !isHome ? "rgba(255,255,255,0.65)" : "rgba(15,42,69,0.6)";
-  const hamburgerColor = onLightHero ? "var(--blue)" : !isHome ? "rgba(255,255,255,0.8)" : "var(--blue)";
-  const accountBorder = onLightHero ? "rgba(15,42,69,0.15)" : !isHome ? "rgba(255,255,255,0.2)" : "rgba(15,42,69,0.15)";
+  const textColor = "var(--blue)";
+  const textInactive = onLightHero ? "rgba(15,42,69,0.6)" : "rgba(15,42,69,0.6)";
+  const hamburgerColor = "var(--blue)";
+  const accountBorder = "rgba(15,42,69,0.15)";
 
   return (
     <>
@@ -422,10 +419,10 @@ function TopNav({ screen, setScreen }) {
       <header className="sticky top-[33px] z-40 transition-all duration-300"
         style={{
           background: navBg,
-          backdropFilter: scrolled || !isHome ? "blur(16px)" : onLightHero ? "blur(12px)" : "none",
-          WebkitBackdropFilter: scrolled || !isHome ? "blur(16px)" : onLightHero ? "blur(12px)" : "none",
-          borderBottom: scrolled && isHome ? "1px solid rgba(192,131,33,0.12)" : scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
-          boxShadow: scrolled && isHome ? "0 4px 24px rgba(192,131,33,0.08)" : scrolled ? "0 4px 32px rgba(6,15,29,0.4)" : "none",
+          backdropFilter: onLightHero ? "blur(12px)" : "none",
+          WebkitBackdropFilter: onLightHero ? "blur(12px)" : "none",
+          borderBottom: !onLightHero ? "1px solid rgba(192,131,33,0.12)" : "none",
+          boxShadow: !onLightHero ? "0 4px 24px rgba(192,131,33,0.08)" : "none",
         }}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-[66px] flex items-center justify-between gap-4">
 
@@ -1266,11 +1263,11 @@ function ResultsScreen({ onBook, onBack }) {
         <div className="flex flex-wrap gap-2">
           {["SL", "3A", "2A", "1A", "CC", "EC"].map((c) => (
             <button key={c} onClick={() => toggle(classesF, setClassesF, c)}
-              className="px-3 h-9 rounded-lg border f-mono text-xs font-semibold"
+              className="px-3 h-9 rounded-lg border f-mono text-xs font-semibold transition-colors"
               style={{
                 borderColor: classesF.includes(c) ? "var(--blue)" : "var(--line)",
-                background: classesF.includes(c) ? "var(--blue)" : "white",
-                color: classesF.includes(c) ? "white" : "var(--ink)",
+                background: classesF.includes(c) ? "var(--marigold)" : "white",
+                color: classesF.includes(c) ? "var(--blue)" : "var(--ink)",
               }}>{c}</button>
           ))}
         </div>
@@ -1334,11 +1331,11 @@ function ResultsScreen({ onBook, onBack }) {
             <div className="flex items-center gap-1">
               {["Departure", "Duration", "Price"].map((s) => (
                 <button key={s} onClick={() => setSort(s)}
-                  className="text-xs px-3 h-8 rounded-full border font-medium"
+                  className="text-xs px-3 h-8 rounded-full border font-medium transition-colors"
                   style={{
                     borderColor: sort === s ? "var(--blue)" : "var(--line)",
-                    background: sort === s ? "var(--blue)" : "white",
-                    color: sort === s ? "white" : "var(--ink)",
+                    background: sort === s ? "var(--marigold)" : "white",
+                    color: sort === s ? "var(--blue)" : "var(--ink)",
                   }}>{s}</button>
               ))}
             </div>
@@ -1444,7 +1441,7 @@ function ResultsScreen({ onBook, onBack }) {
               <button onClick={() => setFiltersOpen(false)}><X size={20} /></button>
             </div>
             {FilterPanel}
-            <button onClick={() => setFiltersOpen(false)} className="mt-6 w-full h-12 rounded-xl font-semibold" style={{ background: "var(--blue)", color: "white" }}>
+            <button onClick={() => setFiltersOpen(false)} className="mt-6 w-full h-12 rounded-xl font-semibold shadow-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
               Show {filtered.length} trains
             </button>
           </div>
@@ -1504,19 +1501,19 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
           {STEPS.map((s, i) => (
             <React.Fragment key={s}>
               <div className="flex flex-col items-center gap-1.5">
-                <div className="h-8 w-8 rounded-full flex items-center justify-center f-mono text-xs font-semibold transition-all duration-300"
+                <div className="h-8 w-8 rounded-full flex items-center justify-center f-mono text-xs font-semibold transition-all duration-300 shadow-sm"
                   style={{
-                    background: i <= step ? "var(--blue)" : "white",
-                    color: i <= step ? "white" : "var(--steel)",
-                    border: `1.5px solid ${i <= step ? "var(--blue)" : "var(--line)"}`,
+                    background: i <= step ? "var(--marigold)" : "white",
+                    color: i <= step ? "var(--blue)" : "var(--steel)",
+                    border: `1.5px solid ${i <= step ? "var(--marigold)" : "var(--line)"}`,
                     transform: i === step ? "scale(1.1)" : "scale(1)",
                   }}>
-                  {i < step ? <Check size={14} /> : i + 1}
+                  {i < step ? <Check size={14} style={{ color: "var(--blue)" }} /> : i + 1}
                 </div>
                 <span className="text-[11px] font-medium" style={{ color: i <= step ? "var(--ink)" : "var(--steel)" }}>{s}</span>
               </div>
               {i < STEPS.length - 1 && (
-                <div className="flex-1 h-[2px] mx-2 mb-4" style={{ background: i < step ? "var(--blue)" : "var(--line)" }} />
+                <div className="flex-1 h-[2px] mx-2 mb-4 transition-colors duration-300" style={{ background: i < step ? "var(--marigold)" : "var(--line)" }} />
               )}
             </React.Fragment>
           ))}

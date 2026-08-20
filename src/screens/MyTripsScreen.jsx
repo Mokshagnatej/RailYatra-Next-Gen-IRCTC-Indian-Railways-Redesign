@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Ticket, Train, User, LifeBuoy, CreditCard, Bell, Shield, Wallet, ChevronDown, CheckCircle2, Clock, AlertTriangle, ArrowRight,
-  Check, X, ScanLine, Download, ChevronRight, Play, Compass, MapPin, Coffee, Tag, Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, Filter, Star, Info
-} from 'lucide-react';
-import FadeIn from '../components/common/FadeIn';
+import React, { useState } from 'react';
+import { Ticket, Search, Clock, CheckCircle2, ChevronRight, AlertCircle, RefreshCw, X, MapPin, Train, ShieldCheck, Check, ScanLine, Download } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
 import { Modal } from '../components/common/Shared';
+import { DotNetwork } from '../components/common/CulturalPatterns.jsx';
 
-function TripsScreen() {
+export default function MyTripsScreen() {
   const [tab, setTab] = useState("upcoming");
   const [pnr, setPnr] = useState("");
-  const [pnrResult, setPnrResult] = useState(null);
   const [isSearchingPnr, setIsSearchingPnr] = useState(false);
-  const [isCancelled, setIsCancelled] = useState(false);
+  const [pnrResult, setPnrResult] = useState(null);
   const [activeModal, setActiveModal] = useState(null);
+  const [isCancelled, setIsCancelled] = useState(false);
 
   const checkPnr = () => {
-    if (!pnr.trim()) return;
+    if (!pnr) return;
     setIsSearchingPnr(true);
-    setPnrResult(null);
     setTimeout(() => {
       setIsSearchingPnr(false);
       setPnrResult({
-        pnr: pnr || "8462097315",
+        pnr,
+        status: "CNF",
         train: "12951 Mumbai Rajdhani",
         date: "25 Aug 2026",
-        from: "NDLS", to: "BCT",
-        cls: "3A", coach: "B4", seat: "22, Side Lower",
-        chart: "Not prepared", status: "CNF",
+        from: "NDLS",
+        to: "BCT",
+        cls: "3A",
+        coach: "B4",
+        seat: "22, 23",
+        chart: "Prepared"
       });
-    }, 800);
+    }, 1500);
   };
 
   const handleCancelTicket = () => {
@@ -44,7 +44,10 @@ function TripsScreen() {
   ];
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body">
+    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+      <div className="absolute top-0 left-0 w-full h-[300px] overflow-hidden pointer-events-none opacity-40">
+        <DotNetwork count={6} />
+      </div>
       <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, PNR status, and refund tracking — consolidated from four scattered pages on the old site." />
       <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-20">
         <div className="flex gap-1 bg-white rounded-xl border p-1 w-fit mb-6" style={{ borderColor: "var(--line)" }}>
@@ -216,31 +219,33 @@ function TripsScreen() {
       <Modal isOpen={activeModal === 'ticket_details'} onClose={() => setActiveModal(null)} title="E-Ticket Details">
         <div className="flex flex-col py-2">
           <div className="rounded-2xl border overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
-            <div className="p-5 text-white transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--blue)" }}>
-              <div className="flex justify-between items-start mb-4">
+            <div className="p-5 transition-colors duration-500 relative" style={{ background: isCancelled ? "var(--red-bg)" : "linear-gradient(135deg, rgba(255,249,240,1) 0%, rgba(254,243,226,1) 100%)", color: isCancelled ? "var(--red)" : "var(--blue)" }}>
+              <div className="flex justify-between items-start mb-4 relative z-10">
                 <div>
                   <p className="font-bold text-lg leading-none">Mumbai Rajdhani</p>
-                  <p className="text-white/80 text-xs mt-1">Train #12951</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>Train #12951</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-lg leading-none">{isCancelled ? "CANCELLED" : "CONFIRMED"}</p>
-                  <p className="text-white/80 text-xs mt-1">PNR 8462097315</p>
+                  <p className="font-bold text-lg leading-none" style={{ color: isCancelled ? "var(--red)" : "var(--marigold-2)" }}>{isCancelled ? "CANCELLED" : "CONFIRMED"}</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>PNR 8462097315</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between relative z-10">
                 <div>
                   <p className="text-2xl font-bold">NDLS</p>
-                  <p className="text-xs text-white/80">New Delhi</p>
+                  <p className="text-xs" style={{ color: "var(--steel)" }}>New Delhi</p>
                 </div>
-                <div className="flex flex-col items-center px-4">
-                  <span className="text-[10px] text-white/80">16:00 hr</span>
-                  <div className="w-16 h-px bg-white/30 my-1 relative">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><Train size={12} className="text-white/80" /></div>
+                <div className="flex flex-col items-center px-4 w-full">
+                  <span className="text-[10px]" style={{ color: "var(--steel)" }}>16:00 hr</span>
+                  <div className="w-full h-px my-1 relative" style={{ background: "rgba(192,131,33,0.2)" }}>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FEF3E2] px-2 rounded-full border" style={{ borderColor: "rgba(192,131,33,0.15)" }}>
+                      <Train size={12} style={{ color: "var(--marigold-2)" }} />
+                    </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold">BCT</p>
-                  <p className="text-xs text-white/80">Mumbai Ctrl</p>
+                  <p className="text-xs" style={{ color: "var(--steel)" }}>Mumbai Ctrl</p>
                 </div>
               </div>
             </div>
@@ -275,5 +280,3 @@ function TripsScreen() {
     </div>
   );
 }
-
-export default TripsScreen;
