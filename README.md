@@ -14,7 +14,7 @@ An ambitious, human-centered UI/UX transformation of the Indian Railways Caterin
 
 [Features](#-key-features--modules) • [Live Demo](#-live-demo--preview) • [Design System](#-design-system--tokens) • [Architecture](#-architecture--directory-structure) • [Getting Started](#-getting-started) • [Tech Stack](#-technology-stack)
 
-**Live Site:** https://mokshagnatej.github.io/UI-UX-Design-Event/
+**Live Site:** [https://Mokshagnatej.github.io/UI-UX-Design-Event/](https://Mokshagnatej.github.io/UI-UX-Design-Event/)
 
 </div>
 
@@ -34,7 +34,7 @@ Millions of passengers book train tickets across India every day. However, tradi
 
 ## 🌐 Live Demo & Preview
 
-- **GitHub Pages:** https://mokshagnatej.github.io/UI-UX-Design-Event/
+- **GitHub Pages:** [https://Mokshagnatej.github.io/UI-UX-Design-Event/](https://Mokshagnatej.github.io/UI-UX-Design-Event/)
 
 ---
 
