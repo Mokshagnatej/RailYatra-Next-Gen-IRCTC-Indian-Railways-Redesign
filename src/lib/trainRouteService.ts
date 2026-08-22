@@ -738,9 +738,50 @@ export function getTrainByNumber(trainNo: string): TrainData | null {
   };
 }
 
+const CITY_CLUSTERS: Record<string, string[]> = {
+  mumbai: ["MMCT", "CSMT", "CSTM", "BCT", "BDTS", "LTT", "DR", "BVI", "TNA", "KYN", "PNVL"],
+  delhi: ["NDLS", "DLI", "NZM", "ANVT", "DEE", "DEC", "GZB", "DSA"],
+  chennai: ["MAS", "MS", "TBM", "PER", "MSB", "RPM"],
+  kolkata: ["HWH", "SDAH", "KOAA", "SHM", "SRC", "DKAE"],
+  bangalore: ["SBC", "YPR", "SMVB", "BNC", "KJM", "BYPL", "WFD"],
+  hyderabad: ["SC", "HYB", "KCG", "LPI", "BMT", "MJF"],
+  ahmedabad: ["ADI", "SBT", "CLDY", "GNC", "MAN"],
+  pune: ["PUNE", "SVJR", "HAD", "KK", "LNL"],
+  jaipur: ["JP", "GADJ", "DKBJ", "DPA"],
+  varanasi: ["BSB", "DDU", "BSBS", "MUV", "KEI"],
+  patna: ["PNBE", "RJPB", "PPTA", "DNR", "PNC"],
+  kanpur: ["CNB", "CPA", "GOY", "CPB"],
+  lucknow: ["LKO", "LJN", "ASH", "BNZ", "DAL"],
+  guwahati: ["GHY", "KYQ", "NGC"],
+  tirupati: ["TPTY", "RU", "CGI"],
+  nagpur: ["NGP", "AJNI"],
+  bhopal: ["BPL", "RKMP", "HBJ"],
+  chandigarh: ["CDG", "UMB"],
+  amritsar: ["ASR", "BEAS"],
+  surat: ["ST", "UDN"],
+  vadodara: ["BRC", "PRTN"],
+  visakhapatnam: ["VSKP", "DVD", "SCMN"],
+  coimbatore: ["CBE", "CBF", "TUP"],
+  kochi: ["ERS", "ERN", "AWY"],
+  thiruvananthapuram: ["TVC", "KCVL"]
+};
+
+export function getStationClusterAliases(stationCode: string): string[] {
+  const upper = (stationCode || "").toUpperCase().trim();
+  const set = new Set<string>([upper]);
+  for (const list of Object.values(CITY_CLUSTERS)) {
+    if (list.includes(upper)) {
+      list.forEach(c => set.add(c));
+    }
+  }
+  return Array.from(set);
+}
+
 export function searchTrainsBetween(fromInput: string, toInput: string, date: string = "25-Aug-2026"): SearchResultTrain[] {
-  const fromCode = normalizeStationCode(extractStationCode(fromInput));
-  const toCode = normalizeStationCode(extractStationCode(toInput));
+  const rawFromCode = extractStationCode(fromInput);
+  const rawToCode = extractStationCode(toInput);
+  const fromAliases = getStationClusterAliases(rawFromCode);
+  const toAliases = getStationClusterAliases(rawToCode);
 
   const results: SearchResultTrain[] = [];
   const addedTrainNos = new Set<string>();
@@ -748,16 +789,26 @@ export function searchTrainsBetween(fromInput: string, toInput: string, date: st
   // 1. First search curated high-detail flagship trains
   for (const train of (curatedTrainsData as TrainData[])) {
     const stops = train.schedule;
-    const fromIdx = stops.findIndex(s => normalizeStationCode(s.stationCode) === fromCode || s.stationCode === fromCode);
-    const toIdx = stops.findIndex(s => normalizeStationCode(s.stationCode) === toCode || s.stationCode === toCode);
+    let fromIdx = -1;
+    let toIdx = -1;
+
+    for (let i = 0; i < stops.length; i++) {
+      const code = stops[i].stationCode.toUpperCase();
+      if (fromIdx === -1 && fromAliases.includes(code)) {
+        fromIdx = i;
+      }
+      if (toAliases.includes(code)) {
+        toIdx = i;
+      }
+    }
 
     if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
       const fromStop = stops[fromIdx];
       const toStop = stops[toIdx];
       const legDist = Math.max(50, (toStop.distKm || train.totalDistanceKm) - (fromStop.distKm || 0));
-      const stopCount = toIdx - fromIdx - 1;
+      const stopCount = Math.max(0, toIdx - fromIdx - 1);
 
-      // Adjust fares
+      // Adjust fares proportionally to distance travelled
       const adjustedClasses: Record<string, any> = {};
       Object.entries(train.classes).forEach(([cls, info]) => {
         const fareRatio = legDist / (train.totalDistanceKm || legDist);
@@ -769,8 +820,8 @@ export function searchTrainsBetween(fromInput: string, toInput: string, date: st
         no: train.trainNo,
         name: train.trainName,
         type: train.type,
-        dep: fromStop.dep !== "Ends" && fromStop.dep !== "--:--" ? fromStop.dep : (train.depTime || (train as any).origin?.dep || "08:00"),
-        arr: toStop.arr !== "Starts" && toStop.arr !== "--:--" ? toStop.arr : (train.arrTime || (train as any).destination?.arr || "20:00"),
+        dep: fromStop.dep !== "Ends" && fromStop.dep !== "--:--" ? fromStop.dep : (train.depTime || "08:00"),
+        arr: toStop.arr !== "Starts" && toStop.arr !== "--:--" ? toStop.arr : (train.arrTime || "20:00"),
         dur: (train as any).duration || train.totalDuration || "15h 40m",
         from: fromStop.stationCode,
         to: toStop.stationCode,
@@ -787,70 +838,53 @@ export function searchTrainsBetween(fromInput: string, toInput: string, date: st
     }
   }
 
-  // 2. Search nationwide 5,208 train search index
+  // 2. Search nationwide 5,208 train search index with stop schedule matching
   for (const t of SEARCH_INDEX) {
     if (addedTrainNos.has(t.no)) continue;
 
-    const matchesFrom = t.from === fromCode || normalizeStationCode(t.from) === fromCode || (t.stopsList && t.stopsList.includes(fromCode));
-    const matchesTo = t.to === toCode || normalizeStationCode(t.to) === toCode || (t.stopsList && t.stopsList.includes(toCode));
+    const stops = t.stopsList || [t.from, t.to];
+    let fromIdx = -1;
+    let toIdx = -1;
 
-    if (matchesFrom && matchesTo) {
-      let isCorrectOrder = true;
-      if (t.stopsList && t.stopsList.length > 1) {
-        const fIndex = t.stopsList.indexOf(fromCode);
-        const tIndex = t.stopsList.indexOf(toCode);
-        if (fIndex !== -1 && tIndex !== -1 && fIndex >= tIndex) {
-          isCorrectOrder = false;
-        }
+    for (let i = 0; i < stops.length; i++) {
+      const stopCode = stops[i].toUpperCase();
+      if (fromIdx === -1 && fromAliases.includes(stopCode)) {
+        fromIdx = i;
       }
-
-      if (isCorrectOrder) {
-        results.push({
-          no: t.no,
-          name: t.name,
-          type: t.type,
-          dep: t.dep,
-          arr: t.arr,
-          dur: t.dur,
-          from: fromCode,
-          to: toCode,
-          days: "MTWTFSS",
-          pantry: t.pantry,
-          distance: t.dist || 750,
-          stops: t.stops || 4,
-          classes: t.classes && Object.keys(t.classes).length > 0 ? t.classes : {
-            "3A": { status: "AVAILABLE", n: 38, fare: Math.max(540, Math.round((t.dist || 750) * 1.35)) },
-            "2A": { status: "AVAILABLE", n: 16, fare: Math.max(850, Math.round((t.dist || 750) * 1.9)) },
-            "SL": { status: "AVAILABLE", n: 82, fare: Math.max(175, Math.round((t.dist || 750) * 0.48)) }
-          }
-        });
-
-        addedTrainNos.add(t.no);
-        if (results.length >= 25) break; // Keep result list crisp and fast
+      if (toAliases.includes(stopCode)) {
+        toIdx = i;
       }
     }
-  }
 
-  // 3. Fallback: If no direct train found between two distant stations, provide the major flagship connecting trains
-  if (results.length === 0) {
-    const popularFallbacks = (curatedTrainsData as TrainData[]).slice(0, 6);
-    return popularFallbacks.map(train => ({
-      no: train.trainNo,
-      name: train.trainName,
-      type: train.type,
-      dep: train.depTime,
-      arr: train.arrTime,
-      dur: train.totalDuration,
-      from: fromCode || train.fromStationCode,
-      to: toCode || train.toStationCode,
-      days: train.runsOn || "MTWTFSS",
-      pantry: train.pantry,
-      distance: train.totalDistanceKm,
-      stops: train.schedule.length - 2,
-      classes: train.classes,
-      rawTrain: train,
-      schedule: train.schedule
-    }));
+    if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
+      const originStation = stops[fromIdx];
+      const destStation = stops[toIdx];
+      const stopCount = Math.max(0, toIdx - fromIdx - 1);
+      const estDist = t.dist || Math.max(120, (toIdx - fromIdx) * 75);
+
+      results.push({
+        no: t.no,
+        name: t.name,
+        type: t.type,
+        dep: t.dep,
+        arr: t.arr,
+        dur: t.dur,
+        from: originStation,
+        to: destStation,
+        days: "MTWTFSS",
+        pantry: t.pantry ?? true,
+        distance: estDist,
+        stops: stopCount,
+        classes: t.classes && Object.keys(t.classes).length > 0 ? t.classes : {
+          "3A": { status: "AVAILABLE", n: 38, fare: Math.max(540, Math.round(estDist * 1.35)) },
+          "2A": { status: "AVAILABLE", n: 16, fare: Math.max(850, Math.round(estDist * 1.9)) },
+          "SL": { status: "AVAILABLE", n: 82, fare: Math.max(175, Math.round(estDist * 0.48)) }
+        }
+      });
+
+      addedTrainNos.add(t.no);
+      if (results.length >= 35) break; // Return top genuine trains on route
+    }
   }
 
   return results;

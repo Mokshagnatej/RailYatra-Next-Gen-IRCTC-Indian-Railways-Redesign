@@ -1337,32 +1337,31 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
   const FilterPanel = (
     <div className="space-y-6">
       <div>
-        <p className="f-body text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--steel)" }}>Train type</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Train Type</p>
         <div className="space-y-2">
           {["Rajdhani", "Shatabdi", "Duronto", "Superfast", "Express", "Mail/Exp"].map((t) => (
-            <label key={t} className="flex items-center gap-2 f-body text-sm cursor-pointer">
-              <input type="checkbox" checked={trainTypes.includes(t)} onChange={() => toggle(trainTypes, setTrainTypes, t)} className="h-4 w-4" />
+            <label key={t} className="flex items-center gap-2 text-xs font-bold text-[#0A1626] cursor-pointer hover:text-blue-700">
+              <input type="checkbox" checked={trainTypes.includes(t)} onChange={() => toggle(trainTypes, setTrainTypes, t)} className="h-4 w-4 accent-[#0A1626]" />
               {t}
             </label>
           ))}
         </div>
       </div>
       <div>
-        <p className="f-body text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--steel)" }}>Class</p>
-        <div className="flex flex-wrap gap-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Class</p>
+        <div className="flex flex-wrap gap-1.5">
           {["SL", "3A", "2A", "1A", "CC", "EC"].map((c) => (
             <button key={c} onClick={() => toggle(classesF, setClassesF, c)}
-              className="px-3 h-9 rounded-lg border f-mono text-xs font-semibold transition-colors cursor-pointer"
-              style={{
-                borderColor: classesF.includes(c) ? "var(--blue)" : "var(--line)",
-                background: classesF.includes(c) ? "var(--marigold)" : "white",
-                color: classesF.includes(c) ? "var(--blue)" : "var(--ink)",
-              }}>{c}</button>
+              className={`px-3 h-8 rounded-xl border font-mono text-xs font-bold transition-all cursor-pointer shadow-xs ${
+                classesF.includes(c)
+                  ? "bg-[#0A1626] text-[#F0A63A] border-[#0A1626]"
+                  : "bg-white text-[#0A1626] border-gray-300 hover:border-gray-500"
+              }`}>{c}</button>
           ))}
         </div>
       </div>
       <div>
-        <p className="f-body text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--steel)" }}>Departure time</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Departure Time</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { label: "Early morning", sub: "00:00–06:00" },
@@ -1370,66 +1369,65 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
             { label: "Afternoon", sub: "12:00–18:00" },
             { label: "Night", sub: "18:00–00:00" },
           ].map((slot) => (
-            <button key={slot.label} className="px-2 py-2 rounded-lg border text-left text-xs cursor-pointer hover:bg-gray-50" style={{ borderColor: "var(--line)" }}>
-              <span className="font-medium block">{slot.label}</span>
-              <span style={{ color: "var(--steel)" }}>{slot.sub}</span>
+            <button key={slot.label} className="px-2.5 py-2 rounded-xl border border-gray-200 bg-[#FAF8F2] hover:border-[#0A1626] text-left text-xs cursor-pointer transition-all">
+              <span className="font-bold text-[#0A1626] block text-[11px]">{slot.label}</span>
+              <span className="text-[10px] text-gray-500 font-mono">{slot.sub}</span>
             </button>
           ))}
         </div>
       </div>
       <div>
-        <p className="f-body text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: "var(--steel)" }}>Amenities</p>
-        <label className="flex items-center gap-2 f-body text-sm cursor-pointer">
-          <input type="checkbox" className="h-4 w-4" />
-          Pantry / food available
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 font-mono">Amenities</p>
+        <label className="flex items-center gap-2 text-xs font-bold text-[#0A1626] cursor-pointer">
+          <input type="checkbox" className="h-4 w-4 accent-[#0A1626]" />
+          Pantry / Food on Board
         </label>
       </div>
     </div>
   );
 
   return (
-    <div  className="min-h-screen f-body pb-16">
+    <div className="min-h-screen f-body pb-16">
       {/* sticky summary bar */}
-      <div className="sticky top-16 z-30 border-b bg-[#F3EEE0]/90 backdrop-blur-md" style={{ borderColor: "var(--line)" }}>
+      <div className="sticky top-16 z-30 border-b bg-[#FAF8F2]/95 backdrop-blur-md border-[rgba(10,22,38,0.1)]">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
-          <button onClick={onBack} className="flex items-center gap-2 text-sm font-bold cursor-pointer hover:underline" style={{ color: "var(--blue)" }}>
-            <ChevronRight size={16} className="rotate-180" /> Edit search
+          <button onClick={onBack} className="flex items-center gap-2 text-xs md:text-sm font-bold cursor-pointer text-[#0A1626] hover:text-blue-700">
+            <ChevronRight size={16} className="rotate-180" /> Edit Search
           </button>
-          <div className="flex items-center gap-2 f-mono text-sm font-semibold" style={{ color: "var(--ink)" }}>
+          <div className="flex items-center gap-2 font-mono text-xs md:text-sm font-bold text-[#0A1626]">
             <span>{fromDisplay}</span>
-            <ArrowLeftRight size={13} style={{ color: "var(--steel)" }} />
+            <ArrowLeftRight size={14} className="text-[#F0A63A]" />
             <span>{toDisplay}</span>
-            <span className="text-xs font-normal f-body px-2 py-0.5 rounded-full" style={{ background: "var(--paper-2)", color: "var(--steel)" }}>
+            <span className="text-[11px] font-normal px-2.5 py-0.5 rounded-full bg-white border border-gray-200 text-gray-600">
               {dateDisplay} · {quotaDisplay}
             </span>
           </div>
-          <button onClick={() => setFiltersOpen(true)} className="md:hidden h-9 px-3 rounded-lg border flex items-center gap-1.5 text-sm font-medium" style={{ borderColor: "var(--line)" }}>
+          <button onClick={() => setFiltersOpen(true)} className="md:hidden h-9 px-3 rounded-xl border border-gray-300 bg-white flex items-center gap-1.5 text-xs font-bold text-[#0A1626]">
             <SlidersHorizontal size={14} /> Filters
           </button>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-6">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6 grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
         {/* desktop left rail */}
         <aside className="hidden md:block">
-          <div className="rounded-xl border glass-card p-4 sticky top-32" style={{ borderColor: "var(--line)" }}>
-            <p className="f-display font-semibold text-sm mb-3">Filters</p>
+          <div className="rounded-3xl border border-[rgba(10,22,38,0.12)] bg-white p-5 sticky top-32 shadow-sm">
+            <h3 className="font-serif font-bold text-sm text-[#0A1626] mb-4">Refine Search</h3>
             {FilterPanel}
           </div>
         </aside>
 
         <main>
           <div className="flex items-center justify-between mb-3">
-            <p className="f-body text-sm" style={{ color: "var(--steel)" }}>{filtered.length} trains found</p>
+            <p className="text-xs md:text-sm font-bold text-[#0A1626]">{filtered.length} Train{filtered.length !== 1 ? 's' : ''} Found</p>
             <div className="flex items-center gap-1">
               {["Departure", "Duration", "Price"].map((s) => (
                 <button key={s} onClick={() => setSort(s)}
-                  className="text-xs px-3 h-8 rounded-full border font-medium transition-colors"
-                  style={{
-                    borderColor: sort === s ? "var(--blue)" : "var(--line)",
-                    background: sort === s ? "var(--marigold)" : "white",
-                    color: sort === s ? "var(--blue)" : "var(--ink)",
-                  }}>{s}</button>
+                  className={`text-xs px-3 h-8 rounded-full border font-bold transition-all cursor-pointer ${
+                    sort === s
+                      ? "bg-[#0A1626] text-[#F0A63A] border-[#0A1626]"
+                      : "bg-white text-gray-600 border-gray-300 hover:border-gray-500"
+                  }`}>{s}</button>
               ))}
             </div>
           </div>
