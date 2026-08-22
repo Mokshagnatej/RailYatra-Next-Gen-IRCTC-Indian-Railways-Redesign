@@ -81,10 +81,56 @@ const getInitialUser = () => {
 
 const initialUser = getInitialUser();
 
+const getInitialJourneys = () => {
+  try {
+    const saved = localStorage.getItem('railyatra_journeys');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+
+  return [
+    {
+      pnr: "8462097315",
+      bookedAt: new Date().toISOString(),
+      txnId: "IRC84620973TX",
+      coach: "B4",
+      cls: "3A",
+      fare: 1680,
+      date: "Tue, 25 Aug 2026",
+      train: {
+        no: "12951",
+        name: "Mumbai Tejas Rajdhani",
+        from: "NDLS",
+        to: "MMCT",
+        dep: "16:55",
+        arr: "08:35",
+        dur: "15h 40m",
+        type: "Rajdhani"
+      },
+      passengers: [
+        {
+          name: "Ananya Rao",
+          age: "28",
+          gender: "F",
+          coach: "B4",
+          seat: "22",
+          berth: "Lower",
+          status: "CNF",
+          class: "3A"
+        }
+      ]
+    }
+  ];
+};
+
+const initialJourneys = getInitialJourneys();
+
 export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: !!initialUser,
-  user: initialUser,
-  journeys: [],
+  isAuthenticated: !!initialUser || initialJourneys.length > 0,
+  user: initialUser || { name: "Ananya Rao", email: "ananya.rao@irctc.in", irctcId: "ananya.rao", mobile: "+91 98765 43210" },
+  journeys: initialJourneys,
   login: (name, email, irctcId = "ananya.rao", mobile = "+91 98765 43210") => {
     const cleanName = name ? name.trim() : (email.includes("@") ? email.split("@")[0] : "Passenger");
     const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
@@ -100,5 +146,49 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (e) {}
     set({ isAuthenticated: false, user: null });
   },
-  addJourney: (journey) => set((state) => ({ journeys: [journey, ...state.journeys] })),
+  addJourney: (journey) => {
+    if (!journey) return;
+    const safeJourney = {
+      pnr: String(journey.pnr || Math.floor(1000000000 + Math.random() * 8999999999)),
+      bookedAt: journey.bookedAt || new Date().toISOString(),
+      txnId: journey.txnId || ("IRC" + String(Date.now()).slice(-8) + "TX"),
+      coach: journey.coach || "B4",
+      cls: journey.cls || journey.train?.cls || "3A",
+      fare: journey.fare || 1680,
+      date: journey.date || "Tue, 25 Aug 2026",
+      train: journey.train || {
+        no: "12951",
+        name: "Mumbai Tejas Rajdhani",
+        from: "NDLS",
+        to: "MMCT",
+        dep: "16:55",
+        arr: "08:35",
+        dur: "15h 40m"
+      },
+      passengers: Array.isArray(journey.passengers) && journey.passengers.length > 0 
+        ? journey.passengers.map((p: any, i: number) => ({
+            name: p.name || `Passenger ${i + 1}`,
+            age: p.age || "28",
+            gender: p.gender || "M",
+            coach: p.coach || journey.coach || "B4",
+            seat: p.seat || String(20 + i * 3),
+            berth: p.berth || "Lower",
+            status: p.status || "CNF",
+            class: p.class || journey.cls || "3A"
+          }))
+        : [{ name: "Passenger 1", age: "28", gender: "M", coach: "B4", seat: "22", berth: "Lower", status: "CNF", class: "3A" }]
+    };
+
+    set((state) => {
+      const updated = [safeJourney, ...state.journeys.filter(j => j.pnr !== safeJourney.pnr)];
+      try {
+        localStorage.setItem('railyatra_journeys', JSON.stringify(updated));
+      } catch (e) {}
+      return { 
+        journeys: updated,
+        isAuthenticated: true,
+        user: state.user || { name: "Ananya Rao", email: "ananya.rao@irctc.in", irctcId: "ananya.rao", mobile: "+91 98765 43210" }
+      };
+    });
+  },
 }));

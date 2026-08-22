@@ -11,27 +11,47 @@ export default function MyTripsScreen() {
   const [isSearchingPnr, setIsSearchingPnr] = useState(false);
   const [pnrResult, setPnrResult] = useState(null);
   const [activeModal, setActiveModal] = useState(null);
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [isCancelled, setIsCancelled] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
   const { journeys, isAuthenticated } = useAuthStore();
+
+  const activeJourney = selectedTicket || (journeys && journeys[0]) || null;
 
   const checkPnr = () => {
     if (!pnr) return;
     setIsSearchingPnr(true);
     setTimeout(() => {
       setIsSearchingPnr(false);
-      setPnrResult({
-        pnr,
-        status: "CNF",
-        train: "12951 Mumbai Rajdhani",
-        date: "25 Aug 2026",
-        from: "NDLS",
-        to: "BCT",
-        cls: "3A",
-        coach: "B4",
-        seat: "22, 23",
-        chart: "Prepared"
-      });
-    }, 1500);
+      const matched = journeys.find(j => j.pnr === pnr.trim());
+      if (matched) {
+        setPnrResult({
+          pnr: matched.pnr,
+          status: "CNF",
+          train: `${matched.train?.no || "12951"} ${matched.train?.name || "Superfast Express"}`,
+          date: matched.date || "25 Aug 2026",
+          from: matched.train?.from || "NDLS",
+          to: matched.train?.to || "MMCT",
+          cls: matched.cls || "3A",
+          coach: matched.coach || "B4",
+          seat: matched.passengers?.[0]?.seat || "22",
+          chart: "Prepared (Charts Done)"
+        });
+      } else {
+        setPnrResult({
+          pnr,
+          status: "CNF",
+          train: "12951 Mumbai Tejas Rajdhani",
+          date: "25 Aug 2026",
+          from: "NDLS",
+          to: "MMCT",
+          cls: "3A",
+          coach: "B4",
+          seat: "22, 23",
+          chart: "Prepared"
+        });
+      }
+    }, 800);
   };
 
   const handleCancelTicket = () => {
@@ -40,24 +60,24 @@ export default function MyTripsScreen() {
   };
 
   const tabs = [
-    { key: "upcoming", label: "Upcoming" },
+    { key: "upcoming", label: `Upcoming Journeys (${journeys?.length || 0})` },
     { key: "pnr", label: "PNR Status" },
     { key: "refunds", label: "Refunds & TDR" },
   ];
 
   return (
-    <div  className="min-h-screen f-body relative">
+    <div className="min-h-screen f-body relative">
       <div className="absolute top-0 left-0 w-full h-[300px] overflow-hidden pointer-events-none opacity-40">
         <DotNetwork count={6} />
       </div>
-      <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, PNR status, and refund tracking — consolidated from four scattered pages on the old site." />
+      <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, confirmed e-tickets, and live coach assignments." />
       <div className="max-w-4xl mx-auto px-4 md:px-8 mt-8 relative z-10 pb-20">
         <div className="flex gap-1 bg-white rounded-2xl border p-1.5 w-fit mb-8 border-[rgba(10,22,38,0.12)] shadow-sm">
           {tabs.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`px-4 h-10 rounded-lg text-sm font-bold transition-all ${
+              className={`px-4 h-10 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
                 tab === t.key
-                  ? "bg-[#0A1626] text-white shadow-md"
+                  ? "bg-[#0A1626] text-[#F0A63A] shadow-md"
                   : "text-[#4B5563] hover:text-[#0A1626] hover:bg-black/5"
               }`}>
               {t.label}
@@ -67,92 +87,130 @@ export default function MyTripsScreen() {
 
         {tab === "upcoming" && (
           <div className="mb-16">
-            {!isAuthenticated || journeys.length === 0 ? (
-              <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[rgba(10,22,38,0.18)] shadow-sm">
+            {!journeys || journeys.length === 0 ? (
+              <div className="p-10 text-center bg-white rounded-3xl border border-dashed border-[rgba(10,22,38,0.18)] shadow-sm">
+                <Ticket size={36} className="mx-auto mb-3 text-gray-400" />
                 <p className="text-base font-bold text-[#0A1626] mb-1">
-                  {!isAuthenticated ? "Sign in to view your bookings" : "No upcoming journeys found"}
+                  No upcoming journeys found
                 </p>
                 <p className="text-xs text-[#4B5563]">
-                  {!isAuthenticated ? "Your booked tickets, PNR status and refund timelines will appear here." : "Book a ticket to start tracking your journey."}
+                  Book a ticket to start tracking your journey and manage e-tickets.
                 </p>
               </div>
             ) : (
-              journeys.map((b, idx) => (
-                <div key={idx} onClick={() => setActiveModal('ticket_details')} className="rounded-xl border bg-[var(--surface)] overflow-hidden mb-6 ticket-notch cursor-pointer hover:shadow-lg transition-shadow" style={{ borderColor: "var(--line)" }}>
-                  <div className="p-5 flex items-center justify-between transition-colors duration-500" style={{ background: isCancelled ? "var(--red-bg)" : "var(--green-bg)" }}>
-                    <div>
-                      <p className="f-display font-semibold text-sm">{b.train.name} · #{b.train.no}</p>
-                      <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>{b.date} · {b.train.dep} {b.train.from} → {b.train.arr} {b.train.to} · {b.passengers[0].class}</p>
-                    </div>
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-500" style={{ background: isCancelled ? "var(--red)" : "var(--green)", color: "white" }}>
-                      {isCancelled ? "Cancelled" : "Confirmed"}
-                    </span>
-                  </div>
-                  <div className="border-t border-dashed p-5 flex flex-wrap gap-6 items-center" style={{ borderColor: "var(--line)" }}>
-                    <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</p><p className="f-mono text-sm font-semibold">{b.pnr}</p></div>
-                    {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Coach / Seat</p><p className="f-mono text-sm font-semibold">B4 / 22 SL</p></div>}
-                    {!isCancelled && <div><p className="text-[11px] uppercase tracking-wide" style={{ color: "var(--steel)" }}>Live status</p><p className="text-sm font-semibold" style={{ color: "var(--green)" }}>On time</p></div>}
-                    
-                    {!isCancelled && (
-                      <div className="ml-auto flex gap-2">
-                        <button onClick={(e) => { e.stopPropagation(); setActiveModal('live_tracking'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>Live tracking</button>
-                        <button onClick={(e) => { e.stopPropagation(); setActiveModal('cancel_ticket'); }} className="h-9 px-3 rounded-lg border text-xs font-semibold hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Cancel</button>
+              journeys.map((b, idx) => {
+                const mainPassenger = (b.passengers && b.passengers[0]) || { name: "Passenger", seat: "22", coach: "B4", berth: "Lower", class: "3A" };
+                const trainName = b.train?.name || "Tejas Rajdhani Express";
+                const trainNo = b.train?.no || "12951";
+                const fromCode = b.train?.from || "NDLS";
+                const toCode = b.train?.to || "MMCT";
+                const depTime = b.train?.dep || "16:55";
+                const arrTime = b.train?.arr || "08:35";
+                const travelDate = b.date || "25 Aug 2026";
+                const coachSeat = `${mainPassenger.coach || b.coach || "B4"} / Berth ${mainPassenger.seat || "22"} (${mainPassenger.berth || "Lower"})`;
+                const ticketClass = mainPassenger.class || b.cls || "3A";
+
+                return (
+                  <div key={b.pnr || idx} onClick={() => { setSelectedTicket(b); setActiveModal('ticket_details'); }} className="rounded-3xl border bg-white overflow-hidden mb-6 shadow-sm hover:shadow-xl transition-all border-[rgba(10,22,38,0.12)] cursor-pointer">
+                    <div className="p-5 flex items-center justify-between transition-colors duration-500 bg-emerald-50 border-b border-emerald-100">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#0A1626] text-[#F0A63A]">#{trainNo}</span>
+                          <p className="font-serif font-bold text-base text-[#0A1626]">{trainName}</p>
+                        </div>
+                        <p className="font-mono text-xs mt-1 text-[#4B5563]">
+                          {travelDate} · {depTime} {fromCode} → {arrTime} {toCode} · Class: <span className="font-bold text-[#0A1626]">{ticketClass}</span>
+                        </p>
                       </div>
-                    )}
+                      <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white font-mono shadow-xs">
+                        {isCancelled ? "Cancelled" : "Confirmed (CNF)"}
+                      </span>
+                    </div>
+                    <div className="p-5 flex flex-wrap gap-6 items-center bg-white">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">PNR Number</p>
+                        <p className="font-mono text-sm font-bold text-[#0A1626]">{b.pnr}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Coach / Seat</p>
+                        <p className="font-mono text-sm font-bold text-[#0A1626]">{coachSeat}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Passenger Manifest</p>
+                        <p className="text-xs font-bold text-[#0A1626]">{mainPassenger.name} {b.passengers?.length > 1 ? `(+${b.passengers.length - 1} more)` : ''}</p>
+                      </div>
+                      <div className="ml-auto flex items-center gap-2">
+                        <button onClick={(e) => { e.stopPropagation(); setSelectedTicket(b); setActiveModal('live_tracking'); }} className="h-9 px-3.5 rounded-xl border border-gray-300 hover:border-[#0A1626] text-xs font-bold text-[#0A1626] bg-[#FAF8F2] flex items-center gap-1.5 transition-all cursor-pointer">
+                          <Train size={14} className="text-blue-700" /> Live Tracking
+                        </button>
+                        <button onClick={(e) => { e.stopPropagation(); setSelectedTicket(b); setActiveModal('ticket_details'); }} className="h-9 px-3.5 rounded-xl border border-[#0A1626] bg-[#0A1626] text-[#F0A63A] hover:bg-black text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs">
+                          <Ticket size={14} /> E-Ticket
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         )}
 
         {tab === "pnr" && (
-          <div className="rounded-xl border bg-[var(--surface)] p-5 mb-16" style={{ borderColor: "var(--line)" }}>
-            <p className="f-display font-semibold mb-1">Check PNR status</p>
-            <p className="text-sm mb-4" style={{ color: "var(--steel)" }}>10-digit number printed on your ticket / SMS.</p>
+          <div className="rounded-3xl border bg-white p-6 mb-16 border-[rgba(10,22,38,0.12)] shadow-sm">
+            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Check PNR Status</h3>
+            <p className="text-xs text-[#6B7280] mb-4">Enter the 10-digit number printed on your booking confirmation or SMS.</p>
             <div className="flex gap-2">
-              <input value={pnr} onChange={(e) => setPnr(e.target.value)} placeholder="e.g. 8462097315"
-                className="flex-1 h-11 rounded-lg border px-3 text-sm f-mono outline-none focus:border-blue-500 transition-colors" style={{ borderColor: "var(--line)" }} />
-              <button onClick={checkPnr} className="h-11 px-5 rounded-lg font-semibold text-sm flex items-center justify-center min-w-[80px] transition-transform active:scale-[0.98]" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
-                {isSearchingPnr ? <div className="w-4 h-4 border-2 border-blue-900 border-t-transparent rounded-full animate-spin"></div> : "Check"}
+              <input 
+                value={pnr} 
+                onChange={(e) => setPnr(e.target.value)} 
+                placeholder="e.g. 8462097315"
+                className="flex-1 h-12 rounded-xl border border-gray-300 px-3 text-sm font-mono font-bold text-[#0A1626] outline-none focus:border-[#0A1626] shadow-xs" 
+              />
+              <button 
+                onClick={checkPnr} 
+                className="h-12 px-6 rounded-xl font-bold text-sm flex items-center justify-center min-w-[100px] bg-[#0A1626] text-[#F0A63A] hover:bg-black transition-all cursor-pointer shadow-md"
+              >
+                {isSearchingPnr ? <div className="w-4 h-4 border-2 border-[#F0A63A] border-t-transparent rounded-full animate-spin"></div> : "Check PNR"}
               </button>
             </div>
 
             {pnrResult && !isSearchingPnr && (
-              <div className="mt-5 rounded-lg border p-4 anim-fade-up" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
+              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 anim-fade-up">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="f-mono text-sm font-semibold">PNR {pnrResult.pnr}</p>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: "var(--green-bg)", color: "var(--green)" }}>{pnrResult.status} — Confirmed</span>
+                  <p className="font-mono text-sm font-bold text-[#0A1626]">PNR: {pnrResult.pnr}</p>
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white font-mono">
+                    {pnrResult.status} — Confirmed
+                  </span>
                 </div>
-                <p className="text-sm" style={{ color: "var(--ink)" }}>{pnrResult.train} · {pnrResult.date}</p>
-                <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>{pnrResult.from} → {pnrResult.to} · {pnrResult.cls} · Coach {pnrResult.coach} · Seat {pnrResult.seat}</p>
-                <p className="text-xs mt-2" style={{ color: "var(--steel)" }}>Chart status: {pnrResult.chart}. Final seat/coach may change slightly after charting.</p>
+                <p className="text-sm font-bold text-[#0A1626]">{pnrResult.train} · {pnrResult.date}</p>
+                <p className="font-mono text-xs mt-1 text-[#4B5563]">{pnrResult.from} → {pnrResult.to} · Class: {pnrResult.cls} · Coach {pnrResult.coach} · Seat {pnrResult.seat}</p>
+                <p className="text-xs mt-2 text-emerald-800 font-medium">Chart status: {pnrResult.chart}. Ready for boarding.</p>
               </div>
             )}
           </div>
         )}
 
         {tab === "refunds" && (
-          <div className="rounded-xl border bg-[var(--surface)] p-5 mb-16" style={{ borderColor: "var(--line)" }}>
-            <p className="f-display font-semibold mb-1">Refund status — TDR REF 20260812-441</p>
-            <p className="text-sm mb-5" style={{ color: "var(--steel)" }}>Filed for a waitlisted passenger cancelled after chart preparation. Refunds are decided by the concerned zonal railway, typically within 60 days.</p>
-            <div className="space-y-0">
+          <div className="rounded-3xl border bg-white p-6 mb-16 border-[rgba(10,22,38,0.12)] shadow-sm">
+            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Refund Status — TDR REF 20260812-441</h3>
+            <p className="text-xs text-[#6B7280] mb-5">Automated IRCTC auto-refund tracking engine. Monitored in real time.</p>
+            <div className="space-y-4">
               {[
-                { label: "TDR filed", done: true, note: "12 Aug, 22:14" },
-                { label: "Under review by Zonal Railway", done: true, note: "14 Aug" },
-                { label: "Refund approved", done: false, note: "Expected by 10 Oct" },
-                { label: "Credited to original payment method", done: false, note: "—" },
+                { label: "TDR Filed & Acknowledged", done: true, note: "12 Aug, 22:14" },
+                { label: "Under Review by Zonal Railway Accounts", done: true, note: "14 Aug, 10:30" },
+                { label: "Refund Approved (₹2,640)", done: true, note: "15 Aug, 18:20" },
+                { label: "Credited to Source Payment Account", done: true, note: "Processed via UPI" },
               ].map((s, i, arr) => (
                 <div key={s.label} className="flex gap-3">
                   <div className="flex flex-col items-center">
-                    <div className="h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors" style={{ background: s.done ? "var(--green)" : "white", border: `2px solid ${s.done ? "var(--green)" : "var(--line)"}` }}>
-                      {s.done && <Check size={12} color="white" />}
+                    <div className={`h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${s.done ? "bg-emerald-600 text-white" : "border-2 border-gray-300 bg-white"}`}>
+                      {s.done && <Check size={12} />}
                     </div>
-                    {i < arr.length - 1 && <div className="w-[2px] flex-1 my-1" style={{ background: s.done ? "var(--green)" : "var(--line)", minHeight: 28 }} />}
+                    {i < arr.length - 1 && <div className="w-[2px] flex-1 my-1 bg-emerald-600 min-h-[24px]" />}
                   </div>
-                  <div className="pb-6">
-                    <p className="text-sm font-semibold" style={{ color: s.done ? "var(--ink)" : "var(--steel)" }}>{s.label}</p>
-                    <p className="text-xs f-mono mt-0.5" style={{ color: "var(--steel)" }}>{s.note}</p>
+                  <div className="pb-2">
+                    <p className="text-xs md:text-sm font-bold text-[#0A1626]">{s.label}</p>
+                    <p className="text-[11px] text-[#6B7280] font-mono">{s.note}</p>
                   </div>
                 </div>
               ))}
@@ -161,42 +219,36 @@ export default function MyTripsScreen() {
         )}
       </div>
 
-      {/* MODALS */}
-      <Modal isOpen={activeModal === 'live_tracking'} onClose={() => setActiveModal(null)} title="Live Tracking">
-        <div className="flex flex-col py-4">
-          <div className="flex items-center justify-between mb-6 p-4 rounded-xl" style={{ background: "var(--green-bg)" }}>
+      {/* Live Tracking Modal */}
+      <Modal isOpen={activeModal === 'live_tracking'} onClose={() => setActiveModal(null)} title="Live Journey Tracking">
+        <div className="py-2">
+          <div className="mb-4 p-3 rounded-xl bg-[#0A1626] text-white flex items-center justify-between">
             <div>
-              <p className="f-mono text-xs" style={{ color: "var(--green)" }}>LIVE STATUS</p>
-              <p className="font-semibold text-lg">On Time</p>
+              <p className="font-serif font-bold text-sm text-[#F0A63A]">{activeJourney?.train?.name || "Mumbai Rajdhani"}</p>
+              <p className="font-mono text-xs text-gray-300">Train #{activeJourney?.train?.no || "12951"} · Status: On Time</p>
             </div>
-            <div className="text-right">
-              <p className="text-xs" style={{ color: "var(--steel)" }}>Next Stop</p>
-              <p className="font-semibold text-lg">Kota Jn (KOTA)</p>
-            </div>
+            <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono">LIVE GPS</span>
           </div>
-          
-          <div className="space-y-0 px-2">
+          <div className="space-y-2">
             {[
-              { station: "New Delhi (NDLS)", time: "16:35", status: "Departed", done: true },
+              { station: `${activeJourney?.train?.from || "NDLS"} (Origin)`, time: activeJourney?.train?.dep || "16:35", status: "Departed", done: true },
               { station: "Mathura Jn (MTJ)", time: "18:02", status: "Departed", done: true },
-              { station: "Kota Jn (KOTA)", time: "20:45", status: "Expected", active: true },
-              { station: "Ratlam Jn (RTM)", time: "00:15", status: "Upcoming", done: false },
+              { station: "Kota Jn (KOTA)", time: "20:45", status: "Current Location", active: true },
+              { station: "Ratlam Jn (RTM)", time: "00:15", status: "Next Stop", done: false },
               { station: "Vadodara Jn (BRC)", time: "03:55", status: "Upcoming", done: false },
-              { station: "Mumbai Central (BCT)", time: "08:35", status: "Destination", done: false },
+              { station: `${activeJourney?.train?.to || "MMCT"} (Destination)`, time: activeJourney?.train?.arr || "08:35", status: "Destination", done: false },
             ].map((s, i, arr) => (
               <div key={s.station} className="flex gap-4">
                 <div className="flex flex-col items-center">
-                  <div className="h-4 w-4 rounded-full flex-shrink-0 relative" style={{ background: s.active ? "var(--blue)" : s.done ? "var(--green)" : "var(--line)" }}>
-                    {s.active && <div className="h-4 w-4 rounded-full bg-blue-400 animate-ping absolute top-0 left-0"></div>}
-                  </div>
-                  {i < arr.length - 1 && <div className="w-[2px] flex-1 my-1" style={{ background: s.done ? "var(--green)" : "var(--line)", minHeight: 40 }} />}
+                  <div className={`h-4 w-4 rounded-full flex-shrink-0 relative ${s.active ? "bg-blue-600 ring-4 ring-blue-100" : s.done ? "bg-emerald-600" : "bg-gray-300"}`} />
+                  {i < arr.length - 1 && <div className={`w-[2px] flex-1 my-1 ${s.done ? "bg-emerald-600" : "bg-gray-200"}`} style={{ minHeight: 30 }} />}
                 </div>
-                <div className="pb-6 w-full flex justify-between items-start">
+                <div className="pb-4 w-full flex justify-between items-start">
                   <div>
-                    <p className={`text-[15px] font-semibold ${s.active ? "text-blue-600" : s.done ? "" : "text-gray-400"}`}>{s.station}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{s.status}</p>
+                    <p className={`text-xs font-bold ${s.active ? "text-blue-700" : s.done ? "text-[#0A1626]" : "text-gray-400"}`}>{s.station}</p>
+                    <p className="text-[10px] text-gray-500">{s.status}</p>
                   </div>
-                  <p className="f-mono text-sm font-semibold">{s.time}</p>
+                  <p className="font-mono text-xs font-bold text-[#0A1626]">{s.time}</p>
                 </div>
               </div>
             ))}
@@ -204,97 +256,72 @@ export default function MyTripsScreen() {
         </div>
       </Modal>
 
-      <Modal isOpen={activeModal === 'cancel_ticket'} onClose={() => setActiveModal(null)} title="Cancel Ticket">
-        <div className="flex flex-col py-2">
-          <div className="h-14 w-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
-            <X size={28} className="text-red-500" />
-          </div>
-          <h3 className="text-center font-semibold text-lg mb-1">Confirm Cancellation</h3>
-          <p className="text-center text-sm mb-6" style={{ color: "var(--steel)" }}>Are you sure you want to cancel your ticket for Mumbai Rajdhani?</p>
-          
-          <div className="rounded-xl border p-4 mb-6 bg-[var(--paper-2)]" style={{ borderColor: "var(--line)" }}>
-            <div className="flex justify-between text-sm mb-2">
-              <span style={{ color: "var(--steel)" }}>Ticket Fare</span>
-              <span className="font-semibold">₹2,840</span>
-            </div>
-            <div className="flex justify-between text-sm mb-2 text-red-600">
-              <span>Cancellation Fee</span>
-              <span className="font-semibold">-₹240</span>
-            </div>
-            <div className="w-full h-px bg-gray-200 my-3"></div>
-            <div className="flex justify-between text-[15px] font-bold">
-              <span>Estimated Refund</span>
-              <span className="text-green-600">₹2,600</span>
-            </div>
-          </div>
-          
-          <div className="flex gap-3 mt-auto">
-            <button onClick={() => setActiveModal(null)} className="flex-1 h-12 rounded-xl font-semibold border hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>Keep Ticket</button>
-            <button onClick={handleCancelTicket} className="flex-1 h-12 rounded-xl font-semibold text-white hover:bg-red-600 transition-colors" style={{ background: "var(--red)" }}>Confirm Cancel</button>
-          </div>
-        </div>
-      </Modal>
+      {/* Ticket Details Modal */}
+      <Modal isOpen={activeModal === 'ticket_details'} onClose={() => setActiveModal(null)} title="Electronic Reservation Slip (ERS)">
+        {activeJourney && (
+          <div className="flex flex-col py-1">
+            <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm bg-white">
+              <div className="p-4 bg-[#0A1626] text-white flex justify-between items-center">
+                <div>
+                  <p className="font-serif font-bold text-base text-[#F0A63A]">{activeJourney.train?.name || "Superfast Express"}</p>
+                  <p className="text-xs font-mono text-gray-300">Train #{activeJourney.train?.no || "12951"} · Class: {activeJourney.cls || "3A"}</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono">CONFIRMED</span>
+                  <p className="text-[11px] font-mono text-gray-300 mt-1">PNR: {activeJourney.pnr}</p>
+                </div>
+              </div>
 
-      <Modal isOpen={activeModal === 'ticket_details'} onClose={() => setActiveModal(null)} title="E-Ticket Details">
-        <div className="flex flex-col py-2">
-          <div className="rounded-2xl border overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
-            <div className="p-5 transition-colors duration-500 relative" style={{ background: isCancelled ? "var(--red-bg)" : "linear-gradient(135deg, rgba(255,249,240,1) 0%, rgba(254,243,226,1) 100%)", color: isCancelled ? "var(--red)" : "var(--blue)" }}>
-              <div className="flex justify-between items-start mb-4 relative z-10">
+              <div className="p-4 bg-[#FAF8F2] border-b border-gray-200 grid grid-cols-2 gap-4">
                 <div>
-                  <p className="font-bold text-lg leading-none">Mumbai Rajdhani</p>
-                  <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>Train #12951</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Boarding</p>
+                  <p className="font-mono text-base font-bold text-[#0A1626]">{activeJourney.train?.from || "NDLS"}</p>
+                  <p className="text-[10px] text-gray-500">{activeJourney.train?.dep || "16:55"} · {activeJourney.date || "25 Aug 2026"}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-lg leading-none" style={{ color: isCancelled ? "var(--red)" : "var(--marigold-2)" }}>{isCancelled ? "CANCELLED" : "CONFIRMED"}</p>
-                  <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>PNR 8462097315</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Destination</p>
+                  <p className="font-mono text-base font-bold text-[#0A1626]">{activeJourney.train?.to || "MMCT"}</p>
+                  <p className="text-[10px] text-gray-500">{activeJourney.train?.arr || "08:35"}</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between relative z-10">
-                <div>
-                  <p className="text-2xl font-bold">NDLS</p>
-                  <p className="text-xs" style={{ color: "var(--steel)" }}>New Delhi</p>
-                </div>
-                <div className="flex flex-col items-center px-4 w-full">
-                  <span className="text-[10px]" style={{ color: "var(--steel)" }}>16:00 hr</span>
-                  <div className="w-full h-px my-1 relative" style={{ background: "rgba(192,131,33,0.2)" }}>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FEF3E2] px-2 rounded-full border" style={{ borderColor: "rgba(192,131,33,0.15)" }}>
-                      <Train size={12} style={{ color: "var(--marigold-2)" }} />
+
+              <div className="p-4">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 font-mono">Passenger Manifest</p>
+                <div className="space-y-2">
+                  {(activeJourney.passengers || [{ name: "Passenger 1", age: "28", gender: "M", coach: "B4", seat: "22", berth: "Lower" }]).map((p, i) => (
+                    <div key={i} className="flex justify-between items-center p-2.5 rounded-xl border border-gray-200 bg-white">
+                      <div>
+                        <p className="text-xs font-bold text-[#0A1626]">{p.name || `Passenger ${i + 1}`}</p>
+                        <p className="text-[10px] text-gray-500">{p.age || "28"} Yrs · {p.gender === "M" ? "Male" : "Female"}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs font-bold font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          Coach {p.coach || activeJourney.coach || "B4"} · Berth {p.seat || 22 + i * 3} ({p.berth || "Lower"})
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold">BCT</p>
-                  <p className="text-xs" style={{ color: "var(--steel)" }}>Mumbai Ctrl</p>
+
+                <div className="flex flex-col items-center justify-center mt-4 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-center">
+                  <ScanLine size={32} className="text-[#0A1626] mb-1" />
+                  <p className="text-[10px] text-gray-600 font-mono">Authorized Indian Railways Ticket QR · Show to TTE on Board</p>
                 </div>
               </div>
             </div>
-            
-            <div className="p-5 bg-[var(--surface)]">
-              <p className="text-[11px] uppercase tracking-wide mb-3" style={{ color: "var(--steel)" }}>Passenger Details</p>
-              <div className="flex justify-between items-center py-2 border-b" style={{ borderColor: "var(--line)" }}>
-                <div>
-                  <p className="font-semibold text-sm">Ananya Rao</p>
-                  <p className="text-xs" style={{ color: "var(--steel)" }}>28 Yrs, Female</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-sm">B4, 22</p>
-                  <p className="text-xs" style={{ color: "var(--steel)" }}>Side Lower</p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col items-center justify-center mt-6 mb-2">
-                <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                  <ScanLine size={32} style={{ color: "var(--steel)" }} />
-                </div>
-                <p className="text-xs mt-2 text-center" style={{ color: "var(--steel)" }}>Show this QR code to the TT</p>
-              </div>
-            </div>
+
+            <button 
+              onClick={() => {
+                setDownloadSuccess(true);
+                setTimeout(() => setDownloadSuccess(false), 2500);
+              }}
+              className="mt-4 w-full h-12 rounded-xl font-bold text-xs md:text-sm bg-[#0A1626] text-[#F0A63A] hover:bg-black transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              <Download size={16} /> 
+              <span>{downloadSuccess ? "✓ E-Ticket PDF Downloaded!" : "Download Official ERS PDF"}</span>
+            </button>
           </div>
-          
-          <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-[var(--paper-2)] transition-colors" style={{ borderColor: "var(--line)" }}>
-            <Download size={16} /> Download PDF
-          </button>
-        </div>
+        )}
       </Modal>
     </div>
   );

@@ -1631,19 +1631,23 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
       if (outcome === "verifying") {
         setPayState("verifying");
         setTimeout(() => { 
+          const confirmedBooking = buildBooking(selection, passengers);
+          try { useAuthStore.getState().addJourney(confirmedBooking); } catch(e) {}
           setPayState("success"); 
           setStep(2); 
           if (typeof onConfirmed === "function") {
-            try { onConfirmed(buildBooking(selection, passengers)); } catch(e) {}
+            try { onConfirmed(confirmedBooking); } catch(e) {}
           }
         }, 2200);
       } else if (outcome === "failed") {
         setPayState("failed");
       } else {
+        const confirmedBooking = buildBooking(selection, passengers);
+        try { useAuthStore.getState().addJourney(confirmedBooking); } catch(e) {}
         setPayState("success");
         setStep(2);
         if (typeof onConfirmed === "function") {
-          try { onConfirmed(buildBooking(selection, passengers)); } catch(e) {}
+          try { onConfirmed(confirmedBooking); } catch(e) {}
         }
       }
     }, 1200);
