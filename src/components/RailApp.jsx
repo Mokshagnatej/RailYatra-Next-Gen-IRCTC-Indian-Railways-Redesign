@@ -1660,152 +1660,204 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
         </div>
 
         {/* journey summary */}
-        <div className="rounded-xl border glass-card p-4 mb-6 flex items-center justify-between" style={{ borderColor: "var(--line)" }}>
+        <div className="rounded-2xl bg-[#0A1626] text-white p-5 mb-6 shadow-md flex items-center justify-between border border-[rgba(255,255,255,0.1)]">
           <div>
-            <p className="f-display font-semibold text-sm">{selection.train.name} · #{selection.train.no}</p>
-            <p className="f-mono text-xs mt-1" style={{ color: "var(--steel)" }}>{selection.train.dep} {selection.train.from} → {selection.train.arr} {selection.train.to} · {selection.cls}</p>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#F0A63A] font-mono block mb-1">Selected Train</span>
+            <p className="font-serif font-bold text-base md:text-lg text-white">{selection.train.name} · #{selection.train.no}</p>
+            <p className="font-mono text-xs text-blue-200 mt-1">
+              {selection.train.dep} {selection.train.from} → {selection.train.arr} {selection.train.to} · Class: <span className="font-bold text-[#F0A63A]">{selection.cls}</span>
+            </p>
           </div>
-          <p className="f-mono font-semibold" style={{ color: "var(--ink)" }}>₹{total.toLocaleString("en-IN")}</p>
+          <div className="text-right">
+            <span className="text-[10px] text-blue-200 uppercase font-mono block">Total Fare</span>
+            <p className="font-mono font-black text-xl text-[#F0A63A]">₹{total.toLocaleString("en-IN")}</p>
+          </div>
         </div>
 
         {step === 0 && (
           <div className="space-y-5">
-            <div className="rounded-xl border glass-card p-5" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold mb-4">Passenger details</p>
+            <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
+              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-1">Passenger Details</h3>
+              <p className="text-xs text-[#6B7280] mb-4">Enter passenger names exactly as printed on government ID cards.</p>
               <div className="space-y-4">
                 {passengers.map((p, i) => (
-                  <div key={i} className="rounded-lg border p-3" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
-                    <p className="text-xs font-semibold mb-2" style={{ color: "var(--blue)" }}>Passenger {i + 1}</p>
-                    <div className="grid grid-cols-[1fr_70px_70px_1fr] gap-2">
+                  <div key={i} className="rounded-2xl border border-[rgba(10,22,38,0.08)] p-4 bg-[#FAF8F2]">
+                    <p className="text-xs font-bold text-[#0A1626] mb-3 font-mono">Passenger {i + 1}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-[1fr_80px_90px_1fr] gap-3">
                       <div>
-                        <label className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Full name</label>
-                        <input value={p.name} onChange={(e) => updatePassenger(i, "name", e.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border px-2.5 text-sm outline-none" style={{ borderColor: "var(--line)" }} placeholder="As per govt. ID" />
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1">Full Name</label>
+                        <input 
+                          value={p.name} 
+                          onChange={(e) => updatePassenger(i, "name", e.target.value)}
+                          className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] focus:border-[#0A1626] focus:ring-1 focus:ring-[#F0A63A] outline-none shadow-xs" 
+                          placeholder="As per Aadhaar / Govt ID" 
+                        />
                       </div>
                       <div>
-                        <label className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Age</label>
-                        <input value={p.age} onChange={(e) => updatePassenger(i, "age", e.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border px-2.5 text-sm outline-none" style={{ borderColor: "var(--line)" }} placeholder="Yrs" />
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1">Age</label>
+                        <input 
+                          value={p.age} 
+                          onChange={(e) => updatePassenger(i, "age", e.target.value)}
+                          className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] focus:border-[#0A1626] focus:ring-1 focus:ring-[#F0A63A] outline-none shadow-xs text-center" 
+                          placeholder="Yrs" 
+                        />
                       </div>
                       <div>
-                        <label className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Gender</label>
-                        <select value={p.gender} onChange={(e) => updatePassenger(i, "gender", e.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border px-2 text-sm outline-none glass-card" style={{ borderColor: "var(--line)" }}>
-                          <option value="M">M</option><option value="F">F</option><option value="O">O</option>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1">Gender</label>
+                        <select 
+                          value={p.gender} 
+                          onChange={(e) => updatePassenger(i, "gender", e.target.value)}
+                          className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] focus:border-[#0A1626] outline-none shadow-xs cursor-pointer"
+                        >
+                          <option value="M">Male</option>
+                          <option value="F">Female</option>
+                          <option value="O">Other</option>
                         </select>
                       </div>
                       <div>
-                        <label className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Berth preference</label>
-                        <select value={p.berth || "NP"} onChange={(e) => updatePassenger(i, "berth", e.target.value)}
-                          className="mt-1 h-10 w-full rounded-lg border px-2 text-sm outline-none glass-card" style={{ borderColor: "var(--line)" }}>
-                          <option value="NP">No pref</option><option value="LB">Lower</option><option value="MB">Middle</option><option value="UB">Upper</option><option value="SL">Side Lower</option><option value="SU">Side Upper</option>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1">Berth Preference</label>
+                        <select 
+                          value={p.berth || "NP"} 
+                          onChange={(e) => updatePassenger(i, "berth", e.target.value)}
+                          className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] focus:border-[#0A1626] outline-none shadow-xs cursor-pointer"
+                        >
+                          <option value="NP">No Preference</option>
+                          <option value="LB">Lower Berth</option>
+                          <option value="MB">Middle Berth</option>
+                          <option value="UB">Upper Berth</option>
+                          <option value="SL">Side Lower</option>
+                          <option value="SU">Side Upper</option>
                         </select>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <button onClick={addPassenger} className="mt-3 text-sm font-medium" style={{ color: "var(--blue)" }}>+ Add another passenger (max 6)</button>
+              <button 
+                onClick={addPassenger} 
+                className="mt-4 text-xs font-bold text-[#0A1626] hover:text-blue-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-xl transition-all cursor-pointer inline-flex items-center gap-1.5"
+              >
+                + Add Another Passenger (Max 6)
+              </button>
             </div>
 
-            <div className="rounded-xl border glass-card p-5" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold mb-3">Contact details</p>
-              <p className="text-xs mb-3" style={{ color: "var(--steel)" }}>E-ticket and booking updates will be sent here.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
+              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-1">Contact Details</h3>
+              <p className="text-xs text-[#6B7280] mb-4">E-ticket and PNR SMS updates will be sent here.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Mobile number</label>
-                  <div className="mt-1.5 h-11 rounded-lg border flex items-center gap-2 px-3" style={{ borderColor: "var(--line)" }}>
-                    <Phone size={14} style={{ color: "var(--steel)" }} />
-                    <input className="flex-1 outline-none text-sm bg-transparent" placeholder="+91 98765 43210" style={{ color: "var(--ink)" }} />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1.5">Mobile Number</label>
+                  <div className="h-11 rounded-xl border border-gray-300 bg-white flex items-center gap-2 px-3 focus-within:border-[#0A1626] focus-within:ring-1 focus-within:ring-[#F0A63A] shadow-xs">
+                    <Phone size={15} className="text-gray-400" />
+                    <input className="flex-1 outline-none text-xs md:text-sm text-[#0A1626] font-semibold bg-transparent" placeholder="+91 98765 43210" defaultValue="+91 98765 43210" />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Email address</label>
-                  <div className="mt-1.5 h-11 rounded-lg border flex items-center gap-2 px-3" style={{ borderColor: "var(--line)" }}>
-                    <Mail size={14} style={{ color: "var(--steel)" }} />
-                    <input className="flex-1 outline-none text-sm bg-transparent" placeholder="you@example.com" style={{ color: "var(--ink)" }} />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] block mb-1.5">Email Address</label>
+                  <div className="h-11 rounded-xl border border-gray-300 bg-white flex items-center gap-2 px-3 focus-within:border-[#0A1626] focus-within:ring-1 focus-within:ring-[#F0A63A] shadow-xs">
+                    <Mail size={15} className="text-gray-400" />
+                    <input className="flex-1 outline-none text-xs md:text-sm text-[#0A1626] font-semibold bg-transparent" placeholder="you@example.com" defaultValue="passenger@irctc.in" />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border glass-card p-5" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold mb-3">Preferences & add-ons</p>
+            <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
+              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-3">Preferences & Add-ons</h3>
               <div className="space-y-3">
-                <label className="flex items-start gap-3 p-3 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-                  <input type="checkbox" className="h-4 w-4 mt-0.5" defaultChecked />
+                <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-gray-200 bg-[#FAF8F2] cursor-pointer hover:border-gray-300 transition-colors">
+                  <input type="checkbox" className="h-4 w-4 mt-0.5 accent-[#0A1626]" defaultChecked />
                   <div>
-                    <p className="text-sm font-medium">Travel insurance — ₹0.45 per passenger</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>IRCTC iPay travel insurance covers accidental death (₹10 lakh) and hospitalisation. Opt-in recommended.</p>
+                    <p className="text-xs md:text-sm font-bold text-[#0A1626]">Travel insurance — ₹0.45 per passenger</p>
+                    <p className="text-xs text-[#6B7280] mt-0.5">IRCTC iPay travel insurance covers accidental death (₹10 lakh) and hospitalisation.</p>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-3 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-                  <input type="checkbox" className="h-4 w-4 mt-0.5" />
+                <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-gray-200 bg-[#FAF8F2] cursor-pointer hover:border-gray-300 transition-colors">
+                  <input type="checkbox" className="h-4 w-4 mt-0.5 accent-[#0A1626]" />
                   <div>
-                    <p className="text-sm font-medium">Opt-in for IRCTC e-Catering meal</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>Pre-order meals from FSSAI-approved restaurants, delivered to your seat at en-route stations.</p>
+                    <p className="text-xs md:text-sm font-bold text-[#0A1626]">Opt-in for IRCTC e-Catering meal</p>
+                    <p className="text-xs text-[#6B7280] mt-0.5">Pre-order hot hygienic meals delivered directly to your seat at en-route stations.</p>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-3 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-                  <input type="checkbox" className="h-4 w-4 mt-0.5" defaultChecked />
+                <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-gray-200 bg-[#FAF8F2] cursor-pointer hover:border-gray-300 transition-colors">
+                  <input type="checkbox" className="h-4 w-4 mt-0.5 accent-[#0A1626]" defaultChecked />
                   <div>
-                    <p className="text-sm font-medium">Consider for auto-upgrade</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>If a higher class has vacancies close to departure, upgrade your berth at no additional charge.</p>
+                    <p className="text-xs md:text-sm font-bold text-[#0A1626]">Consider for auto-upgrade</p>
+                    <p className="text-xs text-[#6B7280] mt-0.5">If a higher class has vacancies close to chart preparation, auto-upgrade at ₹0 charge.</p>
                   </div>
                 </label>
               </div>
             </div>
 
-            <button onClick={() => setStep(1)} className="w-full h-12 rounded-xl font-semibold" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
-              Continue to payment
+            <button 
+              onClick={() => setStep(1)} 
+              className="w-full h-13 rounded-2xl font-bold text-sm md:text-base bg-[#0A1626] hover:bg-black text-[#F0A63A] transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+            >
+              <span>Continue to Payment (₹{total.toLocaleString("en-IN")})</span>
+              <ChevronRight size={18} />
             </button>
           </div>
         )}
 
         {step === 1 && (
           <div className="space-y-5">
-            <div className="rounded-xl border glass-card p-5" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold mb-3">Fare breakdown</p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>Base fare ({passengers.length} pax)</span><span className="f-mono font-semibold">₹{fare.toLocaleString("en-IN")}</span></div>
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>Reservation charge</span><span className="f-mono font-semibold">₹60</span></div>
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>Superfast surcharge</span><span className="f-mono font-semibold">₹45</span></div>
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>GST (5%)</span><span className="f-mono font-semibold">₹{Math.round(fare * 0.05)}</span></div>
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>Convenience fee (incl. GST)</span><span className="f-mono font-semibold">₹{convenience}</span></div>
-                <div className="flex justify-between text-sm"><span style={{ color: "var(--steel)" }}>Travel insurance</span><span className="f-mono font-semibold">₹0.45</span></div>
-                <div className="border-t pt-2 mt-2 flex justify-between text-[15px]" style={{ borderColor: "var(--line)" }}>
-                  <span className="font-semibold">Total payable</span>
-                  <span className="f-mono font-bold" style={{ color: "var(--ink)" }}>₹{total.toLocaleString("en-IN")}</span>
+            <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
+              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-3">Fare Breakdown</h3>
+              <div className="space-y-2.5">
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Base Fare ({passengers.length} passenger{passengers.length > 1 ? 's' : ''})</span><span className="font-mono font-bold text-[#0A1626]">₹{fare.toLocaleString("en-IN")}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Reservation Charge</span><span className="font-mono font-bold text-[#0A1626]">₹60</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Superfast Surcharge</span><span className="font-mono font-bold text-[#0A1626]">₹45</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">GST (5%)</span><span className="font-mono font-bold text-[#0A1626]">₹{Math.round(fare * 0.05)}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Convenience Fee (incl. GST)</span><span className="font-mono font-bold text-[#0A1626]">₹{convenience}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Travel Insurance</span><span className="font-mono font-bold text-[#0A1626]">₹0.45</span></div>
+                <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between text-base">
+                  <span className="font-bold text-[#0A1626]">Total Payable</span>
+                  <span className="font-mono font-black text-xl text-[#0A1626]">₹{total.toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border glass-card p-5" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold mb-1">Select payment method</p>
-              <p className="text-xs mb-4" style={{ color: "var(--steel)" }}>All transactions are PCI-DSS compliant. Card data is tokenised and never stored.</p>
+            <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
+              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-1">Select Payment Method</h3>
+              <p className="text-xs text-[#6B7280] mb-4">All transactions are 256-bit encrypted & PCI-DSS compliant.</p>
 
             {payState === "idle" && (
               <div className="space-y-3">
                 {[
-                  { icon: "💳", label: "UPI (GPay, PhonePe, Paytm)", desc: "Pay instantly via UPI ID or QR scan" },
-                  { icon: "🏦", label: "Debit / Credit Card", desc: "Visa, Mastercard, RuPay accepted" },
-                  { icon: "🏢", label: "Net Banking", desc: "All major banks supported" },
-                  { icon: "👛", label: "IRCTC eWallet", desc: "Pre-loaded wallet for faster checkout" },
+                  { icon: "⚡", label: "UPI (Google Pay, PhonePe, Paytm, BHIM)", desc: "Zero convenience charge · Instant bank transfer" },
+                  { icon: "💳", label: "Debit / Credit Card", desc: "Visa, Mastercard, RuPay & Amex accepted" },
+                  { icon: "🏦", label: "Net Banking", desc: "50+ Indian commercial & regional banks" },
+                  { icon: "👛", label: "IRCTC eWallet / iMudra", desc: "1-click fastest checkout" },
                 ].map((pm) => (
-                  <div key={pm.label} className="rounded-lg border p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-                    <span className="text-xl">{pm.icon}</span>
+                  <div key={pm.label} className="rounded-2xl border border-gray-200 bg-[#FAF8F2] p-4 flex items-center gap-3.5 cursor-pointer hover:border-[#0A1626] transition-all group">
+                    <span className="text-2xl">{pm.icon}</span>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">{pm.label}</p>
-                      <p className="text-xs" style={{ color: "var(--steel)" }}>{pm.desc}</p>
+                      <p className="text-sm font-bold text-[#0A1626] group-hover:text-blue-900">{pm.label}</p>
+                      <p className="text-xs text-[#6B7280]">{pm.desc}</p>
                     </div>
-                    <ChevronRight size={16} style={{ color: "var(--steel)" }} />
+                    <ChevronRight size={16} className="text-gray-400 group-hover:text-[#0A1626]" />
                   </div>
                 ))}
-                <p className="text-xs pt-2" style={{ color: "var(--steel)" }}>Demo: try each outcome to see how the redesigned flow handles it — no more silent dead ends.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                  <button onClick={() => runPayment("success")} className="h-11 rounded-lg font-semibold text-sm" style={{ background: "var(--marigold)", color: "var(--blue)" }}>Pay ₹{total} — succeeds</button>
-                  <button onClick={() => runPayment("verifying")} className="h-11 rounded-lg font-semibold text-sm border" style={{ borderColor: "var(--amber)", color: "var(--amber)" }}>Simulate ambiguous debit</button>
-                  <button onClick={() => runPayment("failed")} className="h-11 rounded-lg font-semibold text-sm border" style={{ borderColor: "var(--red)", color: "var(--red)" }}>Simulate failure</button>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3">
+                  <button 
+                    onClick={() => runPayment("success")} 
+                    className="h-12 rounded-xl font-bold text-xs md:text-sm bg-[#0A1626] hover:bg-black text-[#F0A63A] transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5"
+                  >
+                    Pay ₹{total} (Success)
+                  </button>
+                  <button 
+                    onClick={() => runPayment("verifying")} 
+                    className="h-12 rounded-xl font-bold text-xs md:text-sm border border-amber-500 bg-amber-50 text-amber-900 hover:bg-amber-100 transition-all cursor-pointer"
+                  >
+                    Simulate Ambiguous Debit
+                  </button>
+                  <button 
+                    onClick={() => runPayment("failed")} 
+                    className="h-12 rounded-xl font-bold text-xs md:text-sm border border-red-400 bg-red-50 text-red-900 hover:bg-red-100 transition-all cursor-pointer"
+                  >
+                    Simulate Failure
+                  </button>
                 </div>
               </div>
             )}
@@ -1817,15 +1869,16 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
             )}
 
             {payState === "verifying" && (
-              <div className="rounded-lg p-4 flex gap-3 anim-fade-up" style={{ background: "var(--amber-bg)" }}>
-                <AlertTriangle size={20} style={{ color: "var(--amber)" }} className="shrink-0 mt-0.5" />
+              <div className="rounded-2xl p-5 flex gap-3.5 anim-fade-up bg-amber-50 border border-amber-200">
+                <AlertTriangle size={22} className="text-amber-600 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm font-semibold" style={{ color: "var(--ink)" }}>Verifying your payment</p>
-                  <p className="text-sm mt-1" style={{ color: "var(--ink)" }}>
-                    Your bank confirmed the debit but we're still confirming the booking. We'll confirm within 5 minutes —
-                    if we can't, the amount is auto-refunded and you'll be notified. No action needed from you right now.
+                  <p className="text-sm font-bold text-amber-950">Verifying your payment with IRCTC Gateway</p>
+                  <p className="text-xs text-amber-900 mt-1 leading-relaxed">
+                    Your bank confirmed the debit. We are synchronising with the IRCTC PRS server. The ticket will be confirmed within 2 minutes. In the rare event of PRS timeout, 100% auto-refund is triggered immediately.
                   </p>
-                  <TrainLoader label="Reconciling with bank…" />
+                  <div className="mt-3">
+                    <TrainLoader label="Reconciling with bank…" />
+                  </div>
                 </div>
               </div>
             )}

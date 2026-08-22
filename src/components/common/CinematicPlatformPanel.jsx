@@ -21,7 +21,8 @@ export default function CinematicPlatformPanel() {
         style={{ y: parY }}
       >
         <img 
-          src="/trains/station_platform.jpg" 
+          src={`${import.meta.env.BASE_URL || '/'}trains/station_platform.jpg`} 
+          onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=2000&auto=format&fit=crop"; }}
           alt="Indian Railway Platform" 
           className="w-full h-full object-cover transition-transform duration-[10s] ease-out group-hover:scale-110"
         />

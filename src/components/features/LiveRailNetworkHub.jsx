@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Train, Zap, Mountain, ShieldCheck, ArrowRight, Clock, MapPin, Sparkles, Utensils, CheckCircle2, ChevronRight } from 'lucide-react';
 
+const getAssetUrl = (path) => {
+  const base = import.meta.env.BASE_URL || '/';
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${base}${cleanPath}`;
+};
+
 const SPOTLIGHT_TRAINS = [
   {
     id: 'vande-bharat',
@@ -13,7 +19,8 @@ const SPOTLIGHT_TRAINS = [
     departure: '06:00 AM (NDLS)',
     arrival: '02:00 PM (BSB)',
     duration: '8h 00m',
-    image: '/trains/vande_bharat.jpg',
+    image: getAssetUrl('trains/vande_bharat.jpg'),
+    fallbackImage: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop',
     accent: '#F0A63A',
     perks: ['Executive AC Chair Car', 'Infotainment & Wi-Fi', 'Complimentary Gourmet Meals']
   },
@@ -27,7 +34,8 @@ const SPOTLIGHT_TRAINS = [
     departure: '05:25 AM (CSMT)',
     arrival: '02:40 PM (MAO)',
     duration: '9h 15m',
-    image: '/trains/vistadome.jpg',
+    image: getAssetUrl('trains/vistadome.jpg'),
+    fallbackImage: 'https://images.unsplash.com/photo-1474487548417-781cb71495f3?q=80&w=2084&auto=format&fit=crop',
     accent: '#3FAE71',
     perks: ['360° Glass Roof Views', 'Observation Deck', 'Scenic Tunnel Passes']
   },
@@ -41,7 +49,8 @@ const SPOTLIGHT_TRAINS = [
     departure: '05:00 PM (MMCT)',
     arrival: '08:35 AM (NDLS)',
     duration: '15h 35m',
-    image: '/trains/rajdhani.jpg',
+    image: getAssetUrl('trains/rajdhani.jpg'),
+    fallbackImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop',
     accent: '#60B8F4',
     perks: ['1st AC & 2nd AC Sleepers', 'Pantry On-Board Included', 'Priority Track Clearance']
   }
@@ -123,13 +132,15 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
         <div className="grid grid-cols-1 lg:grid-cols-12">
           {/* Left Visual Area with Image */}
           <div className="lg:col-span-7 relative min-h-[300px] lg:min-h-[420px] overflow-hidden group">
-            <motion.div
+            <motion.img
               key={activeTrain.id}
               initial={{ scale: 1.08, opacity: 0.8 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="absolute inset-0 w-full h-full bg-cover bg-center"
-              style={{ backgroundImage: `url('${activeTrain.image}')` }}
+              src={activeTrain.image}
+              onError={(e) => { e.currentTarget.src = activeTrain.fallbackImage; }}
+              alt={activeTrain.title}
+              className="absolute inset-0 w-full h-full object-cover object-center"
             />
             {/* Vignette & Gradients */}
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--navy)] via-[var(--navy)]/40 to-transparent" />

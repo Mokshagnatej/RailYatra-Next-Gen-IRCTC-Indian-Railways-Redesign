@@ -40,7 +40,7 @@ export default function CinematicHeroScenery() {
         ref={bgRef}
         className="absolute inset-0 w-full h-full bg-cover bg-center origin-center will-change-transform"
         style={{ 
-          backgroundImage: "url('./train-reference.jpg')", 
+          backgroundImage: `url('${import.meta.env.BASE_URL || '/'}train-reference.jpg')`, 
           filter: 'brightness(0.65) saturate(1.2)',
           transform: 'scale(1.05) translate3d(0, 0, 0)'
         }}
