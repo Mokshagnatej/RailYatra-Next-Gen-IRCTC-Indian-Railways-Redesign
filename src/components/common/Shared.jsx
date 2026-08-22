@@ -166,12 +166,12 @@ export function NotificationsModal({ isOpen, onClose }) {
 
 export function ToolCard({ icon: Icon, title, body, onClick }) {
   return (
-    <div onClick={onClick} className="rounded-xl border bg-white p-5 group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1" style={{ borderColor: "var(--line)" }}>
-      <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300 group-hover:bg-blue-50" style={{ background: "var(--paper-2)" }}>
-        <Icon size={20} className="transition-colors duration-300" style={{ color: "var(--blue)" }} />
+    <div onClick={onClick} className="rounded-2xl border bg-white p-5 group cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-[rgba(10,22,38,0.12)]">
+      <div className="h-11 w-11 rounded-xl flex items-center justify-center mb-3 transition-colors duration-300 bg-[#F3EEE0] group-hover:bg-[#EAE2C9]">
+        <Icon size={22} className="text-[#0A1626] transition-colors" />
       </div>
-      <p className="font-semibold text-[15px]">{title}</p>
-      <p className="text-xs mt-1 leading-relaxed" style={{ color: "var(--steel)" }}>{body}</p>
+      <p className="font-bold text-base text-[#0A1626]">{title}</p>
+      <p className="text-xs md:text-sm mt-1.5 leading-relaxed text-[#4B5563]">{body}</p>
     </div>
   );
 }

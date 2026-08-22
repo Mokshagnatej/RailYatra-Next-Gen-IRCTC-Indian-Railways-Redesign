@@ -34,7 +34,7 @@ export interface JourneyState {
 export const useBookingStore = create<BookingState>((set) => ({
   from: "New Delhi (NDLS)",
   to: "Mumbai Central (BCT)",
-  date: "Tue, 25 Aug",
+  date: "23 Aug",
   passengers: { adults: 1, children: 0, infants: 0 },
   cls: "All classes",
   quota: "General",
@@ -62,18 +62,43 @@ export const useJourneyStore = create<JourneyState>((set) => ({
 
 export interface AuthState {
   isAuthenticated: boolean;
-  user: { name: string; email: string } | null;
+  user: { name: string; email: string; irctcId?: string; mobile?: string } | null;
   journeys: any[];
-  login: (name: string, email: string) => void;
+  login: (name: string, email: string, irctcId?: string, mobile?: string) => void;
   logout: () => void;
   addJourney: (journey: any) => void;
 }
 
+const getInitialUser = () => {
+  try {
+    const saved = localStorage.getItem('railyatra_auth_user');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    // ignore
+  }
+  return null;
+};
+
+const initialUser = getInitialUser();
+
 export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
-  user: null,
+  isAuthenticated: !!initialUser,
+  user: initialUser,
   journeys: [],
-  login: (name, email) => set({ isAuthenticated: true, user: { name, email } }),
-  logout: () => set({ isAuthenticated: false, user: null }),
+  login: (name, email, irctcId = "ananya.rao", mobile = "+91 98765 43210") => {
+    const cleanName = name ? name.trim() : (email.includes("@") ? email.split("@")[0] : "Passenger");
+    const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+    const userObj = { name: formattedName, email, irctcId, mobile };
+    try {
+      localStorage.setItem('railyatra_auth_user', JSON.stringify(userObj));
+    } catch (e) {}
+    set({ isAuthenticated: true, user: userObj });
+  },
+  logout: () => {
+    try {
+      localStorage.removeItem('railyatra_auth_user');
+    } catch (e) {}
+    set({ isAuthenticated: false, user: null });
+  },
   addJourney: (journey) => set((state) => ({ journeys: [journey, ...state.journeys] })),
 }));

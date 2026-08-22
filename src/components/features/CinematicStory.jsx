@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
 
 const SHOTS = [
-  { id: '1', title: 'Departing the Station', duration: 8, color: 'bg-slate-800' },
-  { id: '2', title: 'Speeding through Countryside', duration: 10, color: 'bg-emerald-900' },
-  { id: '3', title: 'Crossing the River Bridge', duration: 7, color: 'bg-blue-900' },
-  { id: '4', title: 'Sunset Arrival', duration: 10, color: 'bg-orange-900' },
+  { id: '1', title: 'Departing the Station', duration: 8, image: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=2000' },
+  { id: '2', title: 'Speeding through Countryside', duration: 10, image: 'https://images.unsplash.com/photo-1496350756381-d1c9fb8b0d2f?auto=format&fit=crop&q=80&w=2000' },
+  { id: '3', title: 'Crossing the River Bridge', duration: 7, image: 'https://images.unsplash.com/photo-1628243452445-560bf974b94a?auto=format&fit=crop&q=80&w=2000' },
+  { id: '4', title: 'Sunset Arrival', duration: 10, image: 'https://images.unsplash.com/photo-1534062033054-7f1c1fce9db5?auto=format&fit=crop&q=80&w=2000' },
 ];
 
 export default function CinematicStory() {
@@ -54,24 +54,35 @@ export default function CinematicStory() {
 
   return (
     <div className="relative w-full h-[60vh] md:h-[80vh] bg-black overflow-hidden group">
-      {/* Shots (Placeholders) */}
+      {/* Shots (Images with Ken Burns Effect) */}
       {SHOTS.map((shot, index) => (
         <div 
           key={shot.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ${shot.color} flex items-center justify-center`}
+          className={`absolute inset-0 transition-opacity duration-1000 bg-black flex items-center justify-center overflow-hidden`}
           style={{ opacity: index === activeShot ? 1 : 0, zIndex: index === activeShot ? 10 : 0 }}
         >
-          {/* Placeholder for actual Video/Image */}
-          <div className="text-center text-white/50 space-y-4">
-            <p className="f-mono text-sm tracking-widest uppercase">Cinematic Shot {index + 1}</p>
-            <h2 className="f-serif text-3xl md:text-5xl font-bold text-white drop-shadow-lg">{shot.title}</h2>
-            <p className="f-body">[{shot.duration}s Sequence - Placeholder Media]</p>
+          {/* Animated Background Image simulating a video pan */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ 
+              backgroundImage: `url('${shot.image}')`,
+              // If it's the active shot, apply a slow zoom/pan animation
+              animation: index === activeShot && isPlaying ? `ken-burns ${shot.duration}s linear forwards` : 'none',
+              transform: index === activeShot && !isPlaying ? 'scale(1.05)' : 'scale(1)',
+              filter: 'brightness(0.7)'
+            }}
+          />
+
+          {/* Cinematic Title Overlay */}
+          <div className={`relative z-10 text-center space-y-4 transition-all duration-1000 delay-300 ${index === activeShot ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <p className="f-mono text-sm tracking-widest uppercase text-white/70">Cinematic Shot {index + 1}</p>
+            <h2 className="f-serif text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">{shot.title}</h2>
           </div>
         </div>
       ))}
 
-      {/* Overlay UI */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 z-20 pointer-events-none" />
+      {/* Overlay UI Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 z-20 pointer-events-none" />
 
       {/* Controls */}
       <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-30 flex flex-col gap-6">

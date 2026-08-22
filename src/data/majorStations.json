@@ -1,0 +1,922 @@
+[
+  {
+    "code": "GKP",
+    "name": "GORAKHPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 26.7593,
+    "lng": 83.3815
+  },
+  {
+    "code": "UMB",
+    "name": "AMBALA CANT Junction",
+    "state": "",
+    "zone": "",
+    "lat": 30.3389,
+    "lng": 76.827
+  },
+  {
+    "code": "MGS",
+    "name": "MUGHAL SARAI Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.2781,
+    "lng": 83.1193
+  },
+  {
+    "code": "AGTL",
+    "name": "Agartala",
+    "state": "Tripura",
+    "zone": "NFR",
+    "lat": 23.7924,
+    "lng": 91.2785
+  },
+  {
+    "code": "ASR",
+    "name": "AMRITSAR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 31.6315,
+    "lng": 74.858
+  },
+  {
+    "code": "ST",
+    "name": "SURAT",
+    "state": "",
+    "zone": "",
+    "lat": 21.2066,
+    "lng": 72.8408
+  },
+  {
+    "code": "RIG",
+    "name": "RAIGARH",
+    "state": "",
+    "zone": "",
+    "lat": 21.8913,
+    "lng": 83.3907
+  },
+  {
+    "code": "TCR",
+    "name": "THRISUR",
+    "state": "",
+    "zone": "",
+    "lat": 10.5148,
+    "lng": 76.2079
+  },
+  {
+    "code": "CBE",
+    "name": "COIMBATORE Junction",
+    "state": "",
+    "zone": "",
+    "lat": 10.9976,
+    "lng": 76.9663
+  },
+  {
+    "code": "ERN",
+    "name": "ERNAKULAM TOWN",
+    "state": "",
+    "zone": "",
+    "lat": 9.9916,
+    "lng": 76.2861
+  },
+  {
+    "code": "ALD",
+    "name": "ALLAHABAD Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.4462,
+    "lng": 81.8288
+  },
+  {
+    "code": "BSL",
+    "name": "BHUSAVAL Junction",
+    "state": "",
+    "zone": "",
+    "lat": 21.0473,
+    "lng": 75.7887
+  },
+  {
+    "code": "JHS",
+    "name": "JHANSI Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.4436,
+    "lng": 78.553
+  },
+  {
+    "code": "ED",
+    "name": "ERODE Junction",
+    "state": "",
+    "zone": "",
+    "lat": 11.3277,
+    "lng": 77.7259
+  },
+  {
+    "code": "LDH",
+    "name": "LUDHIANA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 30.9124,
+    "lng": 75.8479
+  },
+  {
+    "code": "JUC",
+    "name": "JALANDHAR CITY",
+    "state": "",
+    "zone": "",
+    "lat": 31.3317,
+    "lng": 75.5915
+  },
+  {
+    "code": "DURG",
+    "name": "DURG",
+    "state": "",
+    "zone": "",
+    "lat": 21.2003,
+    "lng": 81.2918
+  },
+  {
+    "code": "KLK",
+    "name": "Kalka",
+    "state": "Haryana",
+    "zone": "NR",
+    "lat": 30.8377,
+    "lng": 76.9318
+  },
+  {
+    "code": "DEC",
+    "name": "DELHI CANTT",
+    "state": "Delhi NCT",
+    "zone": "NR",
+    "lat": 28.6135,
+    "lng": 77.1166
+  },
+  {
+    "code": "GWL",
+    "name": "GWALIOR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 26.2165,
+    "lng": 78.1823
+  },
+  {
+    "code": "ASN",
+    "name": "ASANSOL Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.6914,
+    "lng": 86.9752
+  },
+  {
+    "code": "MRJ",
+    "name": "MIRAJ Junction",
+    "state": "Maharashtra",
+    "zone": "CR",
+    "lat": 16.8199,
+    "lng": 74.6388
+  },
+  {
+    "code": "AGC",
+    "name": "AGRA CANTT",
+    "state": "",
+    "zone": "",
+    "lat": 27.158,
+    "lng": 77.9902
+  },
+  {
+    "code": "KOTA",
+    "name": "KOTA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.2236,
+    "lng": 75.8805
+  },
+  {
+    "code": "BRC",
+    "name": "VADODARA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 22.3108,
+    "lng": 73.1811
+  },
+  {
+    "code": "DHN",
+    "name": "DHANBAD Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.791,
+    "lng": 86.429
+  },
+  {
+    "code": "SBC",
+    "name": "BANGALORE CITY Junction",
+    "state": "Karnataka",
+    "zone": "SWR",
+    "lat": 12.9776,
+    "lng": 77.5681
+  },
+  {
+    "code": "MTJ",
+    "name": "MATHURA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 27.4801,
+    "lng": 77.6731
+  },
+  {
+    "code": "TBM",
+    "name": "TAMBARAM",
+    "state": "",
+    "zone": "",
+    "lat": 12.926,
+    "lng": 80.1192
+  },
+  {
+    "code": "SCL",
+    "name": "SILCHAR",
+    "state": "Assam",
+    "zone": "NFR",
+    "lat": 24.8303,
+    "lng": 92.7868
+  },
+  {
+    "code": "SHM",
+    "name": "KOLKATA SHALIMAR",
+    "state": "West Bengal",
+    "zone": "SER",
+    "lat": 22.5555,
+    "lng": 88.3156
+  },
+  {
+    "code": "NGP",
+    "name": "NAGPUR",
+    "state": "",
+    "zone": "",
+    "lat": 21.1536,
+    "lng": 79.089
+  },
+  {
+    "code": "MS",
+    "name": "CHENNAI EGMORE",
+    "state": "",
+    "zone": "",
+    "lat": 13.0777,
+    "lng": 80.2602
+  },
+  {
+    "code": "BZA",
+    "name": "VIJAYAWADA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 16.5183,
+    "lng": 80.6186
+  },
+  {
+    "code": "ERS",
+    "name": "ERNAKULAM Junction",
+    "state": "",
+    "zone": "",
+    "lat": 9.9695,
+    "lng": 76.2907
+  },
+  {
+    "code": "CSTM",
+    "name": "MUMBAI CST",
+    "state": "Maharashtra",
+    "zone": "CR",
+    "lat": 18.9445,
+    "lng": 72.8369
+  },
+  {
+    "code": "SRR",
+    "name": "SHORANUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 10.7589,
+    "lng": 76.2722
+  },
+  {
+    "code": "PER",
+    "name": "PERAMBUR",
+    "state": "",
+    "zone": "",
+    "lat": 13.107,
+    "lng": 80.2445
+  },
+  {
+    "code": "UDZ",
+    "name": "UDAIPUR CITY",
+    "state": "Rajasthan",
+    "zone": "NWR",
+    "lat": 24.5669,
+    "lng": 73.6996
+  },
+  {
+    "code": "UHP",
+    "name": "UDHAMPUR",
+    "state": "Jammu and Kashmir",
+    "zone": "NR",
+    "lat": 32.9266,
+    "lng": 75.1549
+  },
+  {
+    "code": "GIMB",
+    "name": "GANDHIDHAM BG",
+    "state": "",
+    "zone": "",
+    "lat": 23.0691,
+    "lng": 70.1478
+  },
+  {
+    "code": "MAS",
+    "name": "CHENNAI CENTRAL",
+    "state": "",
+    "zone": "",
+    "lat": 13.0848,
+    "lng": 80.2749
+  },
+  {
+    "code": "JP",
+    "name": "JAIPUR",
+    "state": "",
+    "zone": "",
+    "lat": 26.9202,
+    "lng": 75.7869
+  },
+  {
+    "code": "CNB",
+    "name": "KANPUR CENTRAL",
+    "state": "",
+    "zone": "",
+    "lat": 26.4542,
+    "lng": 80.351
+  },
+  {
+    "code": "KYN",
+    "name": "KALYAN Junction",
+    "state": "",
+    "zone": "",
+    "lat": 19.2347,
+    "lng": 73.1297
+  },
+  {
+    "code": "TNA",
+    "name": "THANE",
+    "state": "",
+    "zone": "",
+    "lat": 19.1858,
+    "lng": 72.9754
+  },
+  {
+    "code": "CDG",
+    "name": "CHANDIGARH",
+    "state": "Chandigarh",
+    "zone": "NR",
+    "lat": 30.702,
+    "lng": 76.8221
+  },
+  {
+    "code": "SRC",
+    "name": "SANTRAGACHI Junction",
+    "state": "",
+    "zone": "",
+    "lat": 22.5839,
+    "lng": 88.284
+  },
+  {
+    "code": "BSP",
+    "name": "BILASPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 22.0575,
+    "lng": 82.1676
+  },
+  {
+    "code": "R",
+    "name": "RAIPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 21.2565,
+    "lng": 81.6293
+  },
+  {
+    "code": "LKO",
+    "name": "LUCKNOW",
+    "state": "",
+    "zone": "",
+    "lat": 26.8307,
+    "lng": 80.9253
+  },
+  {
+    "code": "DLI",
+    "name": "OLD DELHI",
+    "state": "Delhi NCT",
+    "zone": "NR",
+    "lat": 28.6618,
+    "lng": 77.2284
+  },
+  {
+    "code": "TPJ",
+    "name": "TIRUCHIRAPPALLI",
+    "state": "",
+    "zone": "",
+    "lat": 10.7941,
+    "lng": 78.6854
+  },
+  {
+    "code": "LTT",
+    "name": "LOKMANYA TILAK TERM",
+    "state": "",
+    "zone": "",
+    "lat": 19.0703,
+    "lng": 72.8917
+  },
+  {
+    "code": "DBRG",
+    "name": "DIBRUGARH",
+    "state": "Assam",
+    "zone": "NFR",
+    "lat": 27.4636,
+    "lng": 94.9353
+  },
+  {
+    "code": "JAT",
+    "name": "JAMMU TAWI",
+    "state": "Jammu and Kashmir",
+    "zone": "NR",
+    "lat": 32.707,
+    "lng": 74.8801
+  },
+  {
+    "code": "BSB",
+    "name": "VARANASI Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.3273,
+    "lng": 82.9865
+  },
+  {
+    "code": "CLT",
+    "name": "KOZHIKODE",
+    "state": "Kerala",
+    "zone": "SR",
+    "lat": 11.2462,
+    "lng": 75.7804
+  },
+  {
+    "code": "AII",
+    "name": "AJMER Junction",
+    "state": "Rajasthan",
+    "zone": "NWR",
+    "lat": 26.4566,
+    "lng": 74.6375
+  },
+  {
+    "code": "HYB",
+    "name": "HYDERABAD DECCAN",
+    "state": "Andhra Pradesh",
+    "zone": "SCR",
+    "lat": 17.3934,
+    "lng": 78.4674
+  },
+  {
+    "code": "JBP",
+    "name": "JABALPUR",
+    "state": "Madhya Pradesh",
+    "zone": "WCR",
+    "lat": 23.1646,
+    "lng": 79.9509
+  },
+  {
+    "code": "PNVL",
+    "name": "PANVEL",
+    "state": "Maharashtra",
+    "zone": "CR",
+    "lat": 18.9909,
+    "lng": 73.1218
+  },
+  {
+    "code": "DDR",
+    "name": "MUMBAI DADAR WEST",
+    "state": "Maharashtra",
+    "zone": "WR",
+    "lat": 19.0197,
+    "lng": 72.8435
+  },
+  {
+    "code": "BNC",
+    "name": "BANGALORE CANT",
+    "state": "Karnataka",
+    "zone": "SWR",
+    "lat": 12.9937,
+    "lng": 77.5993
+  },
+  {
+    "code": "BDTS",
+    "name": "MUMBAI BANDRA TERMINUS",
+    "state": "Maharashtra",
+    "zone": "WR",
+    "lat": 19.0619,
+    "lng": 72.8405
+  },
+  {
+    "code": "MAQ",
+    "name": "MANGALORE Central",
+    "state": "Karnataka",
+    "zone": "SR",
+    "lat": 12.8623,
+    "lng": 74.8441
+  },
+  {
+    "code": "DEE",
+    "name": "DELHI SARAI ROHILLA",
+    "state": "Delhi NCT",
+    "zone": "NR",
+    "lat": 28.663,
+    "lng": 77.1871
+  },
+  {
+    "code": "KOP",
+    "name": "C SHAHU M RAJ KOLHAPUR TERM",
+    "state": "Maharashtra",
+    "zone": "CR",
+    "lat": 16.7026,
+    "lng": 74.2377
+  },
+  {
+    "code": "INDB",
+    "name": "INDORE JN BG",
+    "state": "Madhya Pradesh",
+    "zone": "WR",
+    "lat": 22.7176,
+    "lng": 75.8684
+  },
+  {
+    "code": "BCT",
+    "name": "Mumbai Central",
+    "state": "Maharashtra",
+    "zone": "WR",
+    "lat": 18.9707,
+    "lng": 72.8194
+  },
+  {
+    "code": "PPTA",
+    "name": "PATLIPUTRA",
+    "state": "",
+    "zone": "",
+    "lat": 25.6214,
+    "lng": 85.0685
+  },
+  {
+    "code": "SVDK",
+    "name": "S M V D KATRA",
+    "state": "",
+    "zone": "",
+    "lat": 32.9828,
+    "lng": 74.9357
+  },
+  {
+    "code": "SUR",
+    "name": "SOLAPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 17.6645,
+    "lng": 75.8934
+  },
+  {
+    "code": "LPI",
+    "name": "LINGAMPALLI",
+    "state": "",
+    "zone": "",
+    "lat": 17.4829,
+    "lng": 78.3168
+  },
+  {
+    "code": "SC",
+    "name": "SECUNDERABAD Junction",
+    "state": "",
+    "zone": "",
+    "lat": 17.4331,
+    "lng": 78.5015
+  },
+  {
+    "code": "YPR",
+    "name": "YESVANTPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 13.0228,
+    "lng": 77.5512
+  },
+  {
+    "code": "KJM",
+    "name": "KRISHNARAJAPURAM",
+    "state": "",
+    "zone": "",
+    "lat": 13.0005,
+    "lng": 77.674
+  },
+  {
+    "code": "TPTY",
+    "name": "TIRUPATI MAIN",
+    "state": "",
+    "zone": "",
+    "lat": 13.6276,
+    "lng": 79.419
+  },
+  {
+    "code": "RU",
+    "name": "RENIGUNTA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 13.6363,
+    "lng": 79.5063
+  },
+  {
+    "code": "LJN",
+    "name": "LUCKNOW Junction",
+    "state": "",
+    "zone": "",
+    "lat": 26.832,
+    "lng": 80.9186
+  },
+  {
+    "code": "RTM",
+    "name": "RATLAM Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.3404,
+    "lng": 75.0508
+  },
+  {
+    "code": "KYQ",
+    "name": "KAMAKHYA",
+    "state": "",
+    "zone": "",
+    "lat": 26.1562,
+    "lng": 91.6895
+  },
+  {
+    "code": "GHY",
+    "name": "GUWAHATI",
+    "state": "",
+    "zone": "",
+    "lat": 26.1826,
+    "lng": 91.7519
+  },
+  {
+    "code": "TVC",
+    "name": "TRIVANDRUM CENTRAL",
+    "state": "",
+    "zone": "",
+    "lat": 8.4867,
+    "lng": 76.9512
+  },
+  {
+    "code": "ANVT",
+    "name": "ANAND VIHAR Terminus",
+    "state": "",
+    "zone": "",
+    "lat": 28.6505,
+    "lng": 77.3152
+  },
+  {
+    "code": "TATA",
+    "name": "TATANAGAR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 22.769,
+    "lng": 86.2006
+  },
+  {
+    "code": "PUNE",
+    "name": "PUNE Junction",
+    "state": "",
+    "zone": "",
+    "lat": 18.5294,
+    "lng": 73.8731
+  },
+  {
+    "code": "RNC",
+    "name": "RANCHI",
+    "state": "",
+    "zone": "",
+    "lat": 23.3488,
+    "lng": 85.3335
+  },
+  {
+    "code": "NJP",
+    "name": "NEW JALPAIGURI",
+    "state": "",
+    "zone": "",
+    "lat": 26.683,
+    "lng": 88.4434
+  },
+  {
+    "code": "CPA",
+    "name": "KANPUR ANWARGANJ",
+    "state": "",
+    "zone": "",
+    "lat": 26.4562,
+    "lng": 80.3284
+  },
+  {
+    "code": "BBS",
+    "name": "BHUBANESWAR",
+    "state": "",
+    "zone": "",
+    "lat": 20.2654,
+    "lng": 85.8426
+  },
+  {
+    "code": "PURI",
+    "name": "PURI",
+    "state": "",
+    "zone": "",
+    "lat": 19.8115,
+    "lng": 85.84
+  },
+  {
+    "code": "DNR",
+    "name": "DANAPUR",
+    "state": "",
+    "zone": "",
+    "lat": 25.5819,
+    "lng": 85.0446
+  },
+  {
+    "code": "PNBE",
+    "name": "PATNA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 25.6026,
+    "lng": 85.1368
+  },
+  {
+    "code": "RJPB",
+    "name": "RAJENDRA NAGAR BIHAR",
+    "state": "",
+    "zone": "",
+    "lat": 25.6034,
+    "lng": 85.1624
+  },
+  {
+    "code": "GNT",
+    "name": "GUNTUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 16.3008,
+    "lng": 80.442
+  },
+  {
+    "code": "KOAA",
+    "name": "KOLKATA CHITPUR",
+    "state": "",
+    "zone": "",
+    "lat": 22.6012,
+    "lng": 88.3852
+  },
+  {
+    "code": "GAYA",
+    "name": "GAYA Junction",
+    "state": "",
+    "zone": "",
+    "lat": 24.804,
+    "lng": 84.9993
+  },
+  {
+    "code": "AF",
+    "name": "AGRA FORT",
+    "state": "",
+    "zone": "",
+    "lat": 27.1833,
+    "lng": 78.0191
+  },
+  {
+    "code": "BKN",
+    "name": "BIKANER Junction",
+    "state": "",
+    "zone": "",
+    "lat": 28.0141,
+    "lng": 73.3166
+  },
+  {
+    "code": "SDAH",
+    "name": "KOLKATA SEALDAH",
+    "state": "",
+    "zone": "",
+    "lat": 22.5668,
+    "lng": 88.3747
+  },
+  {
+    "code": "HWH",
+    "name": "HOWRAH Junction",
+    "state": "",
+    "zone": "",
+    "lat": 22.5841,
+    "lng": 88.341
+  },
+  {
+    "code": "NZM",
+    "name": "DELHI H NIZAMUDDIN",
+    "state": "",
+    "zone": "",
+    "lat": 28.5873,
+    "lng": 77.2542
+  },
+  {
+    "code": "NDLS",
+    "name": "NEW DELHI",
+    "state": "",
+    "zone": "",
+    "lat": 28.6423,
+    "lng": 77.22
+  },
+  {
+    "code": "VSKP",
+    "name": "VISHAKAPATNAM",
+    "state": "",
+    "zone": "",
+    "lat": 17.7216,
+    "lng": 83.2895
+  },
+  {
+    "code": "KCG",
+    "name": "KACHEGUDA",
+    "state": "",
+    "zone": "",
+    "lat": 17.3896,
+    "lng": 78.4998
+  },
+  {
+    "code": "ADI",
+    "name": "AHMEDABAD Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.0255,
+    "lng": 72.6015
+  },
+  {
+    "code": "ROU",
+    "name": "ROURKELA",
+    "state": "",
+    "zone": "",
+    "lat": 22.2284,
+    "lng": 84.8631
+  },
+  {
+    "code": "JU",
+    "name": "JODHPUR Junction",
+    "state": "",
+    "zone": "",
+    "lat": 26.2838,
+    "lng": 73.0232
+  },
+  {
+    "code": "HBJ",
+    "name": "HABIBGANJ",
+    "state": "",
+    "zone": "",
+    "lat": 23.222,
+    "lng": 77.4394
+  },
+  {
+    "code": "BPL",
+    "name": "BHOPAL Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.2669,
+    "lng": 77.4131
+  },
+  {
+    "code": "UJN",
+    "name": "UJJAIN Junction",
+    "state": "",
+    "zone": "",
+    "lat": 23.1782,
+    "lng": 75.7814
+  },
+  {
+    "code": "CTC",
+    "name": "CUTTACK",
+    "state": "",
+    "zone": "",
+    "lat": 20.4666,
+    "lng": 85.9016
+  },
+  {
+    "code": "MDU",
+    "name": "MADURAI Junction",
+    "state": "",
+    "zone": "",
+    "lat": 9.9199,
+    "lng": 78.1103
+  },
+  {
+    "code": "SA",
+    "name": "SALEM Junction",
+    "state": "",
+    "zone": "",
+    "lat": 11.6717,
+    "lng": 78.1134
+  }
+]

@@ -11,38 +11,54 @@ import {
 } from '../components/common/Shared';
 import { RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
 
+import { useAuthStore } from '../lib/store.ts';
+
 function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);
+  const { user, logout } = useAuthStore();
+  
+  const displayName = user?.name || "Ananya Rao";
+  const displayEmail = user?.email || "ananya.rao@gmail.com";
+  const displayId = user?.irctcId || (displayEmail.includes("@") ? displayEmail.split("@")[0] : "ananya.rao");
+  const displayMobile = user?.mobile || "+91 98765 43210";
+
+  const handleLogoutClick = () => {
+    logout();
+    if (onLogout) onLogout();
+  };
 
   const rows = [
-    { id: "profile", icon: User, label: "Profile", detail: "Name, mobile, email" },
-    { id: "passengers", icon: Users, label: "Saved passengers", detail: "4 saved" },
-    { id: "payments", icon: CreditCard, label: "Payment methods", detail: "2 UPI IDs, 1 card" },
-    { id: "kyc", icon: BadgeCheck, label: "KYC / Aadhaar", detail: "Verified" },
-    { id: "language", icon: Languages, label: "Language", detail: "English" },
-    { id: "notifications", icon: Bell, label: "Notifications", detail: "SMS + push enabled" },
+    { id: "profile", icon: User, label: "Profile", detail: `${displayName}, ${displayMobile}` },
+    { id: "passengers", icon: Users, label: "Saved passengers", detail: "4 saved (Aadhaar verified)" },
+    { id: "payments", icon: CreditCard, label: "Payment methods", detail: "2 UPI IDs, 1 IRCTC Card" },
+    { id: "kyc", icon: BadgeCheck, label: "KYC / Aadhaar", detail: "Verified · DigiLocker Connected" },
+    { id: "language", icon: Languages, label: "Language", detail: "English (Default)" },
+    { id: "notifications", icon: Bell, label: "Notifications", detail: "SMS + WhatsApp alerts enabled" },
   ];
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+    <div className="min-h-screen f-body relative">
       <RangoliOverlay position="top-right" size={200} opacity={0.03} />
-      <PageHero eyebrow="Account" title="Ananya Rao" sub="Member since 2019 · IRCTC ID: ananya.rao" small />
-      <div className="max-w-2xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-16">
-        <div className="rounded-xl border bg-white overflow-hidden" style={{ borderColor: "var(--line)" }}>
+      <PageHero eyebrow="Account & Settings" title={displayName} sub={`Member since 2019 · IRCTC ID: ${displayId} · ${displayEmail}`} small />
+      <div className="max-w-2xl mx-auto px-4 md:px-8 mt-8 relative z-10 pb-16">
+        <div className="rounded-2xl border border-[rgba(10,22,38,0.12)] bg-white shadow-sm overflow-hidden">
           {rows.map((r, i) => (
-            <button key={r.id} onClick={() => setActiveModal(r.id)} className="w-full flex items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-gray-50 active:bg-gray-100" style={{ borderBottom: i < rows.length - 1 ? `1px solid var(--line)` : "none" }}>
-              <div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{ background: "var(--paper-2)" }}>
-                <r.icon size={16} style={{ color: "var(--blue)" }} />
+            <button key={r.id} onClick={() => setActiveModal(r.id)} className="w-full flex items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-[#F3EEE0]/50 active:bg-[#F3EEE0]" style={{ borderBottom: i < rows.length - 1 ? `1px solid rgba(10,22,38,0.08)` : "none" }}>
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-[#F3EEE0]">
+                <r.icon size={18} className="text-[#0A1626]" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">{r.label}</p>
-                <p className="text-xs" style={{ color: "var(--steel)" }}>{r.detail}</p>
+                <p className="text-sm font-bold text-[#0A1626]">{r.label}</p>
+                <p className="text-xs text-[#4B5563] mt-0.5">{r.detail}</p>
               </div>
-              <ChevronRight size={16} style={{ color: "var(--steel)" }} />
+              <ChevronRight size={16} className="text-[#6B7280]" />
             </button>
           ))}
         </div>
-        <button onClick={() => { if(confirm("Are you sure you want to log out?")) onLogout(); }} className="mt-4 w-full h-12 rounded-xl border font-semibold text-sm flex items-center justify-center gap-2 hover:bg-red-50 transition-colors" style={{ borderColor: "var(--red)", color: "var(--red)" }}>
-          <LogOut size={15} /> Log out
+        <button 
+          onClick={handleLogoutClick} 
+          className="mt-4 w-full h-12 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 hover:bg-red-50 transition-colors border-red-200 text-red-600 cursor-pointer shadow-sm active:scale-[0.99]"
+        >
+          <LogOut size={16} /> Log Out from IRCTC
         </button>
       </div>
 

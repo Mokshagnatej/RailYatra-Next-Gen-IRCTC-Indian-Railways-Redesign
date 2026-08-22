@@ -191,20 +191,21 @@ UI-UX-Design-Event/
    cd RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies (Bun is enforced)**:
    ```bash
-   npm install
+   bun install
    ```
+   > **Note on Security**: This project uses a `bunfig.toml` configuration that prevents installing packages published within the last 24 hours (`minimumReleaseAge = "24h"`). If a legitimate day-0 package blocks your install, add it to the `minimumReleaseAgeExcludes` list in `bunfig.toml`.
 
 3. **Start the local development server**:
    ```bash
-   npm run dev
+   bun run dev
    ```
    The application will be live at `http://localhost:5173/`.
 
 4. **Build for production**:
    ```bash
-   npm run build
+   bun run build
    ```
 
 ---

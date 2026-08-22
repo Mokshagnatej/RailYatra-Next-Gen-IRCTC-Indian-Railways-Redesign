@@ -8,6 +8,9 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import CustomCursor from "../components/common/CustomCursor";
+import ScrollProgress from "../components/common/ScrollProgress";
+import AIAssistFAB from "../components/common/AIAssistFAB";
 
 import appCss from "../styles.css?url";
 
@@ -125,6 +128,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ScrollProgress />
+      <CustomCursor />
+      <AIAssistFAB />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>

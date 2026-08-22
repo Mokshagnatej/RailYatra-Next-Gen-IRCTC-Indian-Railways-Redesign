@@ -29,58 +29,57 @@ function HelpScreen() {
   }, [query]);
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+    <div  className="min-h-screen f-body relative">
       <RangoliOverlay position="top-left" size={200} opacity={0.03} />
       <PageHero eyebrow="Help & Support" title="Surfaced, not buried." sub="Refund status, complaint tracking and FAQs — moved from three clicks deep to a top-level page." />
 
-      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-        <a href="tel:139" className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
-          <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "var(--green-bg)" }}><PhoneCall size={17} style={{ color: "var(--green)" }} /></div>
-          <div><p className="text-sm font-semibold">139</p><p className="text-xs" style={{ color: "var(--steel)" }}>24×7 helpline</p></div>
+      <div className="max-w-4xl mx-auto px-4 md:px-8 mt-8 relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+        <a href="tel:139" className="rounded-2xl bg-white border border-[rgba(10,22,38,0.12)] p-5 flex items-center gap-3.5 hover:shadow-lg transition-all hover:-translate-y-0.5">
+          <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-700 shadow-sm"><PhoneCall size={20} /></div>
+          <div><p className="text-base font-bold text-[#0A1626]">139</p><p className="text-xs text-[#4B5563]">24×7 railway helpline</p></div>
         </a>
-        <a href="mailto:care@irctc.co.in" className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
-          <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "var(--amber-bg)" }}><Mail size={17} style={{ color: "var(--amber)" }} /></div>
-          <div><p className="text-sm font-semibold">care@irctc.co.in</p><p className="text-xs" style={{ color: "var(--steel)" }}>Email support</p></div>
+        <a href="mailto:care@irctc.co.in" className="rounded-2xl bg-white border border-[rgba(10,22,38,0.12)] p-5 flex items-center gap-3.5 hover:shadow-lg transition-all hover:-translate-y-0.5">
+          <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-amber-50 text-amber-700 shadow-sm"><Mail size={20} /></div>
+          <div><p className="text-base font-bold text-[#0A1626]">care@irctc.co.in</p><p className="text-xs text-[#4B5563]">Official email support</p></div>
         </a>
-        <button onClick={() => alert("Grievance tracking portal active · Enter reference number on RailMadad")} className="rounded-xl bg-[var(--surface)] border p-4 flex items-center gap-3 text-left hover:shadow-md transition-shadow" style={{ borderColor: "var(--line)" }}>
-          <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: "#EAE3F5" }}><MessageSquareText size={17} style={{ color: "#6D4FA8" }} /></div>
-          <div><p className="text-sm font-semibold">Track a complaint</p><p className="text-xs" style={{ color: "var(--steel)" }}>By reference number</p></div>
+        <button onClick={() => alert("Grievance tracking portal active · Enter reference number on RailMadad")} className="rounded-2xl bg-white border border-[rgba(10,22,38,0.12)] p-5 flex items-center gap-3.5 text-left hover:shadow-lg transition-all hover:-translate-y-0.5">
+          <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-purple-50 text-purple-700 shadow-sm"><MessageSquareText size={20} /></div>
+          <div><p className="text-base font-bold text-[#0A1626]">Track a complaint</p><p className="text-xs text-[#4B5563]">By reference number</p></div>
         </button>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 md:px-6 pb-16">
         <div className="relative mb-6">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "var(--steel)" }} />
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#6B7280]" />
           <input 
             placeholder="Search help articles — refunds, PNR, Tatkal, KYC…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full h-12 rounded-xl border pl-10 pr-4 text-sm outline-none bg-[var(--surface)] shadow-sm" 
-            style={{ borderColor: "var(--line)" }} 
+            className="w-full h-12 rounded-2xl border border-[rgba(10,22,38,0.14)] pl-11 pr-4 text-sm font-semibold text-[#0A1626] placeholder-[#6B7280] outline-none bg-white shadow-sm focus:border-amber-500" 
           />
           {query && (
-            <button onClick={() => setQuery("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs">
+            <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs">
               ✕
             </button>
           )}
         </div>
         <div className="flex justify-between items-center mb-3">
-          <p className="f-display font-semibold">Frequently asked questions</p>
+          <p className="font-serif font-bold text-lg text-[#0A1626]">Frequently asked questions</p>
           {query && <span className="text-xs text-gray-500">{filteredFaqs.length} results</span>}
         </div>
-        <div className="rounded-xl border bg-[var(--surface)] overflow-hidden" style={{ borderColor: "var(--line)" }}>
+        <div className="rounded-2xl border border-[rgba(10,22,38,0.12)] bg-white overflow-hidden shadow-sm">
           {filteredFaqs.length === 0 ? (
             <div className="p-8 text-center text-sm text-gray-500">
               No matching help articles found for "{query}".
             </div>
           ) : (
             filteredFaqs.map((f, i) => (
-              <div key={f.q} style={{ borderBottom: i < filteredFaqs.length - 1 ? `1px solid var(--line)` : "none" }}>
-                <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-[var(--paper-2)]/70 transition-colors">
-                  <span className="text-sm font-medium">{f.q}</span>
-                  {openFaq === i ? <ChevronUp size={16} className="flex-shrink-0" style={{ color: "var(--steel)" }} /> : <ChevronDown size={16} className="flex-shrink-0" style={{ color: "var(--steel)" }} />}
+              <div key={f.q} style={{ borderBottom: i < filteredFaqs.length - 1 ? `1px solid rgba(10,22,38,0.08)` : "none" }}>
+                <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-[#F3EEE0]/50 transition-colors">
+                  <span className="text-sm font-semibold text-[#0A1626]">{f.q}</span>
+                  {openFaq === i ? <ChevronUp size={16} className="flex-shrink-0 text-[#6B7280]" /> : <ChevronDown size={16} className="flex-shrink-0 text-[#6B7280]" />}
                 </button>
-                {openFaq === i && <p className="px-5 pb-4 text-sm leading-relaxed" style={{ color: "var(--steel)" }}>{f.a}</p>}
+                {openFaq === i && <p className="px-5 pb-4 text-sm leading-relaxed text-[#4B5563]">{f.a}</p>}
               </div>
             ))
           )}

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar, 
+import {
+  Map, Sparkles, Navigation, Globe, Utensils, Mountain, Calendar,
   Filter, Star, Info, ChevronRight, Play, Compass, MapPin, Coffee, Tag,
   Search, Train, Wallet, Hotel, Check, ShieldCheck, ArrowRight
 } from 'lucide-react';
@@ -8,16 +8,19 @@ import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
 import { Modal, ToolCard } from '../components/common/Shared';
 import { WarmGradientWave, RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
+import TrainTimetableModal from '../components/common/TrainTimetableModal';
+import { searchTrainsBetween, getTrainByNumber } from '../lib/trainRouteService';
 
-export default function ExploreScreen() {
+export default function ExploreScreen({ onNavigate }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeModal, setActiveModal] = useState(null);
+  const [selectedTimetableTrain, setSelectedTimetableTrain] = useState(null);
   const [toolState, setToolState] = useState({
-    trains: { from: "NDLS", to: "BCT", searched: true },
+    trains: { from: "NDLS", to: "MMCT", searched: true },
     fare: { classType: "3A", quota: "General", base: 1820 },
     room: { station: "NDLS", type: "AC Deluxe", hours: "12 hrs", available: true }
   });
-  
+
   const trending = [
     { name: "Kashmir Vaishno Devi", days: "5N/6D", price: "₹21,300", desc: "Pilgrimage to the holy shrine of Vaishno Devi via Katra, with scenic views of the Trikuta Mountains. Includes train, hotel, and helicopter options.", highlights: "Katra base camp, Bhawan darshan, Patnitop excursion", meals: "Breakfast + Dinner", accommodation: "3-star hotel in Katra", image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&q=80&w=800" },
     { name: "Dev Darshan Yatra", days: "6N/7D", price: "₹18,900", desc: "Multi-city religious circuit covering Varanasi, Prayagraj, Ayodhya and Mathura by train. Guided temple tours included.", highlights: "Kashi Vishwanath, Triveni Sangam, Ram Janmabhoomi", meals: "All meals included", accommodation: "AC Deluxe Hotel", image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&q=80&w=800" },
@@ -50,40 +53,40 @@ export default function ExploreScreen() {
   }, [searchQuery, packages]);
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body pb-20 relative">
+    <div className="min-h-screen f-body pb-20 relative">
       <RangoliOverlay position="bottom-right" size={240} opacity={0.03} />
       <RangoliOverlay position="bottom-left" size={240} opacity={0.03} />
 
-      <section className="relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FFF9F0 0%, #FEF3E2 40%, #F7F4EC 100%)" }}>
-        <WarmGradientWave />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-10 pb-20 md:pt-12 md:pb-24">
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Explore</p>
-          <h1 className="f-display text-3xl md:text-4xl font-semibold mt-2 max-w-xl" style={{ color: "var(--blue)" }}>Beyond booking a seat.</h1>
-          <p className="text-sm mt-2 max-w-lg mb-8" style={{ color: "var(--steel)" }}>Interactive rail planning tools and curated IRCTC Tourism packages for your next journey.</p>
-          
-          <div className="relative max-w-lg">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <Search size={18} style={{ color: "var(--steel)" }} />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search packages, destinations or tour types..." 
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="block w-full pl-11 pr-10 py-3.5 rounded-xl border-none outline-none f-body shadow-sm text-sm transition-shadow focus:shadow-md"
-              style={{ color: "var(--ink)", background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(192,131,33,0.15)" }}
-            />
-            {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600">
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-      </section>
+      <PageHero 
+        eyebrow="Explore & Tourism" 
+        title="Beyond booking a seat." 
+        sub="Interactive rail planning tools and curated IRCTC Tourism packages for your next journey." 
+      />
 
-      {/* 3 Interactive Quick Tools */}
-      <div className="max-w-6xl mx-auto px-4 md:px-6 -mt-10 relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+      {/* Search Bar with proper spacing */}
+      <div className="max-w-6xl mx-auto px-4 md:px-8 mt-8 mb-6 relative z-10">
+        <div className="relative max-w-lg bg-white rounded-2xl border border-[rgba(10,22,38,0.14)] shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search size={18} className="text-[#6B7280]" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search packages, destinations or tour types..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="block w-full pl-11 pr-10 py-3.5 rounded-2xl bg-transparent outline-none text-sm font-semibold text-[#0A1626] placeholder-[#6B7280]"
+          />
+          {searchQuery && (
+            <button onClick={() => setSearchQuery("")} className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#6B7280] hover:text-[#0A1626]">
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 4 Interactive Quick Tools */}
+      <div className="max-w-6xl mx-auto px-4 md:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-12 relative z-10">
+        <ToolCard onClick={() => onNavigate ? onNavigate("seat-availability") : setActiveModal({ type: "seat_avail", title: "Live Seat Availability" })} icon={Calendar} title="Seat Availability" body="Check live berth status, RAC chances & 6-day availability trends." />
         <ToolCard onClick={() => setActiveModal({ type: "trains_between_stations", title: "Trains Between Stations" })} icon={Train} title="Trains between stations" body="Explore full timetables and running days across any two stations." />
         <ToolCard onClick={() => setActiveModal({ type: "fare_enquiry", title: "Fare Enquiry Calculator" })} icon={Wallet} title="Fare enquiry calculator" body="Calculate transparent breakdown across 1A, 2A, 3A, SL and Tatkal quotas." />
         <ToolCard onClick={() => setActiveModal({ type: "retiring_rooms", title: "Station Retiring Rooms" })} icon={Hotel} title="Retiring rooms & dorms" body="Reserve comfortable AC/Non-AC rooms for station layovers at 900+ junctions." />
@@ -105,11 +108,11 @@ export default function ExploreScreen() {
             Hover to pause · Click card for details
           </span>
         </div>
-        
+
         {/* Auto-scrolling carousel with pause-on-hover */}
-        <div className="overflow-hidden relative" style={{ 
-          maskImage: "linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%)", 
-          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%)" 
+        <div className="overflow-hidden relative" style={{
+          maskImage: "linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%)"
         }}>
           <div className="flex gap-4 px-4 md:px-6 pause-hover" style={{
             animation: "scroll-left 35s linear infinite",
@@ -117,19 +120,19 @@ export default function ExploreScreen() {
           }}>
             {/* Duplicate for seamless infinite loop */}
             {[...(filteredTrending.length ? filteredTrending : trending), ...(filteredTrending.length ? filteredTrending : trending)].map((p, idx) => (
-              <div 
-                onClick={() => setActiveModal({ ...p, type: "package_detail" })} 
-                key={`${p.name}-${idx}`} 
+              <div
+                onClick={() => setActiveModal({ ...p, type: "package_detail" })}
+                key={`${p.name}-${idx}`}
                 className="relative w-[280px] md:w-[320px] h-[380px] rounded-2xl overflow-hidden shadow-md flex-shrink-0 group cursor-pointer border border-black/5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-slate-900"
               >
-                <img 
-                  src={p.image} 
-                  alt={p.name} 
+                <img
+                  src={p.image}
+                  alt={p.name}
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800";
                   }}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90" 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent"></div>
                 <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
@@ -172,7 +175,7 @@ export default function ExploreScreen() {
             </span>
           )}
         </div>
-        
+
         {filteredPackages.length === 0 ? (
           <div className="rounded-2xl border p-10 text-center bg-[var(--surface)] shadow-sm">
             <p className="font-semibold text-gray-700">No packages found matching "{searchQuery}"</p>
@@ -184,21 +187,21 @@ export default function ExploreScreen() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filteredPackages.map((p) => (
-              <div 
-                onClick={() => setActiveModal({ ...p, type: "package_detail" })} 
-                key={p.name} 
-                className="rounded-2xl border overflow-hidden flex flex-col sm:flex-row group cursor-pointer transition-all duration-300 hover:shadow-xl" 
+              <div
+                onClick={() => setActiveModal({ ...p, type: "package_detail" })}
+                key={p.name}
+                className="rounded-2xl border overflow-hidden flex flex-col sm:flex-row group cursor-pointer transition-all duration-300 hover:shadow-xl"
                 style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.6)", backdropFilter: "blur(12px)" }}
               >
                 <div className="h-48 sm:h-auto sm:w-48 relative overflow-hidden flex-shrink-0">
-                  <img 
-                    src={p.image} 
-                    alt={p.name} 
+                  <img
+                    src={p.image}
+                    alt={p.name}
                     onError={(e) => {
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800";
                     }}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <span className="absolute top-3 left-3 text-[10px] font-bold f-mono px-2 py-0.5 rounded-md text-white bg-black/60 backdrop-blur-md">
                     {p.days}
@@ -239,55 +242,65 @@ export default function ExploreScreen() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">From Station</label>
-                <select 
-                  value={toolState.trains.from} 
+                <select
+                  value={toolState.trains.from}
                   onChange={(e) => setToolState({ ...toolState, trains: { ...toolState.trains, from: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-white text-sm font-semibold text-[#0A1626] outline-none"
                 >
                   <option value="NDLS">New Delhi (NDLS)</option>
-                  <option value="BCT">Mumbai Central (BCT)</option>
+                  <option value="MMCT">Mumbai Central (MMCT)</option>
                   <option value="HWH">Howrah (HWH)</option>
                   <option value="MAS">Chennai Central (MAS)</option>
                   <option value="SBC">Bengaluru (SBC)</option>
+                  <option value="BSB">Varanasi (BSB)</option>
+                  <option value="HYB">Hyderabad (HYB)</option>
+                  <option value="KOTA">Kota Junction (KOTA)</option>
+                  <option value="BRC">Vadodara Junction (BRC)</option>
                 </select>
               </div>
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">To Station</label>
-                <select 
-                  value={toolState.trains.to} 
+                <select
+                  value={toolState.trains.to}
                   onChange={(e) => setToolState({ ...toolState, trains: { ...toolState.trains, to: e.target.value } })}
-                  className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
+                  className="w-full h-11 px-3 rounded-xl border bg-white text-sm font-semibold text-[#0A1626] outline-none"
                 >
-                  <option value="BCT">Mumbai Central (BCT)</option>
+                  <option value="MMCT">Mumbai Central (MMCT)</option>
                   <option value="NDLS">New Delhi (NDLS)</option>
+                  <option value="BSB">Varanasi (BSB)</option>
                   <option value="HWH">Howrah (HWH)</option>
                   <option value="MAS">Chennai Central (MAS)</option>
                   <option value="SBC">Bengaluru (SBC)</option>
+                  <option value="HYB">Hyderabad (HYB)</option>
+                  <option value="BRC">Vadodara Junction (BRC)</option>
+                  <option value="KOTA">Kota Junction (KOTA)</option>
                 </select>
               </div>
             </div>
 
             <div className="border-t pt-3">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Available Daily Trains ({toolState.trains.from} → {toolState.trains.to})</p>
-              <div className="space-y-2.5">
-                {[
-                  { no: "12951", name: "Mumbai Rajdhani Express", dep: "16:55", arr: "08:35", dur: "15h 40m", days: "Daily", classes: ["1A", "2A", "3A"] },
-                  { no: "12953", name: "August Kranti Rajdhani", dep: "17:15", arr: "10:05", dur: "16h 50m", days: "Daily", classes: ["1A", "2A", "3A", "3E"] },
-                  { no: "22221", name: "CSMT Rajdhani Express", dep: "16:55", arr: "11:15", dur: "18h 20m", days: "Mon, Wed, Fri", classes: ["1A", "2A", "3A"] }
-                ].map((t) => (
-                  <div key={t.no} className="p-3 rounded-xl border bg-[var(--paper-2)]/70 hover:bg-blue-50/50 transition-colors">
+              <p className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-2">Available Daily Trains ({toolState.trains.from} → {toolState.trains.to})</p>
+              <div className="space-y-2.5 max-h-[280px] overflow-y-auto">
+                {searchTrainsBetween(toolState.trains.from, toolState.trains.to).map((t) => (
+                  <div
+                    key={t.no}
+                    onClick={() => setSelectedTimetableTrain(t.rawTrain || getTrainByNumber(t.no))}
+                    className="p-3.5 rounded-xl border bg-white hover:bg-[#F3EEE0]/60 border-[rgba(10,22,38,0.12)] transition-all cursor-pointer shadow-xs hover:border-[#F0A63A] group"
+                  >
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className="f-mono text-xs font-bold text-blue-700 mr-2">{t.no}</span>
-                        <span className="font-semibold text-sm text-gray-900">{t.name}</span>
+                        <span className="font-mono text-xs font-bold text-[#F0A63A] bg-[#0A1626] px-2 py-0.5 rounded mr-2">#{t.no}</span>
+                        <span className="font-bold text-sm text-[#0A1626]">{t.name}</span>
                       </div>
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-green-100 text-green-700">{t.days}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                        {t.rawTrain?.daily ? "Daily" : "Scheduled"}
+                      </span>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-gray-600 mt-2">
+                    <div className="flex items-center justify-between text-xs text-[#4B5563] mt-2 font-medium">
                       <span>Dep: <strong>{t.dep}</strong> → Arr: <strong>{t.arr}</strong> ({t.dur})</span>
-                      <div className="flex gap-1">
-                        {t.classes.map(c => <span key={c} className="px-1.5 py-0.5 rounded bg-[var(--surface)] border text-[10px] font-mono">{c}</span>)}
-                      </div>
+                      <span className="text-[#C97F1F] font-bold group-hover:underline text-[11px]">
+                        View Timetable ({t.schedule?.length || t.stops + 2} stops) →
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -302,8 +315,8 @@ export default function ExploreScreen() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">Select Class</label>
-                <select 
-                  value={toolState.fare.classType} 
+                <select
+                  value={toolState.fare.classType}
                   onChange={(e) => setToolState({ ...toolState, fare: { ...toolState.fare, classType: e.target.value } })}
                   className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
@@ -316,8 +329,8 @@ export default function ExploreScreen() {
               </div>
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">Quota</label>
-                <select 
-                  value={toolState.fare.quota} 
+                <select
+                  value={toolState.fare.quota}
                   onChange={(e) => setToolState({ ...toolState, fare: { ...toolState.fare, quota: e.target.value } })}
                   className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
@@ -334,10 +347,10 @@ export default function ExploreScreen() {
                 <div>
                   <p className="text-xs text-blue-800 font-semibold uppercase">Total Fare Estimate</p>
                   <p className="text-2xl font-extrabold text-blue-950 mt-0.5">
-                    {toolState.fare.classType === "1A" ? "₹4,750" : 
-                     toolState.fare.classType === "2A" ? "₹2,830" : 
-                     toolState.fare.classType === "3A" ? "₹1,985" : 
-                     toolState.fare.classType === "3E" ? "₹1,750" : "₹685"}
+                    {toolState.fare.classType === "1A" ? "₹4,750" :
+                      toolState.fare.classType === "2A" ? "₹2,830" :
+                        toolState.fare.classType === "3A" ? "₹1,985" :
+                          toolState.fare.classType === "3E" ? "₹1,750" : "₹685"}
                   </p>
                 </div>
                 <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white">NDLS ⇄ BCT</span>
@@ -359,8 +372,8 @@ export default function ExploreScreen() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">Station</label>
-                <select 
-                  value={toolState.room.station} 
+                <select
+                  value={toolState.room.station}
                   onChange={(e) => setToolState({ ...toolState, room: { ...toolState.room, station: e.target.value } })}
                   className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
@@ -372,8 +385,8 @@ export default function ExploreScreen() {
               </div>
               <div>
                 <label className="text-xs font-semibold text-gray-600 mb-1 block">Duration</label>
-                <select 
-                  value={toolState.room.hours} 
+                <select
+                  value={toolState.room.hours}
                   onChange={(e) => setToolState({ ...toolState, room: { ...toolState.room, hours: e.target.value } })}
                   className="w-full h-11 px-3 rounded-xl border bg-[var(--paper-2)] text-sm font-medium outline-none"
                 >
@@ -414,14 +427,14 @@ export default function ExploreScreen() {
         {activeModal?.type === "package_detail" && (
           <div className="flex flex-col">
             <div className="relative h-48 -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-lg">
-              <img 
-                src={activeModal.image} 
-                alt={activeModal.name} 
+              <img
+                src={activeModal.image}
+                alt={activeModal.name}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800";
                 }}
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
@@ -432,16 +445,16 @@ export default function ExploreScreen() {
                 </div>
               </div>
             </div>
-            
+
             <p className="text-sm leading-relaxed mb-4 text-gray-700">{activeModal.desc}</p>
-            
+
             {activeModal.highlights && (
               <div className="rounded-xl p-3.5 mb-3 bg-blue-50/70 border border-blue-100">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-blue-900 mb-1">Key Highlights</p>
                 <p className="text-xs text-blue-950 leading-normal">{activeModal.highlights}</p>
               </div>
             )}
-            
+
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="rounded-xl border p-3 bg-[var(--paper-2)]">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Meals Included</p>
@@ -466,6 +479,14 @@ export default function ExploreScreen() {
         )}
       </Modal>
 
+      {/* Interactive Train Timetable & Route Modal */}
+      <TrainTimetableModal
+        train={selectedTimetableTrain}
+        isOpen={!!selectedTimetableTrain}
+        onClose={() => setSelectedTimetableTrain(null)}
+        selectedFromCode={toolState.trains.from}
+        selectedToCode={toolState.trains.to}
+      />
     </div>
   );
 }

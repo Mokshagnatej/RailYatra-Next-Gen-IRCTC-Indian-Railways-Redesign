@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Train, ShieldCheck, Clock, Wallet, Ticket, MapPin, ChevronDown, ChevronRight,
   Sparkles, PhoneCall, Landmark, BadgeCheck, CreditCard, Users, Hotel, Loader2
@@ -6,6 +7,10 @@ import {
 import {
   Reveal, CountUp, RouteMapIllustration, StationIllustration, TrackConnector, TrustIllustration,
 } from "./Illustrations.jsx";
+import ScrollLinkedRailLine from "./common/ScrollLinkedRailLine.jsx";
+import TrainTimetableModal from "./common/TrainTimetableModal";
+import { getTrainByNumber, searchTrainsBetween } from "../lib/trainRouteService";
+import { computeLiveTrainTracking } from "../lib/liveTrackingEngine";
 
 /* ---------------- quick tools: PNR / live status / fare ---------------- */
 
@@ -22,180 +27,391 @@ const TOOLS = [
     key: "live", 
     label: "Live Train Status", 
     icon: Train, 
-    placeholder: "Train number or name (e.g. 12951 or Rajdhani)", 
-    cta: "Track train",
-    samples: ["12951 Rajdhani", "22436 Vande Bharat", "12301 Howrah Rajdhani"]
+    placeholder: "Enter train name/number (e.g. 12951, 22436, 12002)", 
+    cta: "Track live",
+    samples: ["12951", "22436", "12002", "12622", "12301"]
   },
   { 
     key: "fare", 
-    label: "Fare Enquiry", 
+    label: "Fare Calculator", 
     icon: Wallet, 
-    placeholder: "Route or train (e.g. NDLS to BCT)", 
-    cta: "Show fare",
-    samples: ["NDLS → BCT", "HWH → NDLS", "MAS → SBC"]
+    placeholder: "Route (e.g. NDLS to MMCT)", 
+    cta: "Calculate fare",
+    samples: ["NDLS to MMCT", "NDLS to BSB", "MAS to SBC"]
   },
   { 
     key: "seat", 
     label: "Seat Availability", 
     icon: Users, 
-    placeholder: "Train number and date (e.g. 12951)", 
+    placeholder: "Train No (e.g. 12951, 22436)", 
     cta: "Check seats",
-    samples: ["12951 Rajdhani", "22436 Vande Bharat", "12002 Shatabdi"]
+    samples: ["12951", "22436", "12622", "12301"]
   },
 ];
-
-const TOOL_RESULT = {
-  pnr: { 
-    title: "PNR 4517 2280 91 · 12951 Mumbai Rajdhani", 
-    badge: "CONFIRMED", 
-    badgeColor: "var(--green)", 
-    lines: [
-      ["Passenger 1", "Ananya Rao · Coach B2, Berth 41 (Lower)"],
-      ["Status & Quota", "CNF (Confirmed) · General Quota"],
-      ["Journey Date", "Tue, 25 Aug 2026 · Dep 16:55 from NDLS"],
-      ["Chart Status", "Chart Prepared (4 hrs before departure)"]
-    ] 
-  },
-  live: { 
-    title: "12951 Mumbai Rajdhani Express (Live Tracking)", 
-    badge: "ON TIME · +0 min", 
-    badgeColor: "var(--green)", 
-    lines: [
-      ["Current Location", "Approaching Kota Jn (KOTA) · Speed: 128 km/h"],
-      ["Last Passed", "Sawai Madhopur Jn · Departed 20:42 (On Time)"],
-      ["Next Stoppage", "Kota Jn · Scheduled: 22:15 (Platform 1)"],
-      ["Destination ETA", "Mumbai Central (BCT) · Tomorrow 08:35 AM"]
-    ] 
-  },
-  fare: { 
-    title: "Fare Breakdown: New Delhi (NDLS) → Mumbai Central (BCT)", 
-    badge: "Standard Fare", 
-    badgeColor: "var(--blue)", 
-    lines: [
-      ["Sleeper Class (SL)", "₹685 (Base ₹640 + Superfast ₹45)"],
-      ["AC 3-Tier (3A)", "₹1,985 (Base ₹1,820 + Resv ₹40 + GST ₹125)"],
-      ["AC 2-Tier (2A)", "₹2,830 (Base ₹2,620 + Catering ₹210)"],
-      ["AC First Class (1A)", "₹4,750 (All-inclusive coupe/cabin)"]
-    ] 
-  },
-  seat: { 
-    title: "Seat Availability: 12951 Rajdhani Express (25 Aug)", 
-    badge: "HIGH AVAILABILITY", 
-    badgeColor: "var(--green)", 
-    lines: [
-      ["Executive / 1A", "AVAILABLE - 12 berths"],
-      ["AC 2-Tier (2A)", "AVAILABLE - 34 berths (High confirm chance)"],
-      ["AC 3-Tier (3A)", "RAC 6 (Guaranteed seating, likely berth)"],
-      ["Sleeper (SL)", "GNWL 14 / WL 8 (88% confirmation probability)"]
-    ] 
-  },
-};
 
 export function QuickTools() {
   const [tab, setTab] = useState("pnr");
   const [value, setValue] = useState("");
-  const [shown, setShown] = useState(null);
+  const [travelDate, setTravelDate] = useState("25-Aug-2026");
+  const [travelQuota, setTravelQuota] = useState("General");
+  const [dynamicResult, setDynamicResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedTimetableTrain, setSelectedTimetableTrain] = useState(null);
   
   const active = TOOLS.find((t) => t.key === tab) || TOOLS[0];
-  const result = shown ? TOOL_RESULT[shown] : null;
 
-  const handleCheck = (queryValue) => {
+  const QUICK_DATES = [
+    { label: "Today", dateStr: "23-Aug-2026", day: "Sun" },
+    { label: "Tomorrow", dateStr: "24-Aug-2026", day: "Mon" },
+    { label: "25 Aug", dateStr: "25-Aug-2026", day: "Tue" },
+    { label: "26 Aug", dateStr: "26-Aug-2026", day: "Wed" },
+    { label: "27 Aug", dateStr: "27-Aug-2026", day: "Thu" },
+    { label: "28 Aug", dateStr: "28-Aug-2026", day: "Fri" }
+  ];
+
+  const handleCheck = (queryValue, customDate, customQuota) => {
     const q = queryValue !== undefined ? queryValue : (value.trim() || active.samples[0]);
+    const d = customDate || travelDate;
+    const quota = customQuota || travelQuota;
+
     setValue(q);
+    if (customDate) setTravelDate(customDate);
+    if (customQuota) setTravelQuota(customQuota);
     setLoading(true);
-    setShown(null);
+    setDynamicResult(null);
+
     setTimeout(() => {
       setLoading(false);
-      setShown(tab);
-    }, 500);
+      
+      if (tab === "live") {
+        const telemetry = computeLiveTrainTracking(q);
+        if (telemetry) {
+          setDynamicResult({
+            title: `#${telemetry.trainNo} ${telemetry.trainName} (Live GPS Tracking)`,
+            badge: telemetry.statusType === "halted" ? "HALTED AT STATION" : "CRUISING · ON TIME",
+            badgeColor: telemetry.statusType === "halted" ? "#C97F1F" : "#1F7A4C",
+            trainNo: telemetry.trainNo,
+            lines: [
+              ["Current Position", `${telemetry.currentStation.name} (${telemetry.currentStation.code}) · ${telemetry.currentStation.platform}`],
+              ["Live Speed & Delay", `${telemetry.currentSpeedKmH} km/h · ${telemetry.delayString}`],
+              ["Next Upcoming Stoppage", `${telemetry.nextStation.name} (${telemetry.nextStation.code}) · ETA ${telemetry.nextStation.etaMinutes} mins`],
+              ["Journey Progress", `${telemetry.progressPercent}% completed (${telemetry.distanceCoveredKm} km of ${telemetry.totalDistanceKm} km)`]
+            ]
+          });
+        }
+      } else if (tab === "pnr") {
+        setDynamicResult({
+          title: `PNR Status · ${q}`,
+          badge: "CONFIRMED (CNF)",
+          badgeColor: "#1F7A4C",
+          trainNo: "12951",
+          lines: [
+            ["Passenger 1 Status", "Confirmed (CNF) · Coach B3, Berth 24 (Lower)"],
+            ["Passenger 2 Status", "Confirmed (CNF) · Coach B3, Berth 25 (Middle)"],
+            ["Class & Quota", "AC 3-Tier (3A) · General Quota"],
+            ["Chart Status", "Chart Prepared · Boarding Confirmed"]
+          ]
+        });
+      } else if (tab === "seat") {
+        const train = getTrainByNumber(q);
+        const originStation = train?.fromStationName || train?.schedule?.[0]?.stationName || "Origin";
+        const destStation = train?.toStationName || train?.schedule?.[(train?.schedule?.length || 1) - 1]?.stationName || "Destination";
+        
+        // Date and quota specific seat counts
+        const isTatkal = quota === "Tatkal" || quota === "Premium Tatkal";
+        const isWeekend = d.includes("23-Aug") || d.includes("28-Aug") || d.includes("29-Aug");
+
+        const classEntries = train?.classes && Object.keys(train.classes).length > 0
+          ? Object.entries(train.classes).map(([cls, info]) => {
+              const label = cls === "1A" ? "Executive / 1A" : cls === "2A" ? "AC 2-Tier (2A)" : cls === "3A" ? "AC 3-Tier (3A)" : cls === "CC" ? "AC Chair Car (CC)" : cls === "EC" ? "Exec Chair Car (EC)" : "Sleeper (SL)";
+              const baseCount = info.n || (cls === "SL" ? 92 : cls === "3A" ? 48 : cls === "2A" ? 18 : 6);
+              const count = isTatkal ? Math.max(4, Math.round(baseCount * 0.25)) : (isWeekend ? Math.max(8, baseCount - 14) : baseCount);
+              const statusText = isTatkal 
+                ? `TATKAL AVAILABLE - ${count} Seats (Opens 10:00 AM)` 
+                : `AVAILABLE - ${count} Seats (Instant Confirmation)`;
+              return [label, `${statusText} · Fare: ₹${info.fare}`];
+            })
+          : [
+            ["AC 3-Tier (3A)", isTatkal ? "TATKAL AVAILABLE - 12 Seats" : "AVAILABLE - 48 Seats (Instant Confirmation)"],
+            ["AC 2-Tier (2A)", isTatkal ? "TATKAL AVAILABLE - 4 Seats" : "AVAILABLE - 18 Seats (Instant Confirmation)"],
+            ["Executive / 1A", "AVAILABLE - 6 Seats"],
+            ["Sleeper (SL)", isTatkal ? "TATKAL AVAILABLE - 24 Seats" : "AVAILABLE - 92 Seats"]
+          ];
+
+        // 6-day forecast
+        const forecastDates = [
+          { date: "23-Aug", day: "Sun", status: "AVAILABLE 24", color: "#1F7A4C" },
+          { date: "24-Aug", day: "Mon", status: "RAC 6", color: "#C97F1F" },
+          { date: "25-Aug", day: "Tue", status: "AVAILABLE 48", color: "#1F7A4C" },
+          { date: "26-Aug", day: "Wed", status: "AVAILABLE 56", color: "#1F7A4C" },
+          { date: "27-Aug", day: "Thu", status: "AVAILABLE 38", color: "#1F7A4C" },
+          { date: "28-Aug", day: "Fri", status: "WL 8", color: "#C23B32" }
+        ];
+
+        setDynamicResult({
+          title: `Seat Availability · #${train?.trainNo} ${train?.trainName}`,
+          badge: `DATE: ${d}`,
+          badgeColor: "#1F7A4C",
+          trainNo: train?.trainNo,
+          forecast: forecastDates,
+          lines: [
+            ["Selected Journey Date", `${d} · ${quota} Quota`],
+            ["Route & Operating Days", `${originStation} → ${destStation} (${train?.runsOn || "Daily"})`],
+            ...classEntries
+          ]
+        });
+      } else {
+        const train = getTrainByNumber(q);
+        const originStation = train?.fromStationName || train?.schedule?.[0]?.stationName || "New Delhi (NDLS)";
+        const destStation = train?.toStationName || train?.schedule?.[(train?.schedule?.length || 1) - 1]?.stationName || "Mumbai Central (MMCT)";
+        
+        const fareEntries = train?.classes && Object.keys(train.classes).length > 0
+          ? Object.entries(train.classes).map(([cls, info]) => {
+              const label = cls === "1A" ? "AC First Class (1A)" : cls === "2A" ? "AC 2-Tier (2A)" : cls === "3A" ? "AC 3-Tier (3A)" : cls === "CC" ? "AC Chair Car (CC)" : cls === "EC" ? "Exec Chair Car (EC)" : "Sleeper Class (SL)";
+              return [label, `₹${info.fare} (Base fare + Reservation + GST)`];
+            })
+          : [
+            ["Sleeper Class (SL)", "₹685 (Base ₹640 + Superfast ₹45)"],
+            ["AC 3-Tier (3A)", "₹1,985 (Base ₹1,820 + GST ₹110 + Resv ₹40)"],
+            ["AC 2-Tier (2A)", "₹2,830 (Base ₹2,620 + Catering Included)"],
+            ["AC First Class (1A)", "₹4,855 (Coupe / Cabin Berth)"]
+          ];
+
+        setDynamicResult({
+          title: `Fare Breakdown: #${train?.trainNo} ${train?.trainName} (${originStation} → ${destStation})`,
+          badge: `DATE: ${d}`,
+          badgeColor: "#0A1626",
+          trainNo: train?.trainNo,
+          lines: fareEntries
+        });
+      }
+    }, 300);
   };
 
   return (
-    <section className="max-w-4xl mx-auto px-4 md:px-6 mt-10">
-      <div className="rounded-2xl border bg-[var(--surface)] overflow-hidden shadow-sm" style={{ borderColor: "var(--line)" }}>
-        <div className="flex overflow-x-auto border-b bg-gray-50/50" style={{ borderColor: "var(--line)" }}>
-          {TOOLS.map((t) => {
-            const on = t.key === tab;
-            const Icon = t.icon;
-            return (
-              <button key={t.key} onClick={() => { setTab(t.key); setShown(null); setValue(""); }}
-                className="flex items-center gap-2 px-5 h-13 text-sm font-semibold whitespace-nowrap border-b-2 transition-all cursor-pointer"
-                style={{ 
-                  borderColor: on ? "var(--marigold)" : "transparent", 
-                  color: on ? "var(--blue)" : "var(--steel)",
-                  background: on ? "white" : "transparent"
-                }}>
-                <Icon size={16} style={{ color: on ? "var(--marigold)" : "var(--steel)" }} /> 
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
-        <div className="p-5 md:p-6">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 h-12 rounded-xl border flex items-center gap-2 px-3.5 bg-[var(--surface)] transition-all focus-within:ring-2 focus-within:ring-blue-100" style={{ borderColor: "var(--line)" }}>
-              <Search size={17} style={{ color: "var(--blue)" }} />
-              <input 
-                value={value} 
-                onChange={(e) => setValue(e.target.value)} 
-                placeholder={active.placeholder}
-                className="flex-1 outline-none bg-transparent text-[15px]" 
-                style={{ color: "var(--ink)" }} 
-                onKeyDown={(e) => e.key === 'Enter' && handleCheck()} 
-              />
-              {value && (
-                <button onClick={() => setValue("")} className="text-gray-400 hover:text-gray-600 text-xs px-1">✕</button>
-              )}
-            </div>
-            <button 
-              onClick={() => handleCheck()} 
-              disabled={loading}
-              className="h-12 px-6 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] flex items-center justify-center min-w-[130px] shadow-sm hover:opacity-95 cursor-pointer"
-              style={{ background: "var(--blue)", color: "white" }}>
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <Loader2 size={16} className="animate-spin" /> Checking...
-                </span>
-              ) : active.cta}
-            </button>
+    <section className="max-w-5xl mx-auto px-4 md:px-8 mt-12 relative z-20">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        {TOOLS.map((t) => {
+          const on = t.key === tab;
+          const Icon = t.icon;
+          return (
+            <motion.button 
+              key={t.key} 
+              onClick={() => { setTab(t.key); setDynamicResult(null); setValue(""); }}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex flex-col items-start gap-3 p-5 rounded-2xl cursor-pointer text-left transition-all duration-300 ${
+                on
+                  ? 'bg-[#0A1626] text-white shadow-xl ring-2 ring-[#F0A63A]'
+                  : 'bg-white text-[#0A1626] border border-[rgba(10,22,38,0.12)] hover:border-[#F0A63A] hover:bg-[#F3EEE0]/60 shadow-sm'
+              }`}
+            >
+              <div className={`p-2.5 rounded-xl shadow-sm ${
+                on ? 'bg-white/15 text-[#F0A63A]' : 'bg-[#F3EEE0] text-[#0A1626]'
+              }`}>
+                <Icon size={20} /> 
+              </div>
+              <span className="font-bold text-[15px]">{t.label}</span>
+            </motion.button>
+          );
+        })}
+      </div>
+
+      <motion.div 
+        layout
+        className="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-[rgba(10,22,38,0.12)] shadow-xl"
+      >
+        <div className="flex flex-col md:flex-row gap-3">
+          {/* Train Number Input */}
+          <div className="flex-1 h-14 rounded-2xl border border-[rgba(10,22,38,0.14)] flex items-center gap-3 px-4 bg-white transition-all focus-within:ring-2 focus-within:ring-[#F0A63A] focus-within:border-transparent shadow-inner">
+            <Search size={20} className="text-[#0A1626]" />
+            <input 
+              value={value} 
+              onChange={(e) => setValue(e.target.value)} 
+              placeholder={active.placeholder}
+              className="flex-1 outline-none bg-transparent text-[16px] font-semibold text-[#0A1626] placeholder-[#6B7280]" 
+              onKeyDown={(e) => e.key === 'Enter' && handleCheck()} 
+            />
+            {value && (
+              <button onClick={() => setValue("")} className="text-gray-400 hover:text-red-500 transition-colors p-1"><span className="sr-only">Clear</span>✕</button>
+            )}
           </div>
 
-          {/* Quick Clickable Sample Chips */}
-          <div className="flex flex-wrap items-center gap-2 mt-3 text-xs" style={{ color: "var(--steel)" }}>
-            <span className="font-medium">Try quick sample:</span>
+          {/* Date Picker (Shown on Seat Availability & Fare) */}
+          {(tab === "seat" || tab === "fare") && (
+            <div className="flex gap-2">
+              <div className="h-14 rounded-2xl border border-[rgba(10,22,38,0.14)] flex items-center gap-2 px-3 bg-white shadow-inner">
+                <CalendarDays size={18} className="text-[#F0A63A]" />
+                <select
+                  value={travelDate}
+                  onChange={(e) => {
+                    setTravelDate(e.target.value);
+                    if (dynamicResult) handleCheck(undefined, e.target.value);
+                  }}
+                  className="bg-transparent text-sm font-bold text-[#0A1626] outline-none cursor-pointer"
+                >
+                  {QUICK_DATES.map(d => (
+                    <option key={d.dateStr} value={d.dateStr}>{d.dateStr} ({d.day})</option>
+                  ))}
+                  <option value="29-Aug-2026">29-Aug-2026 (Sat)</option>
+                  <option value="30-Aug-2026">30-Aug-2026 (Sun)</option>
+                  <option value="31-Aug-2026">31-Aug-2026 (Mon)</option>
+                  <option value="01-Sep-2026">01-Sep-2026 (Tue)</option>
+                </select>
+              </div>
+
+              <div className="h-14 rounded-2xl border border-[rgba(10,22,38,0.14)] flex items-center px-3 bg-white shadow-inner">
+                <select
+                  value={travelQuota}
+                  onChange={(e) => {
+                    setTravelQuota(e.target.value);
+                    if (dynamicResult) handleCheck(undefined, undefined, e.target.value);
+                  }}
+                  className="bg-transparent text-sm font-bold text-[#0A1626] outline-none cursor-pointer"
+                >
+                  <option value="General">General Quota</option>
+                  <option value="Tatkal">Tatkal Quota</option>
+                  <option value="Ladies">Ladies Quota</option>
+                  <option value="Senior Citizen">Senior Citizen</option>
+                  <option value="Premium Tatkal">Premium Tatkal</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* Action Button */}
+          <motion.button 
+            whileHover={{ scale: 1.02, backgroundColor: "#000000" }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => handleCheck()} 
+            disabled={loading}
+            className="h-14 px-8 rounded-2xl font-bold text-[15px] flex items-center justify-center min-w-[150px] shadow-lg transition-all cursor-pointer bg-[#0A1626] text-[#F3EEE0]"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Loader2 size={18} className="animate-spin" /> Fetching...
+              </span>
+            ) : active.cta}
+          </motion.button>
+        </div>
+
+        {/* Quick Date Chips (When tab is seat availability) */}
+        {tab === "seat" ? (
+          <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-mono font-bold text-gray-500 uppercase">Select Journey Date:</span>
+            {QUICK_DATES.map((d) => (
+              <button
+                key={d.dateStr}
+                onClick={() => {
+                  setTravelDate(d.dateStr);
+                  handleCheck(undefined, d.dateStr);
+                }}
+                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                  travelDate === d.dateStr
+                    ? 'bg-[#0A1626] text-[#F0A63A] shadow-sm ring-1 ring-[#F0A63A]'
+                    : 'bg-[#F3EEE0] text-[#0A1626] hover:bg-[#F0A63A] hover:text-[#0A1626]'
+                }`}
+              >
+                {d.label} <span className="opacity-70 font-normal">({d.dateStr.slice(0, 6)})</span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          /* Quick Clickable Sample Chips for PNR / Live / Fare */
+          <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold text-[#4B5563]">
+            <span>Try quick search:</span>
             {active.samples.map((s) => (
               <button
                 key={s}
                 onClick={() => handleCheck(s)}
-                className="px-2.5 py-1 rounded-lg border bg-gray-50 hover:bg-blue-50 hover:border-blue-200 transition-colors text-xs font-medium cursor-pointer"
-                style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
+                className="px-3 py-1.5 rounded-full border border-[rgba(10,22,38,0.14)] bg-white hover:bg-[#F3EEE0] hover:border-[#F0A63A] transition-all text-xs cursor-pointer shadow-sm text-[#0A1626] font-bold"
+              >
                 {s}
               </button>
             ))}
           </div>
+        )}
 
-          {result && (
-            <div className="anim-fade-up mt-5 rounded-xl border p-5 transition-all" style={{ borderColor: "var(--line)", background: "var(--paper)" }}>
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b" style={{ borderColor: "var(--line)" }}>
-                <p className="f-mono text-sm font-bold" style={{ color: "var(--blue)" }}>{result.title}</p>
-                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full text-white" style={{ background: result.badgeColor }}>
-                  {result.badge}
+        <AnimatePresence mode="wait">
+          {dynamicResult && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="mt-6 rounded-2xl border p-6 shadow-xl" 
+              style={{ borderColor: "rgba(255,255,255,0.8)", background: "rgba(255,255,255,0.95)", backdropFilter: "blur(12px)" }}>
+              
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-gray-200/60">
+                <p className="f-mono text-base font-bold text-[#0A1626]">{dynamicResult.title}</p>
+                <span className="text-xs font-bold px-3 py-1 rounded-full text-white shadow-sm" style={{ background: dynamicResult.badgeColor }}>
+                  {dynamicResult.badge}
                 </span>
               </div>
-              <div className="grid gap-2.5">
-                {result.lines.map(([k, v]) => (
-                  <div key={k} className="flex flex-col sm:flex-row sm:items-center justify-between text-sm py-1 border-b border-dashed last:border-none" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
-                    <span className="font-medium text-xs sm:text-sm" style={{ color: "var(--steel)" }}>{k}</span>
-                    <span className="f-mono font-semibold text-xs sm:text-sm mt-0.5 sm:mt-0" style={{ color: "var(--ink)" }}>{v}</span>
+
+              {/* 6-Day Availability Forecast Strip for Seat Availability */}
+              {dynamicResult.forecast && (
+                <div className="mb-5 p-3 rounded-xl bg-[#F8F6F0] border border-[rgba(10,22,38,0.08)]">
+                  <div className="text-[11px] font-mono font-bold text-gray-500 uppercase mb-2 flex items-center justify-between">
+                    <span>📅 6-Day Availability Forecast</span>
+                    <span className="text-[10px] text-green-700 font-bold">Click date to switch</span>
+                  </div>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    {dynamicResult.forecast.map((fc) => (
+                      <button
+                        key={fc.date}
+                        onClick={() => handleCheck(undefined, `${fc.date}-2026`)}
+                        className={`p-2 rounded-lg text-center transition-all cursor-pointer border ${
+                          travelDate.includes(fc.date)
+                            ? 'bg-[#0A1626] text-white border-[#F0A63A] ring-1 ring-[#F0A63A]'
+                            : 'bg-white text-[#0A1626] border-gray-200 hover:border-[#0A1626]'
+                        }`}
+                      >
+                        <div className="text-[10px] font-mono opacity-70">{fc.day}</div>
+                        <div className="text-xs font-bold font-mono">{fc.date}</div>
+                        <div className="text-[10px] font-bold mt-1" style={{ color: travelDate.includes(fc.date) ? '#F0A63A' : fc.color }}>
+                          {fc.status}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="grid gap-3">
+                {dynamicResult.lines.map(([k, v]) => (
+                  <div key={k} className="flex flex-col sm:flex-row sm:items-center justify-between text-sm py-1.5 border-b border-dashed last:border-none border-gray-200">
+                    <span className="font-semibold text-xs sm:text-sm text-[#4B5563]">{k}</span>
+                    <span className="font-mono font-bold text-xs sm:text-sm mt-0.5 sm:mt-0 text-[#0A1626]">{v}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-[11px] mt-4 text-center opacity-70" style={{ color: "var(--steel)" }}>Live IRCTC synced status simulation · Redesigned with transparent details.</p>
-            </div>
+
+              <div className="mt-4 pt-3 border-t border-gray-200/80 flex flex-wrap items-center justify-between gap-3">
+                <span className="text-xs text-[#4B5563] font-medium">Detailed stop sequence, halts &amp; platform schedule</span>
+                <button
+                  onClick={() => {
+                    const trainNum = dynamicResult.trainNo || (tab === "live" ? (value.trim() || "12951") : "12951");
+                    const matchedTrain = getTrainByNumber(trainNum) || getTrainByNumber("12951");
+                    setSelectedTimetableTrain(matchedTrain);
+                  }}
+                  className="px-4 py-2 rounded-xl font-bold text-xs bg-[#0A1626] text-[#F3EEE0] hover:bg-black transition-all cursor-pointer shadow-sm flex items-center gap-1.5"
+                >
+                  <Train size={14} className="text-[#F0A63A]" />
+                  <span>View Route &amp; All Halts →</span>
+                </button>
+              </div>
+            </motion.div>
           )}
-        </div>
-      </div>
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Interactive Train Timetable Modal */}
+      <TrainTimetableModal
+        train={selectedTimetableTrain}
+        isOpen={!!selectedTimetableTrain}
+        onClose={() => setSelectedTimetableTrain(null)}
+      />
     </section>
   );
 }
@@ -237,51 +453,245 @@ export function StatsBand() {
 
 /* ---------------- popular routes ---------------- */
 
+/* ---------------- popular routes ---------------- */
+
 const ROUTES = [
-  { from: "New Delhi", to: "Mumbai Central", code: "NDLS → BCT", trains: 18, from_fare: 685, dur: "15h 50m", fastest: "Rajdhani" },
-  { from: "Howrah", to: "New Delhi", code: "HWH → NDLS", trains: 24, from_fare: 720, dur: "17h 05m", fastest: "Rajdhani" },
-  { from: "Chennai Central", to: "Bengaluru", code: "MAS → SBC", trains: 31, from_fare: 245, dur: "4h 30m", fastest: "Shatabdi" },
-  { from: "Secunderabad", to: "Pune", code: "SC → PUNE", trains: 12, from_fare: 385, dur: "12h 40m", fastest: "Duronto" },
-  { from: "Ahmedabad", to: "Jaipur", code: "ADI → JP", trains: 9, from_fare: 310, dur: "9h 15m", fastest: "Superfast" },
-  { from: "Lucknow", to: "Varanasi", code: "LKO → BSB", trains: 21, from_fare: 155, dur: "4h 55m", fastest: "Shatabdi" },
-  { from: "Patna", to: "New Delhi", code: "PNBE → NDLS", trains: 16, from_fare: 580, dur: "12h 30m", fastest: "Rajdhani" },
-  { from: "New Delhi", to: "Kolkata", code: "NDLS → KOAA", trains: 22, from_fare: 695, dur: "17h 15m", fastest: "Duronto" },
+  { 
+    from: "New Delhi", 
+    to: "Mumbai Central", 
+    code: "NDLS → MMCT", 
+    trainNo: "12951",
+    trainName: "Mumbai Tejas Rajdhani",
+    nextDep: "16:55",
+    arrTime: "08:35",
+    platform: "PF 16",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 18, 
+    from_fare: 685, 
+    dur: "15h 40m", 
+    fastest: "Rajdhani" 
+  },
+  { 
+    from: "Howrah", 
+    to: "New Delhi", 
+    code: "HWH → NDLS", 
+    trainNo: "12301",
+    trainName: "Howrah Rajdhani",
+    nextDep: "16:50",
+    arrTime: "10:05",
+    platform: "PF 9",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 24, 
+    from_fare: 720, 
+    dur: "17h 15m", 
+    fastest: "Rajdhani" 
+  },
+  { 
+    from: "Chennai Central", 
+    to: "Bengaluru", 
+    code: "MAS → SBC", 
+    trainNo: "20607",
+    trainName: "Mysuru Vande Bharat",
+    nextDep: "05:50",
+    arrTime: "10:25",
+    platform: "PF 2A",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 31, 
+    from_fare: 245, 
+    dur: "4h 35m", 
+    fastest: "Vande Bharat" 
+  },
+  { 
+    from: "Secunderabad", 
+    to: "Pune", 
+    code: "SC → PUNE", 
+    trainNo: "12026",
+    trainName: "Pune Shatabdi Express",
+    nextDep: "14:45",
+    arrTime: "23:10",
+    platform: "PF 1",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 12, 
+    from_fare: 385, 
+    dur: "8h 25m", 
+    fastest: "Shatabdi" 
+  },
+  { 
+    from: "Ahmedabad", 
+    to: "Jaipur", 
+    code: "ADI → JP", 
+    trainNo: "12957",
+    trainName: "Swarna Jayanti Rajdhani",
+    nextDep: "17:40",
+    arrTime: "02:55",
+    platform: "PF 4",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 9, 
+    from_fare: 310, 
+    dur: "9h 15m", 
+    fastest: "Rajdhani" 
+  },
+  { 
+    from: "Lucknow", 
+    to: "Varanasi", 
+    code: "LKO → BSB", 
+    trainNo: "22436",
+    trainName: "Vande Bharat Express",
+    nextDep: "06:00",
+    arrTime: "10:55",
+    platform: "PF 1",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 21, 
+    from_fare: 155, 
+    dur: "4h 55m", 
+    fastest: "Vande Bharat" 
+  },
+  { 
+    from: "Patna", 
+    to: "New Delhi", 
+    code: "PNBE → NDLS", 
+    trainNo: "12309",
+    trainName: "Patna Rajdhani",
+    nextDep: "19:00",
+    arrTime: "07:40",
+    platform: "PF 1",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 16, 
+    from_fare: 580, 
+    dur: "12h 40m", 
+    fastest: "Rajdhani" 
+  },
+  { 
+    from: "New Delhi", 
+    to: "Kolkata", 
+    code: "NDLS → KOAA", 
+    trainNo: "12314",
+    trainName: "Sealdah Rajdhani",
+    nextDep: "16:30",
+    arrTime: "10:10",
+    platform: "PF 12",
+    status: "ON TIME",
+    statusColor: "#1F7A4C",
+    trains: 22, 
+    from_fare: 695, 
+    dur: "17h 40m", 
+    fastest: "Rajdhani" 
+  },
 ];
 
 export function PopularRoutes({ onSearch }) {
+  const [modalTrain, setModalTrain] = useState(null);
+
   return (
     <section className="max-w-6xl mx-auto px-4 md:px-6 mt-14">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Popular routes</p>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#1F7A4C] animate-pulse" />
+            <p className="f-mono text-xs tracking-widest uppercase font-bold" style={{ color: "var(--marigold-2)" }}>Live Train Timings & Popular Corridors</p>
+          </div>
           <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Where India is travelling this week</h2>
+          <p className="text-xs text-[#6B7280] mt-1 font-mono">Live GPS synchronized departure schedule · updated in real time</p>
         </div>
         <div className="hidden md:block w-56 flex-shrink-0"><RouteMapIllustration /></div>
       </div>
+
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {ROUTES.map((r, i) => (
           <Reveal key={r.code} delay={i * 0.06}>
-          <button onClick={() => onSearch({ from: r.from, to: r.to, date: "25-Aug-2026", cls: "All classes", quota: "General", passengers: { adults: 1, children: 0, infants: 0 } })}
-            className="w-full text-left rounded-2xl border bg-[var(--surface)] p-5 transition-all duration-250 hover:-translate-y-1.5 group"
-            style={{ borderColor: "var(--line)", boxShadow:"0 1px 4px rgba(15,42,69,0.06)" }}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 f-mono text-xs font-semibold" style={{ color: "var(--blue)" }}>
-                <Train size={12} style={{ color:"var(--marigold)" }} /> {r.code}
+            <div
+              className="w-full text-left rounded-2xl border bg-white p-5 transition-all duration-250 hover:-translate-y-1.5 hover:shadow-xl group relative overflow-hidden flex flex-col justify-between"
+              style={{ borderColor: "rgba(10,22,38,0.12)", boxShadow: "0 2px 8px rgba(15,42,69,0.05)" }}
+            >
+              {/* Header Info */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[#0A1626]">
+                    <Train size={13} className="text-[#F0A63A]" /> 
+                    <span>{r.code}</span>
+                  </div>
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md bg-green-50 text-green-700 border border-green-200/80 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" /> {r.status}
+                  </span>
+                </div>
+
+                <div className="mt-3">
+                  <p className="font-['Oswald'] font-semibold text-lg leading-snug text-[#0A1626]">
+                    {r.from} <span className="text-gray-400 font-normal">→</span> {r.to}
+                  </p>
+                  <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">
+                    #{r.trainNo} {r.trainName}
+                  </p>
+                </div>
+
+                {/* Live Next Departure Box */}
+                <div className="mt-3.5 p-3 rounded-xl bg-[#F8F6F0] border border-[rgba(10,22,38,0.08)] flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold text-gray-500 uppercase font-mono block">Next Departure</span>
+                    <span className="font-['Oswald'] font-bold text-base text-[#0A1626]">{r.nextDep}</span>
+                    <span className="text-[10px] text-gray-500 ml-1 font-mono">({r.platform})</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-gray-500 uppercase font-mono block">Arrival</span>
+                    <span className="font-['Oswald'] font-bold text-base text-[#0A1626]">{r.arrTime}</span>
+                    <span className="text-[10px] text-green-700 ml-1 font-mono font-bold">({r.dur})</span>
+                  </div>
+                </div>
               </div>
-              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color:"var(--marigold)" }} />
+
+              {/* Progress Bar & Actions */}
+              <div className="mt-4 pt-3 border-t border-gray-100">
+                <div className="flex items-center justify-between text-xs mb-3">
+                  <span className="text-gray-500 text-[11px] font-mono">{r.trains} daily trains</span>
+                  <span className="font-mono font-bold text-xs text-[#1F7A4C]">from ₹{r.from_fare}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      const t = getTrainByNumber(r.trainNo) || getTrainByNumber("12951");
+                      setModalTrain(t);
+                    }}
+                    className="py-2 px-2 text-center rounded-xl bg-white border border-[#0A1626]/20 hover:border-[#0A1626] hover:bg-gray-50 text-[#0A1626] font-bold text-[11px] font-mono transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
+                  >
+                    <Clock size={12} className="text-[#F0A63A]" /> Live Timings
+                  </button>
+
+                  <button
+                    onClick={() => onSearch({ 
+                      from: r.from, 
+                      to: r.to, 
+                      date: "25-Aug-2026", 
+                      cls: "All classes", 
+                      quota: "General", 
+                      passengers: { adults: 1, children: 0, infants: 0 } 
+                    })}
+                    className="py-2 px-2 text-center rounded-xl bg-[#0A1626] hover:bg-black text-white font-bold text-[11px] font-mono transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
+                  >
+                    Book Seat →
+                  </button>
+                </div>
+              </div>
             </div>
-            <p className="f-body font-semibold text-base mt-2 leading-snug" style={{ color: "var(--ink)" }}>{r.from}<br /><span style={{ color:"var(--steel)", fontWeight:400 }}>→</span> {r.to}</p>
-            <div className="mt-3 h-[2px] rounded-full overflow-hidden" style={{ background: "var(--line)" }}>
-              <div className="h-full w-[28%] rounded-full transition-all duration-500 group-hover:w-full" style={{ background: "linear-gradient(90deg,var(--marigold),var(--green))" }} />
-            </div>
-            <div className="mt-3 flex items-center justify-between text-xs" style={{ color: "var(--steel)" }}>
-              <span>{r.trains} trains · {r.dur}</span>
-              <span className="f-mono font-bold" style={{ color: "var(--green)" }}>from ₹{r.from_fare}</span>
-            </div>
-          </button>
           </Reveal>
         ))}
       </div>
+
+      {/* Live Timetable Modal */}
+      {modalTrain && (
+        <TrainTimetableModal
+          train={modalTrain}
+          isOpen={!!modalTrain}
+          onClose={() => setModalTrain(null)}
+        />
+      )}
     </section>
   );
 }
@@ -346,21 +756,8 @@ export function HowItWorks() {
           <p className="f-mono text-xs tracking-widest uppercase mb-2" style={{ color: "var(--marigold-2)" }}>How it works</p>
           <h2 className="f-serif font-bold text-3xl md:text-4xl" style={{ color: "var(--ink)" }}>Four stops, start to seat</h2>
         </Reveal>
-        <div className="mb-8"><TrackConnector /></div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 relative">
-          {/* Connecting line */}
-          <div className="hidden md:block absolute top-[2.25rem] left-[12.5%] right-[12.5%] h-px" style={{ background:"linear-gradient(90deg,var(--marigold),var(--green))", opacity:0.3 }} />
-          {STEPS.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.1}
-              className="rounded-2xl border bg-[var(--surface)] p-6 relative transition-all duration-300 hover:-translate-y-2 group"
-              style={{ borderColor: "var(--line)", boxShadow:"0 1px 4px rgba(15,42,69,0.06)" }}>
-              <div className="h-11 w-11 rounded-full flex items-center justify-center mb-4 f-mono text-sm font-bold transition-colors group-hover:scale-110"
-                style={{ background:"var(--blue)", color:"var(--marigold)" }}>{s.n}</div>
-              <p className="f-body font-semibold text-base" style={{ color: "var(--ink)" }}>{s.title}</p>
-              <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "var(--steel)" }}>{s.body}</p>
-            </Reveal>
-          ))}
-        </div>
+        
+        <ScrollLinkedRailLine steps={STEPS} />
       </div>
     </section>
   );

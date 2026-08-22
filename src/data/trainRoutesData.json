@@ -1,0 +1,403 @@
+[
+  {
+    "trainNo": "12951",
+    "trainName": "Mumbai Tejas Rajdhani Express",
+    "type": "Rajdhani",
+    "runsOn": "MTWTFSS",
+    "daily": true,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "16:55" },
+    "destination": { "code": "MMCT", "name": "Mumbai Central", "arr": "08:35" },
+    "duration": "15h 40m",
+    "totalDistanceKm": 1384,
+    "avgSpeedKmH": 88.3,
+    "pantry": true,
+    "cateringType": "Complimentary on-board catering & e-Catering",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 8, "fare": 4855, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 24, "fare": 2830, "label": "AC 2-Tier" },
+      "3A": { "status": "RAC", "n": 6, "fare": 1985, "label": "AC 3-Tier" }
+    },
+    "coachComposition": ["ENG", "EOG", "B1", "B2", "B3", "B4", "B5", "B6", "PC", "M1", "A1", "A2", "A3", "H1", "EOG"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "16:55", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 3" },
+      { "seq": 2, "stationCode": "KOTA", "stationName": "Kota Junction", "state": "Rajasthan", "arr": "21:25", "dep": "21:35", "haltMin": "10 min", "distKm": 465, "day": 1, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "RTM", "stationName": "Ratlam Junction", "state": "Madhya Pradesh", "arr": "00:40", "dep": "00:45", "haltMin": "5 min", "distKm": 732, "day": 2, "platform": "PF 4" },
+      { "seq": 4, "stationCode": "BRC", "stationName": "Vadodara Junction", "state": "Gujarat", "arr": "04:12", "dep": "04:22", "haltMin": "10 min", "distKm": 993, "day": 2, "platform": "PF 1" },
+      { "seq": 5, "stationCode": "ST", "stationName": "Surat", "state": "Gujarat", "arr": "05:48", "dep": "05:53", "haltMin": "5 min", "distKm": 1122, "day": 2, "platform": "PF 2" },
+      { "seq": 6, "stationCode": "BVI", "stationName": "Borivali", "state": "Maharashtra", "arr": "08:10", "dep": "08:12", "haltMin": "2 min", "distKm": 1354, "day": 2, "platform": "PF 7" },
+      { "seq": 7, "stationCode": "MMCT", "stationName": "Mumbai Central", "state": "Maharashtra", "arr": "08:35", "dep": "--:--", "haltMin": "Destination", "distKm": 1384, "day": 2, "platform": "PF 1" }
+    ],
+    "skippedStations": [
+      { "code": "FDB", "name": "Faridabad", "distKm": 28 },
+      { "code": "MTJ", "name": "Mathura Junction", "distKm": 141 },
+      { "code": "BTE", "name": "Bharatpur Junction", "distKm": 175 },
+      { "code": "SWM", "name": "Sawai Madhopur Junction", "distKm": 357 },
+      { "code": "NAD", "name": "Nagda Junction", "distKm": 691 },
+      { "code": "DHD", "name": "Dahod", "distKm": 806 },
+      { "code": "GDA", "name": "Godhra Junction", "distKm": 879 },
+      { "code": "BH", "name": "Bharuch Junction", "distKm": 1063 },
+      { "code": "NVS", "name": "Navsari", "distKm": 1152 },
+      { "code": "BL", "name": "Valsad", "distKm": 1191 },
+      { "code": "VAPI", "name": "Vapi", "distKm": 1217 },
+      { "code": "PLG", "name": "Palghar", "distKm": 1298 }
+    ]
+  },
+  {
+    "trainNo": "12952",
+    "trainName": "New Delhi Tejas Rajdhani Express",
+    "type": "Rajdhani",
+    "runsOn": "MTWTFSS",
+    "daily": true,
+    "origin": { "code": "MMCT", "name": "Mumbai Central", "dep": "17:00" },
+    "destination": { "code": "NDLS", "name": "New Delhi", "arr": "08:35" },
+    "duration": "15h 35m",
+    "totalDistanceKm": 1384,
+    "avgSpeedKmH": 88.8,
+    "pantry": true,
+    "cateringType": "Complimentary on-board catering & e-Catering",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 6, "fare": 4855, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 32, "fare": 2830, "label": "AC 2-Tier" },
+      "3A": { "status": "AVAILABLE", "n": 48, "fare": 1985, "label": "AC 3-Tier" }
+    },
+    "coachComposition": ["ENG", "EOG", "B1", "B2", "B3", "B4", "B5", "B6", "PC", "M1", "A1", "A2", "A3", "H1", "EOG"],
+    "schedule": [
+      { "seq": 1, "stationCode": "MMCT", "stationName": "Mumbai Central", "state": "Maharashtra", "arr": "--:--", "dep": "17:00", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 1" },
+      { "seq": 2, "stationCode": "BVI", "stationName": "Borivali", "state": "Maharashtra", "arr": "17:28", "dep": "17:30", "haltMin": "2 min", "distKm": 30, "day": 1, "platform": "PF 6" },
+      { "seq": 3, "stationCode": "ST", "stationName": "Surat", "state": "Gujarat", "arr": "19:43", "dep": "19:48", "haltMin": "5 min", "distKm": 263, "day": 1, "platform": "PF 1" },
+      { "seq": 4, "stationCode": "BRC", "stationName": "Vadodara Junction", "state": "Gujarat", "arr": "21:06", "dep": "21:16", "haltMin": "10 min", "distKm": 392, "day": 1, "platform": "PF 2" },
+      { "seq": 5, "stationCode": "RTM", "stationName": "Ratlam Junction", "state": "Madhya Pradesh", "arr": "00:45", "dep": "00:50", "haltMin": "5 min", "distKm": 653, "day": 2, "platform": "PF 5" },
+      { "seq": 6, "stationCode": "KOTA", "stationName": "Kota Junction", "state": "Rajasthan", "arr": "03:45", "dep": "03:55", "haltMin": "10 min", "distKm": 920, "day": 2, "platform": "PF 1" },
+      { "seq": 7, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "08:35", "dep": "--:--", "haltMin": "Destination", "distKm": 1384, "day": 2, "platform": "PF 2" }
+    ],
+    "skippedStations": [
+      { "code": "PLG", "name": "Palghar", "distKm": 87 },
+      { "code": "VAPI", "name": "Vapi", "distKm": 168 },
+      { "code": "BL", "name": "Valsad", "distKm": 194 },
+      { "code": "NVS", "name": "Navsari", "distKm": 233 },
+      { "code": "BH", "name": "Bharuch Junction", "distKm": 322 },
+      { "code": "GDA", "name": "Godhra Junction", "distKm": 466 },
+      { "code": "DHD", "name": "Dahod", "distKm": 539 },
+      { "code": "NAD", "name": "Nagda Junction", "distKm": 694 },
+      { "code": "SWM", "name": "Sawai Madhopur Junction", "distKm": 1028 },
+      { "code": "BTE", "name": "Bharatpur Junction", "distKm": 1210 },
+      { "code": "MTJ", "name": "Mathura Junction", "distKm": 1244 },
+      { "code": "FDB", "name": "Faridabad", "distKm": 1357 }
+    ]
+  },
+  {
+    "trainNo": "22436",
+    "trainName": "Vande Bharat Express",
+    "type": "Vande Bharat",
+    "runsOn": "M_WTFSS",
+    "daily": false,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "06:00" },
+    "destination": { "code": "BSB", "name": "Varanasi Junction", "arr": "14:00" },
+    "duration": "8h 00m",
+    "totalDistanceKm": 759,
+    "avgSpeedKmH": 94.9,
+    "pantry": true,
+    "cateringType": "Executive Dining & Premium Chair Car Meals",
+    "classes": {
+      "EC": { "status": "AVAILABLE", "n": 14, "fare": 3355, "label": "Executive Chair Car" },
+      "CC": { "status": "AVAILABLE", "n": 86, "fare": 1750, "label": "AC Chair Car" }
+    },
+    "coachComposition": ["D1", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "E1", "E2", "C8", "C9", "C10", "C11", "C12", "D2"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "06:00", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 16" },
+      { "seq": 2, "stationCode": "CNB", "stationName": "Kanpur Central", "state": "Uttar Pradesh", "arr": "10:08", "dep": "10:10", "haltMin": "2 min", "distKm": 440, "day": 1, "platform": "PF 5" },
+      { "seq": 3, "stationCode": "PRYJ", "stationName": "Prayagraj Junction", "state": "Uttar Pradesh", "arr": "12:08", "dep": "12:10", "haltMin": "2 min", "distKm": 634, "day": 1, "platform": "PF 6" },
+      { "seq": 4, "stationCode": "BSB", "stationName": "Varanasi Junction", "state": "Uttar Pradesh", "arr": "14:00", "dep": "--:--", "haltMin": "Destination", "distKm": 759, "day": 1, "platform": "PF 1" }
+    ],
+    "skippedStations": [
+      { "code": "GZB", "name": "Ghaziabad Junction", "distKm": 26 },
+      { "code": "ALJN", "name": "Aligarh Junction", "distKm": 132 },
+      { "code": "TDL", "name": "Tundla Junction", "distKm": 210 },
+      { "code": "ETW", "name": "Etawah Junction", "distKm": 302 },
+      { "code": "FTP", "name": "Fatehpur", "distKm": 518 },
+      { "code": "MZP", "name": "Mirzapur", "distKm": 718 }
+    ]
+  },
+  {
+    "trainNo": "22435",
+    "trainName": "Vande Bharat Express (BSB-NDLS)",
+    "type": "Vande Bharat",
+    "runsOn": "M_WTFSS",
+    "daily": false,
+    "origin": { "code": "BSB", "name": "Varanasi Junction", "dep": "15:00" },
+    "destination": { "code": "NDLS", "name": "New Delhi", "arr": "23:00" },
+    "duration": "8h 00m",
+    "totalDistanceKm": 759,
+    "avgSpeedKmH": 94.9,
+    "pantry": true,
+    "cateringType": "Executive Dining & Premium Chair Car Meals",
+    "classes": {
+      "EC": { "status": "AVAILABLE", "n": 10, "fare": 3355, "label": "Executive Chair Car" },
+      "CC": { "status": "AVAILABLE", "n": 72, "fare": 1750, "label": "AC Chair Car" }
+    },
+    "coachComposition": ["D1", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "E1", "E2", "C8", "C9", "C10", "C11", "C12", "D2"],
+    "schedule": [
+      { "seq": 1, "stationCode": "BSB", "stationName": "Varanasi Junction", "state": "Uttar Pradesh", "arr": "--:--", "dep": "15:00", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 1" },
+      { "seq": 2, "stationCode": "PRYJ", "stationName": "Prayagraj Junction", "state": "Uttar Pradesh", "arr": "16:30", "dep": "16:32", "haltMin": "2 min", "distKm": 125, "day": 1, "platform": "PF 6" },
+      { "seq": 3, "stationCode": "CNB", "stationName": "Kanpur Central", "state": "Uttar Pradesh", "arr": "18:30", "dep": "18:32", "haltMin": "2 min", "distKm": 319, "day": 1, "platform": "PF 5" },
+      { "seq": 4, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "23:00", "dep": "--:--", "haltMin": "Destination", "distKm": 759, "day": 1, "platform": "PF 16" }
+    ],
+    "skippedStations": [
+      { "code": "MZP", "name": "Mirzapur", "distKm": 41 },
+      { "code": "FTP", "name": "Fatehpur", "distKm": 241 },
+      { "code": "ETW", "name": "Etawah Junction", "distKm": 457 },
+      { "code": "TDL", "name": "Tundla Junction", "distKm": 549 },
+      { "code": "ALJN", "name": "Aligarh Junction", "distKm": 627 },
+      { "code": "GZB", "name": "Ghaziabad Junction", "distKm": 733 }
+    ]
+  },
+  {
+    "trainNo": "12002",
+    "trainName": "Bhopal Shatabdi Express",
+    "type": "Shatabdi",
+    "runsOn": "MTWTFSS",
+    "daily": true,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "06:00" },
+    "destination": { "code": "RKMP", "name": "Rani Kamlapati (Bhopal)", "arr": "14:40" },
+    "duration": "8h 40m",
+    "totalDistanceKm": 704,
+    "avgSpeedKmH": 81.2,
+    "pantry": true,
+    "cateringType": "Complimentary Breakfast & High Tea",
+    "classes": {
+      "EC": { "status": "RAC", "n": 4, "fare": 2040, "label": "Executive Class" },
+      "CC": { "status": "AVAILABLE", "n": 142, "fare": 1055, "label": "AC Chair Car" }
+    },
+    "coachComposition": ["ENG", "EOG", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "E1", "E2", "C9", "C10", "EOG"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "06:00", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 1" },
+      { "seq": 2, "stationCode": "MTJ", "stationName": "Mathura Junction", "state": "Uttar Pradesh", "arr": "07:19", "dep": "07:20", "haltMin": "1 min", "distKm": 141, "day": 1, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "AGC", "stationName": "Agra Cantt", "state": "Uttar Pradesh", "arr": "07:50", "dep": "07:55", "haltMin": "5 min", "distKm": 195, "day": 1, "platform": "PF 1" },
+      { "seq": 4, "stationCode": "DHO", "stationName": "Dholpur", "state": "Rajasthan", "arr": "08:39", "dep": "08:40", "haltMin": "1 min", "distKm": 248, "day": 1, "platform": "PF 2" },
+      { "seq": 5, "stationCode": "MRA", "stationName": "Morena", "state": "Madhya Pradesh", "arr": "09:01", "dep": "09:02", "haltMin": "1 min", "distKm": 275, "day": 1, "platform": "PF 1" },
+      { "seq": 6, "stationCode": "GWL", "stationName": "Gwalior Junction", "state": "Madhya Pradesh", "arr": "09:23", "dep": "09:28", "haltMin": "5 min", "distKm": 313, "day": 1, "platform": "PF 1" },
+      { "seq": 7, "stationCode": "VGLJ", "stationName": "V Lakshmibai Jhansi", "state": "Uttar Pradesh", "arr": "10:45", "dep": "10:50", "haltMin": "5 min", "distKm": 411, "day": 1, "platform": "PF 1" },
+      { "seq": 8, "stationCode": "LAR", "stationName": "Lalitpur", "state": "Uttar Pradesh", "arr": "11:42", "dep": "11:43", "haltMin": "1 min", "distKm": 501, "day": 1, "platform": "PF 2" },
+      { "seq": 9, "stationCode": "BPL", "stationName": "Bhopal Junction", "state": "Madhya Pradesh", "arr": "14:07", "dep": "14:12", "haltMin": "5 min", "distKm": 702, "day": 1, "platform": "PF 1" },
+      { "seq": 10, "stationCode": "RKMP", "stationName": "Rani Kamlapati", "state": "Madhya Pradesh", "arr": "14:40", "dep": "--:--", "haltMin": "Destination", "distKm": 708, "day": 1, "platform": "PF 5" }
+    ],
+    "skippedStations": [
+      { "code": "FDB", "name": "Faridabad", "distKm": 28 },
+      { "code": "PWL", "name": "Palwal", "distKm": 58 },
+      { "code": "KSV", "name": "Kosi Kalan", "distKm": 101 },
+      { "code": "RKM", "name": "Raja Ki Mandi", "distKm": 191 },
+      { "code": "BAO", "name": "Banmor", "distKm": 293 },
+      { "code": "DBA", "name": "Dabra", "distKm": 356 },
+      { "code": "BAB", "name": "Babina", "distKm": 436 },
+      { "code": "BINA", "name": "Bina Junction", "distKm": 564 },
+      { "code": "BAQ", "name": "Ganj Basoda", "distKm": 610 },
+      { "code": "BHS", "name": "Vidisha", "distKm": 649 }
+    ]
+  },
+  {
+    "trainNo": "12622",
+    "trainName": "Tamil Nadu Superfast Express",
+    "type": "Superfast",
+    "runsOn": "MTWTFSS",
+    "daily": true,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "21:05" },
+    "destination": { "code": "MAS", "name": "MGR Chennai Central", "arr": "06:35" },
+    "duration": "33h 30m",
+    "totalDistanceKm": 2182,
+    "avgSpeedKmH": 65.1,
+    "pantry": true,
+    "cateringType": "Full On-board Pantry Car & e-Catering",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 2, "fare": 5350, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 18, "fare": 3120, "label": "AC 2-Tier" },
+      "3A": { "status": "AVAILABLE", "n": 64, "fare": 2150, "label": "AC 3-Tier" },
+      "SL": { "status": "AVAILABLE", "n": 128, "fare": 810, "label": "Sleeper" }
+    },
+    "coachComposition": ["ENG", "SLR", "GS", "S1", "S2", "S3", "S4", "S5", "S6", "PC", "B1", "B2", "B3", "B4", "B5", "M1", "A1", "A2", "H1", "GS", "SLR"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "21:05", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 3" },
+      { "seq": 2, "stationCode": "AGC", "stationName": "Agra Cantt", "state": "Uttar Pradesh", "arr": "23:25", "dep": "23:30", "haltMin": "5 min", "distKm": 195, "day": 1, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "GWL", "stationName": "Gwalior Junction", "state": "Madhya Pradesh", "arr": "01:13", "dep": "01:15", "haltMin": "2 min", "distKm": 313, "day": 2, "platform": "PF 1" },
+      { "seq": 4, "stationCode": "VGLJ", "stationName": "V Lakshmibai Jhansi", "state": "Uttar Pradesh", "arr": "02:35", "dep": "02:45", "haltMin": "10 min", "distKm": 411, "day": 2, "platform": "PF 2" },
+      { "seq": 5, "stationCode": "BPL", "stationName": "Bhopal Junction", "state": "Madhya Pradesh", "arr": "06:45", "dep": "06:50", "haltMin": "5 min", "distKm": 702, "day": 2, "platform": "PF 1" },
+      { "seq": 6, "stationCode": "ET", "stationName": "Itarsi Junction", "state": "Madhya Pradesh", "arr": "08:35", "dep": "08:40", "haltMin": "5 min", "distKm": 794, "day": 2, "platform": "PF 2" },
+      { "seq": 7, "stationCode": "NGP", "stationName": "Nagpur Junction", "state": "Maharashtra", "arr": "13:05", "dep": "13:10", "haltMin": "5 min", "distKm": 1092, "day": 2, "platform": "PF 2" },
+      { "seq": 8, "stationCode": "BPQ", "stationName": "Balharshah", "state": "Maharashtra", "arr": "16:25", "dep": "16:30", "haltMin": "5 min", "distKm": 1301, "day": 2, "platform": "PF 1" },
+      { "seq": 9, "stationCode": "WL", "stationName": "Warangal", "state": "Telangana", "arr": "19:58", "dep": "20:00", "haltMin": "2 min", "distKm": 1544, "day": 2, "platform": "PF 1" },
+      { "seq": 10, "stationCode": "BZA", "stationName": "Vijayawada Junction", "state": "Andhra Pradesh", "arr": "23:55", "dep": "00:05", "haltMin": "10 min", "distKm": 1751, "day": 2, "platform": "PF 6" },
+      { "seq": 11, "stationCode": "MAS", "stationName": "MGR Chennai Central", "state": "Tamil Nadu", "arr": "06:35", "dep": "--:--", "haltMin": "Destination", "distKm": 2182, "day": 3, "platform": "PF 4" }
+    ],
+    "skippedStations": [
+      { "code": "MTJ", "name": "Mathura Junction", "distKm": 141 },
+      { "code": "BINA", "name": "Bina Junction", "distKm": 564 },
+      { "code": "BZU", "name": "Betul", "distKm": 901 },
+      { "code": "CD", "name": "Chandrapur", "distKm": 1287 },
+      { "code": "SKZR", "name": "Sirpur Kaghaznagar", "distKm": 1370 },
+      { "code": "RDM", "name": "Ramagundam", "distKm": 1442 },
+      { "code": "KMT", "name": "Khammam", "distKm": 1652 },
+      { "code": "OGL", "name": "Ongole", "distKm": 1890 },
+      { "code": "NLR", "name": "Nellore", "distKm": 2006 },
+      { "code": "GDR", "name": "Gudur Junction", "distKm": 2045 }
+    ]
+  },
+  {
+    "trainNo": "12301",
+    "trainName": "Howrah Rajdhani Express (via Gaya)",
+    "type": "Rajdhani",
+    "runsOn": "MTWTF_S",
+    "daily": false,
+    "origin": { "code": "HWH", "name": "Howrah Junction", "dep": "16:50" },
+    "destination": { "code": "NDLS", "name": "New Delhi", "arr": "10:05" },
+    "duration": "17h 15m",
+    "totalDistanceKm": 1451,
+    "avgSpeedKmH": 84.1,
+    "pantry": true,
+    "cateringType": "Complimentary Royal Multi-Course Meals",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 4, "fare": 5100, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 22, "fare": 2980, "label": "AC 2-Tier" },
+      "3A": { "status": "AVAILABLE", "n": 52, "fare": 2100, "label": "AC 3-Tier" }
+    },
+    "coachComposition": ["ENG", "EOG", "B1", "B2", "B3", "B4", "B5", "PC", "M1", "A1", "A2", "H1", "EOG"],
+    "schedule": [
+      { "seq": 1, "stationCode": "HWH", "stationName": "Howrah Junction", "state": "West Bengal", "arr": "--:--", "dep": "16:50", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 9" },
+      { "seq": 2, "stationCode": "ASN", "stationName": "Asansol Junction", "state": "West Bengal", "arr": "18:57", "dep": "19:00", "haltMin": "3 min", "distKm": 200, "day": 1, "platform": "PF 4" },
+      { "seq": 3, "stationCode": "DHN", "stationName": "Dhanbad Junction", "state": "Jharkhand", "arr": "19:55", "dep": "20:00", "haltMin": "5 min", "distKm": 259, "day": 1, "platform": "PF 3" },
+      { "seq": 4, "stationCode": "PNME", "stationName": "Parasnath", "state": "Jharkhand", "arr": "20:34", "dep": "20:36", "haltMin": "2 min", "distKm": 307, "day": 1, "platform": "PF 3" },
+      { "seq": 5, "stationCode": "GAYA", "stationName": "Gaya Junction", "state": "Bihar", "arr": "22:25", "dep": "22:28", "haltMin": "3 min", "distKm": 458, "day": 1, "platform": "PF 1" },
+      { "seq": 6, "stationCode": "DDU", "stationName": "Pt Deen Dayal Upadhyaya", "state": "Uttar Pradesh", "arr": "00:45", "dep": "00:55", "haltMin": "10 min", "distKm": 663, "day": 2, "platform": "PF 4" },
+      { "seq": 7, "stationCode": "PRYJ", "stationName": "Prayagraj Junction", "state": "Uttar Pradesh", "arr": "02:43", "dep": "02:45", "haltMin": "2 min", "distKm": 816, "day": 2, "platform": "PF 1" },
+      { "seq": 8, "stationCode": "CNB", "stationName": "Kanpur Central", "state": "Uttar Pradesh", "arr": "04:40", "dep": "04:45", "haltMin": "5 min", "distKm": 1010, "day": 2, "platform": "PF 1" },
+      { "seq": 9, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "10:05", "dep": "--:--", "haltMin": "Destination", "distKm": 1451, "day": 2, "platform": "PF 14" }
+    ],
+    "skippedStations": [
+      { "code": "BWN", "name": "Barddhaman Junction", "distKm": 95 },
+      { "code": "DGR", "name": "Durgapur", "distKm": 158 },
+      { "code": "KQR", "name": "Koderma Junction", "distKm": 382 },
+      { "code": "DOS", "name": "Dehri On Sone", "distKm": 543 },
+      { "code": "SSM", "name": "Sasaram Junction", "distKm": 561 },
+      { "code": "MZP", "name": "Mirzapur", "distKm": 727 },
+      { "code": "FTP", "name": "Fatehpur", "distKm": 932 },
+      { "code": "ETW", "name": "Etawah Junction", "distKm": 1149 },
+      { "code": "ALJN", "name": "Aligarh Junction", "distKm": 1320 },
+      { "code": "GZB", "name": "Ghaziabad Junction", "distKm": 1425 }
+    ]
+  },
+  {
+    "trainNo": "20607",
+    "trainName": "Mysuru Vande Bharat Express",
+    "type": "Vande Bharat",
+    "runsOn": "M_WTFSS",
+    "daily": false,
+    "origin": { "code": "MAS", "name": "MGR Chennai Central", "dep": "05:50" },
+    "destination": { "code": "MYS", "name": "Mysuru Junction", "arr": "12:20" },
+    "duration": "6h 30m",
+    "totalDistanceKm": 497,
+    "avgSpeedKmH": 76.5,
+    "pantry": true,
+    "cateringType": "South Indian Gourmet Breakfast & Refreshments",
+    "classes": {
+      "EC": { "status": "AVAILABLE", "n": 12, "fare": 2485, "label": "Executive Chair Car" },
+      "CC": { "status": "AVAILABLE", "n": 94, "fare": 1365, "label": "AC Chair Car" }
+    },
+    "coachComposition": ["D1", "C1", "C2", "C3", "C4", "C5", "C6", "E1", "C7", "C8", "D2"],
+    "schedule": [
+      { "seq": 1, "stationCode": "MAS", "stationName": "MGR Chennai Central", "state": "Tamil Nadu", "arr": "--:--", "dep": "05:50", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 2" },
+      { "seq": 2, "stationCode": "KPD", "stationName": "Katpadi Junction", "state": "Tamil Nadu", "arr": "07:13", "dep": "07:15", "haltMin": "2 min", "distKm": 130, "day": 1, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "KJM", "stationName": "Krishnarajapuram", "state": "Karnataka", "arr": "09:58", "dep": "10:00", "haltMin": "2 min", "distKm": 345, "day": 1, "platform": "PF 4" },
+      { "seq": 4, "stationCode": "SBC", "stationName": "KSR Bengaluru", "state": "Karnataka", "arr": "10:25", "dep": "10:30", "haltMin": "5 min", "distKm": 359, "day": 1, "platform": "PF 7" },
+      { "seq": 5, "stationCode": "MYS", "stationName": "Mysuru Junction", "state": "Karnataka", "arr": "12:20", "dep": "--:--", "haltMin": "Destination", "distKm": 497, "day": 1, "platform": "PF 1" }
+    ],
+    "skippedStations": [
+      { "code": "AJJ", "name": "Arakkonam Junction", "distKm": 69 },
+      { "code": "JTJ", "name": "Jolarpettai Junction", "distKm": 214 },
+      { "code": "KPN", "name": "Kuppam", "distKm": 255 },
+      { "code": "BWT", "name": "Bangarapet", "distKm": 289 },
+      { "code": "WFD", "name": "Whitefield", "distKm": 336 },
+      { "code": "BNC", "name": "Bengaluru Cantt", "distKm": 355 },
+      { "code": "KGI", "name": "Kengeri", "distKm": 371 },
+      { "code": "MYA", "name": "Mandya", "distKm": 452 }
+    ]
+  },
+  {
+    "trainNo": "12724",
+    "trainName": "Telangana Superfast Express",
+    "type": "Superfast",
+    "runsOn": "MTWTFSS",
+    "daily": true,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "16:00" },
+    "destination": { "code": "HYB", "name": "Hyderabad Deccan", "arr": "17:10" },
+    "duration": "25h 10m",
+    "totalDistanceKm": 1677,
+    "avgSpeedKmH": 66.6,
+    "pantry": true,
+    "cateringType": "Full On-board Pantry & e-Catering",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 3, "fare": 4620, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 20, "fare": 2680, "label": "AC 2-Tier" },
+      "3A": { "status": "AVAILABLE", "n": 58, "fare": 1870, "label": "AC 3-Tier" },
+      "SL": { "status": "AVAILABLE", "n": 110, "fare": 695, "label": "Sleeper" }
+    },
+    "coachComposition": ["ENG", "SLR", "GS", "S1", "S2", "S3", "S4", "S5", "PC", "B1", "B2", "B3", "B4", "M1", "A1", "A2", "H1", "GS", "SLR"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "16:00", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 5" },
+      { "seq": 2, "stationCode": "MTJ", "stationName": "Mathura Junction", "state": "Uttar Pradesh", "arr": "17:26", "dep": "17:28", "haltMin": "2 min", "distKm": 141, "day": 1, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "AGC", "stationName": "Agra Cantt", "state": "Uttar Pradesh", "arr": "18:05", "dep": "18:10", "haltMin": "5 min", "distKm": 195, "day": 1, "platform": "PF 1" },
+      { "seq": 4, "stationCode": "GWL", "stationName": "Gwalior Junction", "state": "Madhya Pradesh", "arr": "19:58", "dep": "20:00", "haltMin": "2 min", "distKm": 313, "day": 1, "platform": "PF 1" },
+      { "seq": 5, "stationCode": "VGLJ", "stationName": "V Lakshmibai Jhansi", "state": "Uttar Pradesh", "arr": "21:45", "dep": "21:53", "haltMin": "8 min", "distKm": 411, "day": 1, "platform": "PF 2" },
+      { "seq": 6, "stationCode": "BPL", "stationName": "Bhopal Junction", "state": "Madhya Pradesh", "arr": "01:20", "dep": "01:30", "haltMin": "10 min", "distKm": 702, "day": 2, "platform": "PF 1" },
+      { "seq": 7, "stationCode": "NGP", "stationName": "Nagpur Junction", "state": "Maharashtra", "arr": "07:10", "dep": "07:15", "haltMin": "5 min", "distKm": 1092, "day": 2, "platform": "PF 2" },
+      { "seq": 8, "stationCode": "BPQ", "stationName": "Balharshah", "state": "Maharashtra", "arr": "10:30", "dep": "10:35", "haltMin": "5 min", "distKm": 1301, "day": 2, "platform": "PF 1" },
+      { "seq": 9, "stationCode": "KZJ", "stationName": "Kazipet Junction", "state": "Telangana", "arr": "13:53", "dep": "13:55", "haltMin": "2 min", "distKm": 1535, "day": 2, "platform": "PF 3" },
+      { "seq": 10, "stationCode": "SC", "stationName": "Secunderabad Junction", "state": "Telangana", "arr": "16:20", "dep": "16:25", "haltMin": "5 min", "distKm": 1667, "day": 2, "platform": "PF 1" },
+      { "seq": 11, "stationCode": "HYB", "stationName": "Hyderabad Deccan", "state": "Telangana", "arr": "17:10", "dep": "--:--", "haltMin": "Destination", "distKm": 1677, "day": 2, "platform": "PF 6" }
+    ],
+    "skippedStations": [
+      { "code": "FDB", "name": "Faridabad", "distKm": 28 },
+      { "code": "BINA", "name": "Bina Junction", "distKm": 564 },
+      { "code": "ET", "name": "Itarsi Junction", "distKm": 794 },
+      { "code": "CD", "name": "Chandrapur", "distKm": 1287 },
+      { "code": "SKZR", "name": "Sirpur Kaghaznagar", "distKm": 1370 },
+      { "code": "RDM", "name": "Ramagundam", "distKm": 1442 },
+      { "code": "MCI", "name": "Manchiryal", "distKm": 1456 },
+      { "code": "ZN", "name": "Jangaon", "distKm": 1583 },
+      { "code": "BG", "name": "Bhongir", "distKm": 1620 },
+      { "code": "MLY", "name": "Moula Ali", "distKm": 1661 }
+    ]
+  },
+  {
+    "trainNo": "12259",
+    "trainName": "Sealdah AC Duronto Express",
+    "type": "Duronto",
+    "runsOn": "M_W_F__",
+    "daily": false,
+    "origin": { "code": "NDLS", "name": "New Delhi", "dep": "20:05" },
+    "destination": { "code": "SDAH", "name": "Sealdah (Kolkata)", "arr": "12:25" },
+    "duration": "16h 20m",
+    "totalDistanceKm": 1453,
+    "avgSpeedKmH": 88.9,
+    "pantry": true,
+    "cateringType": "Complimentary Multi-Course Meals",
+    "classes": {
+      "1A": { "status": "AVAILABLE", "n": 6, "fare": 4980, "label": "First AC" },
+      "2A": { "status": "AVAILABLE", "n": 18, "fare": 2890, "label": "AC 2-Tier" },
+      "3A": { "status": "AVAILABLE", "n": 44, "fare": 2040, "label": "AC 3-Tier" }
+    },
+    "coachComposition": ["ENG", "EOG", "B1", "B2", "B3", "B4", "B5", "B6", "PC", "M1", "A1", "A2", "H1", "EOG"],
+    "schedule": [
+      { "seq": 1, "stationCode": "NDLS", "stationName": "New Delhi", "state": "Delhi", "arr": "--:--", "dep": "20:05", "haltMin": "Origin", "distKm": 0, "day": 1, "platform": "PF 12" },
+      { "seq": 2, "stationCode": "CNB", "stationName": "Kanpur Central", "state": "Uttar Pradesh", "arr": "01:25", "dep": "01:30", "haltMin": "5 min", "distKm": 440, "day": 2, "platform": "PF 1" },
+      { "seq": 3, "stationCode": "DDU", "stationName": "Pt Deen Dayal Upadhyaya", "state": "Uttar Pradesh", "arr": "05:15", "dep": "05:25", "haltMin": "10 min", "distKm": 787, "day": 2, "platform": "PF 2" },
+      { "seq": 4, "stationCode": "DHN", "stationName": "Dhanbad Junction", "state": "Jharkhand", "arr": "08:50", "dep": "08:55", "haltMin": "5 min", "distKm": 1194, "day": 2, "platform": "PF 1" },
+      { "seq": 5, "stationCode": "SDAH", "stationName": "Sealdah", "state": "West Bengal", "arr": "12:25", "dep": "--:--", "haltMin": "Destination", "distKm": 1453, "day": 2, "platform": "PF 12" }
+    ],
+    "skippedStations": [
+      { "code": "ALJN", "name": "Aligarh Junction", "distKm": 132 },
+      { "code": "TDL", "name": "Tundla Junction", "distKm": 210 },
+      { "code": "PRYJ", "name": "Prayagraj Junction", "distKm": 634 },
+      { "code": "GAYA", "name": "Gaya Junction", "distKm": 995 },
+      { "code": "ASN", "name": "Asansol Junction", "distKm": 1253 },
+      { "code": "BWN", "name": "Barddhaman Junction", "distKm": 1358 }
+    ]
+  }
+]

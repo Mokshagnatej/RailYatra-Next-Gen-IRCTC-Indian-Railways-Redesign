@@ -46,17 +46,20 @@ export default function MyTripsScreen() {
   ];
 
   return (
-    <div style={{ background: "var(--paper)" }} className="min-h-screen f-body relative">
+    <div  className="min-h-screen f-body relative">
       <div className="absolute top-0 left-0 w-full h-[300px] overflow-hidden pointer-events-none opacity-40">
         <DotNetwork count={6} />
       </div>
       <PageHero eyebrow="My Trips" title="Every booking, one place." sub="Upcoming journeys, PNR status, and refund tracking — consolidated from four scattered pages on the old site." />
-      <div className="max-w-4xl mx-auto px-4 md:px-6 -mt-10 relative z-10 pb-20">
-        <div className="flex gap-1 bg-[var(--surface)] rounded-xl border p-1 w-fit mb-6" style={{ borderColor: "var(--line)" }}>
+      <div className="max-w-4xl mx-auto px-4 md:px-8 mt-8 relative z-10 pb-20">
+        <div className="flex gap-1 bg-white rounded-2xl border p-1.5 w-fit mb-8 border-[rgba(10,22,38,0.12)] shadow-sm">
           {tabs.map((t) => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className="px-4 h-10 rounded-lg text-sm font-medium f-body transition-colors"
-              style={{ background: tab === t.key ? "var(--blue)" : "transparent", color: tab === t.key ? "white" : "var(--ink)" }}>
+              className={`px-4 h-10 rounded-lg text-sm font-bold transition-all ${
+                tab === t.key
+                  ? "bg-[#0A1626] text-white shadow-md"
+                  : "text-[#4B5563] hover:text-[#0A1626] hover:bg-black/5"
+              }`}>
               {t.label}
             </button>
           ))}
@@ -65,8 +68,13 @@ export default function MyTripsScreen() {
         {tab === "upcoming" && (
           <div className="mb-16">
             {!isAuthenticated || journeys.length === 0 ? (
-              <div className="p-8 text-center bg-[var(--surface)] rounded-xl border border-dashed border-slate-300 text-[var(--steel)]">
-                {!isAuthenticated ? "Sign in to view your bookings." : "No upcoming journeys found."}
+              <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[rgba(10,22,38,0.18)] shadow-sm">
+                <p className="text-base font-bold text-[#0A1626] mb-1">
+                  {!isAuthenticated ? "Sign in to view your bookings" : "No upcoming journeys found"}
+                </p>
+                <p className="text-xs text-[#4B5563]">
+                  {!isAuthenticated ? "Your booked tickets, PNR status and refund timelines will appear here." : "Book a ticket to start tracking your journey."}
+                </p>
               </div>
             ) : (
               journeys.map((b, idx) => (
