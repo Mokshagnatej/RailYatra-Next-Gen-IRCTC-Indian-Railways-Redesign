@@ -4,7 +4,28 @@
 # 🚆 RailYatra — Next-Gen IRCTC Indian Railways Redesign
 
 <a href="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/" target="_blank">
-  <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80" alt="3D Train Aesthetics" width="100%" style="border-radius: 12px; margin: 15px 0;">
+  <!-- Evolution of Indian Railways Section -->
+  <table width="100%" style="border-collapse: separate; border-spacing: 10px;">
+    <tr>
+      <td colspan="3" align="center">
+        <h3 style="margin-top: 0; color: #0F2A45;">🚂 The Evolution of Indian Railways</h3>
+      </td>
+    </tr>
+    <tr>
+      <td width="33%" align="center" valign="top">
+        <img src="public/wdp4d.jpg" alt="Classic WDP4D Diesel Locomotive" width="100%" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; aspect-ratio: 4/3; object-fit: cover;">
+        <br><b>The Legacy</b><br><sub style="color: #6D7681;">Classic WDP4D Diesel Power</sub>
+      </td>
+      <td width="33%" align="center" valign="top">
+        <img src="public/double-decker.jpg" alt="Double Decker Express Illustration" width="100%" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; aspect-ratio: 4/3; object-fit: cover;">
+        <br><b>The Transition</b><br><sub style="color: #6D7681;">High-Capacity Double Decker</sub>
+      </td>
+      <td width="33%" align="center" valign="top">
+        <img src="public/vande-bharat.jpg" alt="Modern Vande Bharat Express" width="100%" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px; aspect-ratio: 4/3; object-fit: cover;">
+        <br><b>The Future</b><br><sub style="color: #6D7681;">Vande Bharat Express</sub>
+      </td>
+    </tr>
+  </table>
 </a>
 
 ### *Book Indian train tickets without the guesswork. A Premium 3D-inspired Redesign.*
