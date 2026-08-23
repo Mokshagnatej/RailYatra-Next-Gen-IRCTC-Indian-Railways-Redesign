@@ -1,4 +1,6 @@
+const fs = require('fs');
 
+const readmeContent = `
 <div align="center">
 
 # 🚆 RailYatra — Next-Gen IRCTC Indian Railways Redesign
@@ -53,31 +55,31 @@ Millions of passengers book train tickets across India every day. However, tradi
 ## 🛠️ What I Use & How I Use It (Tech Stack)
 
 ### ⚛️ Frontend Framework
-- **React 19**: Used for building isolated, highly interactive UI components like the `LiveRailRadarCard`.
+- **React 19**: Used for building isolated, highly interactive UI components like the \`LiveRailRadarCard\`.
 - **TypeScript**: Ensures type safety across complex booking payloads and train schedules.
 
 ### ⚡ Build Tool & Deployment
 - **Vite 8**: Provides lightning-fast HMR during development and bundles our application optimally.
-- **GitHub Actions**: Automates the CI/CD pipeline, pushing our `dist` directly to GitHub Pages upon every commit.
+- **GitHub Actions**: Automates the CI/CD pipeline, pushing our \`dist\` directly to GitHub Pages upon every commit.
 
 ### 📦 State Management
 - **Zustand**: A small, fast, scalable bearbones state-management solution.
-  - *How I use it:* Manages global states like `useJourneyStore` (tracking the live train progress) and `useBookingStore` (storing ticket data persistently).
+  - *How I use it:* Manages global states like \`useJourneyStore\` (tracking the live train progress) and \`useBookingStore\` (storing ticket data persistently).
 
 ### 🎨 Styling & 3D Aesthetics
 - **Tailwind CSS V4**: Rapid utility-first styling.
-- **CSS Modules & Variables**: Used for the deep dark-mode and custom color mappings (like `--marigold` and `--blue`).
+- **CSS Modules & Variables**: Used for the deep dark-mode and custom color mappings (like \`--marigold\` and \`--blue\`).
 - **Glassmorphism**: Backdrop blur effects are heavily used in modals to give a modern, layered, "floating" 3D aesthetic to the UI.
 
 ### 🌐 PWA (Progressive Web App)
 - **Vite PWA Plugin**: Automatically generates service workers.
-  - *How I use it:* Caches the app shell and user's `MyTripsScreen` so they can access their e-ticket even when the train goes through a tunnel and they lose network connectivity.
+  - *How I use it:* Caches the app shell and user's \`MyTripsScreen\` so they can access their e-ticket even when the train goes through a tunnel and they lose network connectivity.
 
 ---
 
 ## 📐 Architecture & Flow
 
-```mermaid
+\`\`\`mermaid
 graph TD
     A[Root Shell: RailApp.jsx] --> B[Top Navigation & Brand Header]
     A --> C{Screen State Router}
@@ -94,7 +96,7 @@ graph TD
     H --> O[Live Route Tracker Modal]
     
     I --> Q[Interactive Tourism Hub]
-```
+\`\`\`
 
 ---
 
@@ -104,11 +106,11 @@ The design system honors Indian Railways' heritage while adopting a modern edito
 
 | Token | CSS Variable | Hex / Value | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Deep Rail Blue** | `--blue` | `#0F2A45` | Primary navigation, brand surfaces, active buttons |
-| **Marigold Yellow** | `--marigold` | `#E5A93D` | Call-to-actions, badges, brand accents |
-| **Heritage Paper** | `--paper` | `#F7F4EC` | Soft textured warm canvas background |
-| **Forest Green** | `--green` | `#1F7A4C` | Confirmed seats, on-time alerts, verified KYC |
-| **Signal Red** | `--red` | `#C23B32` | Cancellations, errors, Tatkal warnings |
+| **Deep Rail Blue** | \`--blue\` | \`#0F2A45\` | Primary navigation, brand surfaces, active buttons |
+| **Marigold Yellow** | \`--marigold\` | \`#E5A93D\` | Call-to-actions, badges, brand accents |
+| **Heritage Paper** | \`--paper\` | \`#F7F4EC\` | Soft textured warm canvas background |
+| **Forest Green** | \`--green\` | \`#1F7A4C\` | Confirmed seats, on-time alerts, verified KYC |
+| **Signal Red** | \`--red\` | \`#C23B32\` | Cancellations, errors, Tatkal warnings |
 
 ---
 
@@ -117,27 +119,27 @@ The design system honors Indian Railways' heritage while adopting a modern edito
 <details open>
 <summary><b>1. Clone the repository</b></summary>
 
-```bash
+\`\`\`bash
 git clone https://github.com/Mokshagnatej/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign.git
 cd RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign
-```
+\`\`\`
 </details>
 
 <details open>
 <summary><b>2. Install dependencies</b></summary>
 
-```bash
+\`\`\`bash
 npm install
-```
+\`\`\`
 </details>
 
 <details open>
 <summary><b>3. Start the local server</b></summary>
 
-```bash
+\`\`\`bash
 npm run dev
-```
-> The application will be live at `http://localhost:5173/`.
+\`\`\`
+> The application will be live at \`http://localhost:5173/\`.
 </details>
 
 ---
@@ -150,3 +152,6 @@ npm run dev
 <div align="center">
   <sub>Made with ❤️ for Indian Railways travelers.</sub>
 </div>
+`;
+
+fs.writeFileSync('README.md', readmeContent);
