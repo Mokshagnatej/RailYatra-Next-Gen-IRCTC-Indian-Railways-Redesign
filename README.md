@@ -4,7 +4,7 @@
 # 🚆 RailYatra — Next-Gen IRCTC Indian Railways Redesign
 
 <a href="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/" target="_blank">
-  <img src="https://images.unsplash.com/photo-1541883733221-a1dc6e8656d0?auto=format&fit=crop&q=80&w=1200&h=400" alt="3D Train Aesthetics" width="100%" style="border-radius: 12px; margin: 15px 0;">
+  <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80" alt="3D Train Aesthetics" width="100%" style="border-radius: 12px; margin: 15px 0;">
 </a>
 
 ### *Book Indian train tickets without the guesswork. A Premium 3D-inspired Redesign.*
@@ -58,7 +58,7 @@ Millions of passengers book train tickets across India every day. However, tradi
 
 ### ⚡ Build Tool & Deployment
 - **Vite 8**: Provides lightning-fast HMR during development and bundles our application optimally.
-- **GitHub Actions**: Automates the CI/CD pipeline, pushing our `dist` directly to GitHub Pages upon every commit.
+- **gh-pages**: Automates deployment directly to GitHub Pages. Running `npm run deploy` automatically builds the `dist` folder and pushes it to the `gh-pages` branch.
 
 ### 📦 State Management
 - **Zustand**: A small, fast, scalable bearbones state-management solution.
@@ -138,6 +138,16 @@ npm install
 npm run dev
 ```
 > The application will be live at `http://localhost:5173/`.
+</details>
+
+<details open>
+<summary><b>4. Deploy to GitHub Pages automatically</b></summary>
+
+If you want to push your latest changes live, simply run:
+```bash
+npm run deploy
+```
+> This will automatically build the `dist` folder and push the changes directly to the `gh-pages` branch. In your repository settings, make sure **Settings > Pages > Source** is set to **Deploy from a branch** and select the `gh-pages` branch.
 </details>
 
 ---
