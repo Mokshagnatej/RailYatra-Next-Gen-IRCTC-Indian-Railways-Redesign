@@ -2385,14 +2385,36 @@ export default function App({ initialScreen }) {
     return "";
   };
 
+  const VALID_SCREENS = ["search", "explore", "trips", "help", "account", "results", "booking", "seat-availability", "confirmation"];
+
   const getScreenFromPath = () => {
     if (typeof window === "undefined") return "search";
     const basePath = getBasePath();
+
+    // Check query params (?screen=seat-availability or ?p=explore)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const qScreen = urlParams.get("screen") || urlParams.get("p") || urlParams.get("page");
+      if (qScreen && VALID_SCREENS.includes(qScreen.toLowerCase())) {
+        return qScreen.toLowerCase();
+      }
+    } catch (e) {}
+
+    // Check hash (#seat-availability, #trips)
+    try {
+      const hashScreen = window.location.hash.replace(/^#\/?/, "").toLowerCase();
+      if (hashScreen && VALID_SCREENS.includes(hashScreen)) {
+        return hashScreen;
+      }
+    } catch (e) {}
+
+    // Check path (/seat-availability, /trips, etc.)
     const cleanPath = window.location.pathname
       .replace(basePath, "")
       .replace(/^\/+|\/+$/g, "")
       .toLowerCase();
-    if (["explore", "trips", "help", "account", "results", "booking"].includes(cleanPath)) {
+
+    if (VALID_SCREENS.includes(cleanPath)) {
       return cleanPath;
     }
     return "search";

@@ -5,16 +5,16 @@
   "type": "module",
   "homepage": "https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "build:pages": "vite build --base=/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/",
-    "preview": "vite preview",
-    "lint": "eslint .",
-    "format": "prettier --write .",
+    "dev": "bun x vite dev",
+    "build": "bun x vite build",
+    "build:dev": "bun x vite build --mode development",
+    "build:pages": "bun x vite build --base=/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/",
+    "preview": "bun x vite preview",
+    "lint": "bun x eslint .",
+    "format": "bun x prettier --write .",
     "preinstall": "npx only-allow bun",
-    "predeploy": "npm run build:pages",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "bun run build:pages",
+    "deploy": "bun x gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
