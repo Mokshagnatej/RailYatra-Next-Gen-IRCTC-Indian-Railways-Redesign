@@ -310,6 +310,12 @@
     box-shadow: 0 8px 30px -4px rgba(10, 22, 38, 0.08);
   }
 
+  .glass-bento {
+    background: #FFFFFF;
+    border: 1px solid rgba(10, 22, 38, 0.1);
+    box-shadow: 0 4px 24px -2px rgba(10, 22, 38, 0.06);
+  }
+
   .glass-hero-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(40px);
@@ -331,6 +337,154 @@
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.2s; }
   .reveal-delay-3 { transition-delay: 0.3s; }
+}
+
+/* Custom Cursor */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  border-radius: 50%;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--amber);
+}
+.cursor-ring {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(240, 166, 58, 0.55);
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              background 0.25s ease;
+}
+.cursor-ring.hovering {
+  width: 52px;
+  height: 52px;
+  background: rgba(240, 166, 58, 0.1);
+  border-color: var(--amber);
+}
+body.touch .cursor-dot, body.touch .cursor-ring {
+  display: none !important;
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--marigold), var(--green));
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* Keyframe Animations */
+@keyframes anim-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-fade-up {
+  animation: anim-fade-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes anim-fade-up-md {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-fade-up-md {
+  animation: anim-fade-up-md 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes anim-fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-fade-down {
+  animation: anim-fade-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes anim-glow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(240, 166, 58, 0.5);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 6px rgba(240, 166, 58, 0);
+  }
+}
+
+.anim-glow-pulse {
+  animation: anim-glow-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes anim-pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.anim-pulse-dot {
+  animation: anim-pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes train-cross {
+  0% {
+    left: -30px;
+  }
+  100% {
+    left: calc(100% + 30px);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(220px) rotate(420deg);
+    opacity: 0;
+  }
+}
+
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* Ken Burns Effect for Cinematic Shots */

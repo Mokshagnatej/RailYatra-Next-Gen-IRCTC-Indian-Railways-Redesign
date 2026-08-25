@@ -7,10 +7,30 @@ import {
 import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
 import { RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
+import { Modal } from '../components/common/Shared';
 
 function HelpScreen() {
   const [openFaq, setOpenFaq] = useState(0);
   const [query, setQuery] = useState("");
+  const [trackingModal, setTrackingModal] = useState(false);
+  const [complaintRef, setComplaintRef] = useState("");
+  const [complaintStatus, setComplaintStatus] = useState(null);
+  const [isSearchingComplaint, setIsSearchingComplaint] = useState(false);
+
+  const handleTrackComplaint = () => {
+    if (!complaintRef.trim()) return;
+    setIsSearchingComplaint(true);
+    setTimeout(() => {
+      setIsSearchingComplaint(false);
+      setComplaintStatus({
+        ref: complaintRef.trim().toUpperCase(),
+        status: "RESOLVED · ACTION TAKEN",
+        date: "24 Aug 2026",
+        dep: "Railway Board / Western Railway",
+        resolution: "Cleanliness issue addressed by On-Board Housekeeping Staff (OBHS) at Kota Junction."
+      });
+    }, 600);
+  };
   const faqs = [
     { q: "My money was debited but I didn't get a ticket. What now?", a: "You'll see a 'Verifying' status immediately with a confirmation SLA. If the booking can't be confirmed within that window, the amount is auto-refunded to your original payment method — no TDR filing needed for this case. Refunds typically appear within 3–5 working days." },
     { q: "How do I file a TDR for a waitlisted passenger?", a: "Go to My Trips → Refunds & TDR, select the PNR, choose the affected passenger(s), and submit before the train's scheduled departure. Refunds are decided by the concerned Zonal Railway, usually within 60 days." },
@@ -29,7 +49,7 @@ function HelpScreen() {
   }, [query]);
 
   return (
-    <div  className="min-h-screen f-body relative">
+    <div className="min-h-screen f-body relative">
       <RangoliOverlay position="top-left" size={200} opacity={0.03} />
       <PageHero eyebrow="Help & Support" title="Surfaced, not buried." sub="Refund status, complaint tracking and FAQs — moved from three clicks deep to a top-level page." />
 
@@ -42,7 +62,7 @@ function HelpScreen() {
           <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-amber-50 text-amber-700 shadow-sm"><Mail size={20} /></div>
           <div><p className="text-base font-bold text-[#0A1626]">care@irctc.co.in</p><p className="text-xs text-[#4B5563]">Official email support</p></div>
         </a>
-        <button onClick={() => alert("Grievance tracking portal active · Enter reference number on RailMadad")} className="rounded-2xl bg-white border border-[rgba(10,22,38,0.12)] p-5 flex items-center gap-3.5 text-left hover:shadow-lg transition-all hover:-translate-y-0.5">
+        <button onClick={() => setTrackingModal(true)} className="rounded-2xl bg-white border border-[rgba(10,22,38,0.12)] p-5 flex items-center gap-3.5 text-left hover:shadow-lg transition-all hover:-translate-y-0.5 cursor-pointer">
           <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-purple-50 text-purple-700 shadow-sm"><MessageSquareText size={20} /></div>
           <div><p className="text-base font-bold text-[#0A1626]">Track a complaint</p><p className="text-xs text-[#4B5563]">By reference number</p></div>
         </button>
@@ -85,6 +105,41 @@ function HelpScreen() {
           )}
         </div>
       </div>
+
+      {/* RailMadad Grievance Tracking Modal */}
+      <Modal title="RailMadad Grievance Tracker" isOpen={trackingModal} onClose={() => setTrackingModal(false)}>
+        <div className="flex flex-col gap-3.5">
+          <p className="text-xs text-[#6B7280]">Enter your 10-digit RailMadad reference ID or PNR to view real-time department investigation status.</p>
+          <div className="flex gap-2">
+            <input 
+              value={complaintRef}
+              onChange={e => setComplaintRef(e.target.value)}
+              placeholder="e.g. RM20260824901"
+              className="flex-1 h-12 px-3.5 rounded-xl border border-gray-300 bg-white text-xs md:text-sm font-mono font-bold text-[#0A1626] outline-none"
+            />
+            <button 
+              onClick={handleTrackComplaint}
+              disabled={isSearchingComplaint}
+              className="h-12 px-5 rounded-xl bg-[#0A1626] text-[#F0A63A] font-bold text-xs md:text-sm cursor-pointer shadow-md"
+            >
+              {isSearchingComplaint ? "Checking..." : "Track"}
+            </button>
+          </div>
+
+          {complaintStatus && (
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs space-y-2 anim-fade-up">
+              <div className="flex justify-between items-center pb-2 border-b border-emerald-200">
+                <span className="font-mono font-bold text-emerald-950">Ref: {complaintStatus.ref}</span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-600 text-white">{complaintStatus.status}</span>
+              </div>
+              <p className="text-[#0A1626] font-semibold">Department: <span className="text-emerald-900">{complaintStatus.dep}</span></p>
+              <p className="text-emerald-800 bg-white p-2.5 rounded-xl border border-emerald-100 leading-relaxed font-medium">
+                {complaintStatus.resolution}
+              </p>
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }

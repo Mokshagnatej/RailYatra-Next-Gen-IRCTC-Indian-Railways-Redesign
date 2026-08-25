@@ -38,6 +38,9 @@ import LiveRailNetworkHub from "../components/features/LiveRailNetworkHub";
 import CinematicPlatformPanel from "./common/CinematicPlatformPanel";
 import TrainTimetableModal from "./common/TrainTimetableModal";
 import StationPickerDropdown from "./common/StationPickerDropdown";
+import CustomCursor from "./common/CustomCursor.jsx";
+import ScrollProgress from "./common/ScrollProgress.jsx";
+import AIAssistFAB from "./common/AIAssistFAB.jsx";
 import { getTrainByNumber } from "../lib/trainRouteService";
 
 /* ---------------------------------------------------------------
@@ -633,10 +636,17 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
           </div>
 
           <div className="flex gap-2">
-            <button onClick={() => { alert("TDR request submitted successfully! Reference #TDR-981742. Refund will credit in 3 business days."); onClose(); }} className="flex-1 h-11 rounded-xl font-semibold text-sm text-white bg-red-600 hover:bg-red-700">
-              Submit Cancellation
+            <button 
+              onClick={() => {
+                const targetPnr = pnrInput.trim() || "8462097315";
+                useAuthStore.getState().cancelJourney(targetPnr);
+                onClose();
+              }} 
+              className="flex-1 h-11 rounded-xl font-bold text-xs md:text-sm text-white bg-red-600 hover:bg-red-700 cursor-pointer shadow-sm"
+            >
+              Submit Cancellation & Claim Refund
             </button>
-            <button onClick={onClose} className="px-4 h-11 rounded-xl border font-semibold text-sm hover:bg-gray-50">Cancel</button>
+            <button onClick={onClose} className="px-4 h-11 rounded-xl border font-semibold text-xs md:text-sm hover:bg-gray-50 cursor-pointer">Cancel</button>
           </div>
         </div>
       )}
@@ -697,6 +707,21 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
         </div>
       )}
 
+      {/* Explore info / Generic notice */}
+      {modal.type === "explore_info" && (
+        <div className="flex flex-col gap-4">
+          <div className="p-4 rounded-xl border bg-amber-50 border-amber-200">
+            <p className="font-bold text-sm text-amber-950 mb-1">{modal.title || "Official Indian Railways Portal"}</p>
+            <p className="text-xs text-amber-900 leading-relaxed">
+              Official Indian Railways information and direct services are actively integrated and available in RailYatra Next-Gen.
+            </p>
+          </div>
+          <button onClick={onClose} className="w-full h-11 rounded-xl bg-[#0A1626] text-[#F0A63A] font-bold text-xs cursor-pointer shadow-sm">
+            Close Notice
+          </button>
+        </div>
+      )}
+
       {/* Fare Enquiry & Other Services */}
       {(modal.type === "fare_enquiry" || modal.type === "trains_between_stations" || modal.type === "retiring_rooms" || modal.type === "e_catering") && (
         <div className="flex flex-col gap-4">
@@ -709,7 +734,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
                "Book AC Deluxe and Standard rooms or dormitory pods at station junctions."}
             </p>
           </div>
-          <button onClick={() => { onClose(); if (onNavigate) onNavigate("explore"); }} className="w-full h-12 rounded-xl text-white font-bold text-sm bg-blue-900 hover:bg-blue-800">
+          <button onClick={() => { onClose(); if (onNavigate) onNavigate("explore"); }} className="w-full h-12 rounded-xl text-white font-bold text-sm bg-blue-900 hover:bg-blue-800 cursor-pointer">
             Launch Interactive Tool
           </button>
         </div>
@@ -1594,6 +1619,31 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
 const STEPS = ["Passengers", "Payment", "Confirmation"];
 
 function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
+  const safeSelection = useMemo(() => {
+    if (!selection) {
+      return {
+        train: { no: "12951", name: "Mumbai Tejas Rajdhani", from: "NDLS", to: "MMCT", dep: "16:55", arr: "08:35", type: "Rajdhani" },
+        cls: "3A",
+        fare: 1680
+      };
+    }
+    const trainObj = selection.train || {
+      name: selection.trainName || "Superfast Express",
+      no: selection.trainNo || "12951",
+      dep: selection.dep || "16:55",
+      arr: selection.arr || "08:35",
+      from: selection.from || "NDLS",
+      to: selection.to || "MMCT",
+      type: selection.type || "Express"
+    };
+    return {
+      ...selection,
+      train: trainObj,
+      cls: selection.cls || "3A",
+      fare: selection.fare || 1680
+    };
+  }, [selection]);
+
   const [step, setStep] = useState(0);
   const [payState, setPayState] = useState("idle"); // idle | otp | processing | verifying | success | failed
   const [selectedMethod, setSelectedMethod] = useState("upi"); // upi | card | netbanking | wallet
@@ -1609,7 +1659,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
   const [ticketShared, setTicketShared] = useState(false);
   const [passengers, setPassengers] = useState([{ name: "Rahul Sharma", age: "28", gender: "M", berth: "LB" }]);
 
-  const fare = selection.fare;
+  const fare = safeSelection.fare;
   const convenience = 35;
   const total = fare * passengers.length + convenience;
 
@@ -1631,7 +1681,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
       if (outcome === "verifying") {
         setPayState("verifying");
         setTimeout(() => { 
-          const confirmedBooking = buildBooking(selection, passengers);
+          const confirmedBooking = buildBooking(safeSelection, passengers);
           try { useAuthStore.getState().addJourney(confirmedBooking); } catch(e) {}
           setPayState("success"); 
           setStep(2); 
@@ -1642,7 +1692,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
       } else if (outcome === "failed") {
         setPayState("failed");
       } else {
-        const confirmedBooking = buildBooking(selection, passengers);
+        const confirmedBooking = buildBooking(safeSelection, passengers);
         try { useAuthStore.getState().addJourney(confirmedBooking); } catch(e) {}
         setPayState("success");
         setStep(2);
@@ -1696,9 +1746,9 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
         <div className="rounded-3xl bg-[#0A1626] text-white p-5 md:p-6 mb-6 shadow-xl flex flex-wrap items-center justify-between gap-4 border border-[rgba(255,255,255,0.1)]">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0A63A] font-mono block mb-1">Journey Summary</span>
-            <h2 className="font-serif font-bold text-lg md:text-xl text-white">{selection.train.name} · #{selection.train.no}</h2>
+            <h2 className="font-serif font-bold text-lg md:text-xl text-white">{safeSelection.train.name} · #{safeSelection.train.no}</h2>
             <p className="font-mono text-xs text-blue-200 mt-1">
-              {selection.train.dep} {selection.train.from} → {selection.train.arr} {selection.train.to} · Class: <span className="font-bold text-[#F0A63A]">{selection.cls}</span> · Quota: General
+              {safeSelection.train.dep} {safeSelection.train.from} → {safeSelection.train.arr} {safeSelection.train.to} · Class: <span className="font-bold text-[#F0A63A]">{safeSelection.cls}</span> · Quota: General
             </p>
           </div>
           <div className="text-right">
@@ -2319,181 +2369,7 @@ function ToolCard({ icon: Icon, title, body, onClick }) {
 /* ---------------- HELP & SUPPORT ---------------- */
 
 
-/* ---------------- ACCOUNT ---------------- */
-
-function SimpleInput({ label, icon: Icon, value }) {
-  return (
-    <div>
-      <label className="f-body text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>{label}</label>
-      <div className="mt-1.5 h-11 rounded-xl border flex items-center gap-2 px-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
-        <Icon size={16} style={{ color: "var(--steel)" }} />
-        <input defaultValue={value} className="f-body flex-1 outline-none text-[15px] bg-transparent" style={{ color: "var(--ink)" }} />
-      </div>
-    </div>
-  );
-}
-
-function Modal({ title, isOpen, onClose, children }) {
-  if (!isOpen) return null;
-  const modalContent = (
-    <div 
-      style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999 }}
-      className="fixed inset-0 z-[99999] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-md transition-opacity" 
-      onClick={onClose}
-    >
-      <div 
-        className="glass-card w-full md:w-[480px] max-h-[90vh] md:max-h-[80vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col anim-fade-up overflow-hidden my-auto" 
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="h-14 px-5 border-b flex items-center justify-between" style={{ borderColor: "var(--line)" }}>
-          <h3 className="font-semibold text-lg" style={{ color: "var(--ink)" }}>{title}</h3>
-          <button onClick={onClose} className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer">
-            <X size={16} style={{ color: "var(--steel)" }} />
-          </button>
-        </div>
-        <div className="p-5 overflow-y-auto">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-
-  if (typeof document === 'undefined') return null;
-  return createPortal(modalContent, document.body);
-}
-
-function ProfileModal({ isOpen, onClose }) {
-  return (
-    <Modal title="Edit Profile" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4">
-        <SimpleInput label="First Name" icon={User} value="Ananya" />
-        <SimpleInput label="Last Name" icon={User} value="Rao" />
-        <SimpleInput label="Mobile Number" icon={Phone} value="+91 98765 43210" />
-        <SimpleInput label="Email Address" icon={Mail} value="ananya.rao@example.com" />
-        <button className="mt-2 w-full h-12 rounded-xl f-body font-semibold text-[15px] flex items-center justify-center gap-2 transition-transform active:scale-[0.99]" style={{ background: "var(--marigold)", color: "var(--blue)" }} onClick={onClose}>Save Changes</button>
-      </div>
-    </Modal>
-  );
-}
-
-function PassengersModal({ isOpen, onClose }) {
-  const passengers = [
-    { name: "Ananya Rao", age: 28, gender: "Female", pref: "Lower" },
-    { name: "Rohan Rao", age: 30, gender: "Male", pref: "Upper" },
-    { name: "Sita Devi", age: 58, gender: "Female", pref: "Lower" },
-    { name: "Arjun Rao", age: 8, gender: "Male", pref: "No Preference" },
-  ];
-  return (
-    <Modal title="Saved Passengers" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-3">
-        {passengers.map((p, i) => (
-          <div key={i} className="p-3 border rounded-xl flex items-center justify-between bg-gray-50" style={{ borderColor: "var(--line)" }}>
-            <div>
-              <p className="font-semibold text-[15px]">{p.name}</p>
-              <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{p.age} yrs, {p.gender} • {p.pref} Berth</p>
-            </div>
-            <button className="text-sm font-medium transition-colors hover:text-blue-700" style={{ color: "var(--blue)" }}>Edit</button>
-          </div>
-        ))}
-        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
-          <User size={16} /> Add New Passenger
-        </button>
-      </div>
-    </Modal>
-  );
-}
-
-function PaymentsModal({ isOpen, onClose }) {
-  return (
-    <Modal title="Payment Methods" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-3">
-        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
-          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-green-100"><CreditCard size={18} className="text-green-700" /></div>
-          <div className="flex-1">
-            <p className="font-semibold text-[15px]">HDFC Bank Credit Card</p>
-            <p className="text-xs" style={{ color: "var(--steel)" }}>•••• 4242</p>
-          </div>
-        </div>
-        <div className="p-4 border rounded-xl flex items-center gap-3 bg-gray-50" style={{ borderColor: "var(--line)" }}>
-          <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-blue-100"><Landmark size={18} className="text-blue-700" /></div>
-          <div className="flex-1">
-            <p className="font-semibold text-[15px]">Google Pay</p>
-            <p className="text-xs" style={{ color: "var(--steel)" }}>ananya@okaxis</p>
-          </div>
-        </div>
-        <button className="mt-2 w-full h-12 rounded-xl border-2 border-dashed font-semibold text-[15px] flex items-center justify-center gap-2 transition-colors hover:bg-blue-50" style={{ borderColor: "var(--line)", color: "var(--blue)" }}>
-          <CreditCard size={16} /> Add Payment Method
-        </button>
-      </div>
-    </Modal>
-  );
-}
-
-function KycModal({ isOpen, onClose }) {
-  return (
-    <Modal title="KYC / Aadhaar" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col items-center py-6 text-center">
-        <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
-          <BadgeCheck size={32} className="text-green-600" />
-        </div>
-        <h4 className="font-semibold text-lg">Verified Successfully</h4>
-        <p className="text-sm mt-1 max-w-[250px]" style={{ color: "var(--steel)" }}>Your Aadhaar ending in <strong>8392</strong> is linked to your IRCTC account.</p>
-        <button className="mt-6 w-full h-12 rounded-xl border font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-          Update Aadhaar
-        </button>
-      </div>
-    </Modal>
-  );
-}
-
-function LanguageModal({ isOpen, onClose }) {
-  const [lang, setLang] = useState("English");
-  return (
-    <Modal title="Select Language" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-2">
-        {["English", "हिंदी (Hindi)", "తెలుగు (Telugu)", "தமிழ் (Tamil)", "বাংলা (Bengali)", "मराठी (Marathi)"].map(l => (
-          <button key={l} onClick={() => { setLang(l); setTimeout(onClose, 200); }} className="p-3 border rounded-xl text-left font-medium text-[15px] transition-colors hover:bg-gray-50 flex items-center justify-between" style={{ borderColor: lang === l ? "var(--blue)" : "var(--line)", background: lang === l ? "var(--blue-3)" : "transparent" }}>
-            <span>{l}</span>
-            {lang === l && <Check size={16} style={{ color: "var(--blue)" }} />}
-          </button>
-        ))}
-      </div>
-    </Modal>
-  );
-}
-
-function NotificationsModal({ isOpen, onClose }) {
-  const [toggles, setToggles] = useState({ sms: true, wa: true, push: false });
-  const items = [
-    { id: "sms", icon: MessageSquareText, title: "SMS Updates", desc: "PNR status and journey alerts via SMS." },
-    { id: "wa", icon: PhoneCall, title: "WhatsApp Updates", desc: "Get tickets directly on WhatsApp." },
-    { id: "push", icon: Bell, title: "Push Notifications", desc: "App alerts for Tatkal and availability." }
-  ];
-  return (
-    <Modal title="Notifications" isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-3">
-        {items.map(n => (
-          <div key={n.id} onClick={() => setToggles(p => ({ ...p, [n.id]: !p[n.id] }))} className="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors" style={{ borderColor: "var(--line)" }}>
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center"><n.icon size={18} style={{ color: "var(--blue)" }} /></div>
-              <div>
-                <p className="font-semibold text-[14px]">{n.title}</p>
-                <p className="text-[11px]" style={{ color: "var(--steel)" }}>{n.desc}</p>
-              </div>
-            </div>
-            <div className="w-11 h-6 rounded-full relative transition-colors duration-300" style={{ background: toggles[n.id] ? "var(--green)" : "var(--steel)" }}>
-              <div className="absolute top-1 h-4 w-4 glass-card rounded-full shadow-sm transition-all duration-300" style={{ left: toggles[n.id] ? "calc(100% - 20px)" : "4px" }}></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </Modal>
-  );
-}
-
-
 /* ---------------- shared page hero ---------------- */
-
 
 export default function App({ initialScreen }) {
   const getBasePath = () => {
@@ -2576,13 +2452,16 @@ export default function App({ initialScreen }) {
       setScreen("help");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      alert(`Viewing ${action} · IRCTC Official Redesign Portal`);
+      setQuickModal({ type: "explore_info", title: action });
     }
   };
 
   return (
     <div className="f-body" style={{ minHeight: "100vh" }}>
-      
+      <ScrollProgress />
+      <CustomCursor />
+      <AIAssistFAB />
+
       <TopNav screen={screen} setScreen={setScreen} />
 
       {screen === "search" && <SearchScreen onSearch={(params) => { setSearchParams(params); setScreen("results"); }} onFooterAction={handleFooterAction} />}

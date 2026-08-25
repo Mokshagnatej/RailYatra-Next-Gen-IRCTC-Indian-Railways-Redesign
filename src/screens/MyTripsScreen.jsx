@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Ticket, Search, Clock, CheckCircle2, ChevronRight, AlertCircle, RefreshCw, X, MapPin, Train, ShieldCheck, Check, ScanLine, Download } from 'lucide-react';
+import { Ticket, Search, Clock, CheckCircle2, ChevronRight, AlertCircle, RefreshCw, X, MapPin, Train, ShieldCheck, Check, ScanLine, Download, Activity, AlertTriangle } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
 import { useAuthStore } from '../lib/store.ts';
 import { Modal } from '../components/common/Shared';
 import { DotNetwork } from '../components/common/CulturalPatterns.jsx';
+import { computeLiveTrainTracking } from '../lib/liveTrackingEngine';
 
 export default function MyTripsScreen() {
   const [tab, setTab] = useState("upcoming");
@@ -12,22 +13,24 @@ export default function MyTripsScreen() {
   const [pnrResult, setPnrResult] = useState(null);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [isCancelled, setIsCancelled] = useState(false);
+  const [cancelSuccess, setCancelSuccess] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
-  const { journeys, isAuthenticated } = useAuthStore();
+  const { journeys, cancelJourney } = useAuthStore();
 
   const activeJourney = selectedTicket || (journeys && journeys[0]) || null;
+  const liveTelemetry = activeJourney?.train?.no ? computeLiveTrainTracking(activeJourney.train.no) : null;
 
   const checkPnr = () => {
-    if (!pnr) return;
+    if (!pnr.trim()) return;
     setIsSearchingPnr(true);
     setTimeout(() => {
       setIsSearchingPnr(false);
-      const matched = journeys.find(j => j.pnr === pnr.trim());
+      const cleanPnr = pnr.trim();
+      const matched = (journeys || []).find(j => j.pnr === cleanPnr);
       if (matched) {
         setPnrResult({
           pnr: matched.pnr,
-          status: "CNF",
+          status: matched.status === "CANCELLED" ? "CANCELLED" : "CNF",
           train: `${matched.train?.no || "12951"} ${matched.train?.name || "Superfast Express"}`,
           date: matched.date || "25 Aug 2026",
           from: matched.train?.from || "NDLS",
@@ -35,11 +38,11 @@ export default function MyTripsScreen() {
           cls: matched.cls || "3A",
           coach: matched.coach || "B4",
           seat: matched.passengers?.[0]?.seat || "22",
-          chart: "Prepared (Charts Done)"
+          chart: matched.status === "CANCELLED" ? "Booking Cancelled · Refund Initiated" : "Chart Prepared (Ready for Boarding)"
         });
       } else {
         setPnrResult({
-          pnr,
+          pnr: cleanPnr,
           status: "CNF",
           train: "12951 Mumbai Tejas Rajdhani",
           date: "25 Aug 2026",
@@ -48,15 +51,19 @@ export default function MyTripsScreen() {
           cls: "3A",
           coach: "B4",
           seat: "22, 23",
-          chart: "Prepared"
+          chart: "Prepared (Confirmed)"
         });
       }
-    }, 800);
+    }, 500);
   };
 
-  const handleCancelTicket = () => {
-    setIsCancelled(true);
-    setActiveModal(null);
+  const handleCancelTicket = (targetPnr) => {
+    cancelJourney(targetPnr);
+    setCancelSuccess(true);
+    setTimeout(() => {
+      setCancelSuccess(false);
+      setActiveModal(null);
+    }, 2000);
   };
 
   const tabs = [
@@ -99,6 +106,7 @@ export default function MyTripsScreen() {
               </div>
             ) : (
               journeys.map((b, idx) => {
+                const isItemCancelled = b.status === "CANCELLED";
                 const mainPassenger = (b.passengers && b.passengers[0]) || { name: "Passenger", seat: "22", coach: "B4", berth: "Lower", class: "3A" };
                 const trainName = b.train?.name || "Tejas Rajdhani Express";
                 const trainNo = b.train?.no || "12951";
@@ -112,7 +120,9 @@ export default function MyTripsScreen() {
 
                 return (
                   <div key={b.pnr || idx} onClick={() => { setSelectedTicket(b); setActiveModal('ticket_details'); }} className="rounded-3xl border bg-white overflow-hidden mb-6 shadow-sm hover:shadow-xl transition-all border-[rgba(10,22,38,0.12)] cursor-pointer">
-                    <div className="p-5 flex items-center justify-between transition-colors duration-500 bg-emerald-50 border-b border-emerald-100">
+                    <div className={`p-5 flex items-center justify-between transition-colors duration-500 border-b ${
+                      isItemCancelled ? "bg-rose-50 border-rose-100" : "bg-emerald-50 border-emerald-100"
+                    }`}>
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#0A1626] text-[#F0A63A]">#{trainNo}</span>
@@ -122,8 +132,10 @@ export default function MyTripsScreen() {
                           {travelDate} · {depTime} {fromCode} → {arrTime} {toCode} · Class: <span className="font-bold text-[#0A1626]">{ticketClass}</span>
                         </p>
                       </div>
-                      <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white font-mono shadow-xs">
-                        {isCancelled ? "Cancelled" : "Confirmed (CNF)"}
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full font-mono shadow-xs ${
+                        isItemCancelled ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
+                      }`}>
+                        {isItemCancelled ? "Cancelled · Refund Processed" : "Confirmed (CNF)"}
                       </span>
                     </div>
                     <div className="p-5 flex flex-wrap gap-6 items-center bg-white">
@@ -178,13 +190,15 @@ export default function MyTripsScreen() {
               <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 anim-fade-up">
                 <div className="flex items-center justify-between mb-3">
                   <p className="font-mono text-sm font-bold text-[#0A1626]">PNR: {pnrResult.pnr}</p>
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white font-mono">
-                    {pnrResult.status} — Confirmed
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full font-mono ${
+                    pnrResult.status === "CANCELLED" ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
+                  }`}>
+                    {pnrResult.status === "CANCELLED" ? "Cancelled" : "CNF — Confirmed"}
                   </span>
                 </div>
                 <p className="text-sm font-bold text-[#0A1626]">{pnrResult.train} · {pnrResult.date}</p>
                 <p className="font-mono text-xs mt-1 text-[#4B5563]">{pnrResult.from} → {pnrResult.to} · Class: {pnrResult.cls} · Coach {pnrResult.coach} · Seat {pnrResult.seat}</p>
-                <p className="text-xs mt-2 text-emerald-800 font-medium">Chart status: {pnrResult.chart}. Ready for boarding.</p>
+                <p className="text-xs mt-2 text-emerald-800 font-medium">Chart status: {pnrResult.chart}.</p>
               </div>
             )}
           </div>
@@ -192,14 +206,14 @@ export default function MyTripsScreen() {
 
         {tab === "refunds" && (
           <div className="rounded-3xl border bg-white p-6 mb-16 border-[rgba(10,22,38,0.12)] shadow-sm">
-            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Refund Status — TDR REF 20260812-441</h3>
+            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Refund Status — TDR Tracking</h3>
             <p className="text-xs text-[#6B7280] mb-5">Automated IRCTC auto-refund tracking engine. Monitored in real time.</p>
             <div className="space-y-4">
               {[
-                { label: "TDR Filed & Acknowledged", done: true, note: "12 Aug, 22:14" },
-                { label: "Under Review by Zonal Railway Accounts", done: true, note: "14 Aug, 10:30" },
-                { label: "Refund Approved (₹2,640)", done: true, note: "15 Aug, 18:20" },
-                { label: "Credited to Source Payment Account", done: true, note: "Processed via UPI" },
+                { label: "TDR Filed & Acknowledged", done: true, note: "Just now · Automated PRS link" },
+                { label: "Under Review by Zonal Railway Accounts", done: true, note: "Instant automated pre-approval" },
+                { label: "Refund Approved (100% Guaranteed)", done: true, note: "Net amount ₹1,645 credited" },
+                { label: "Credited to Source Payment Account", done: true, note: "Processed via UPI / Original Source" },
               ].map((s, i, arr) => (
                 <div key={s.label} className="flex gap-3">
                   <div className="flex flex-col items-center">
@@ -222,33 +236,57 @@ export default function MyTripsScreen() {
       {/* Live Tracking Modal */}
       <Modal isOpen={activeModal === 'live_tracking'} onClose={() => setActiveModal(null)} title="Live Journey Tracking">
         <div className="py-2">
-          <div className="mb-4 p-3 rounded-xl bg-[#0A1626] text-white flex items-center justify-between">
+          <div className="mb-4 p-3.5 rounded-xl bg-[#0A1626] text-white flex items-center justify-between shadow-md">
             <div>
               <p className="font-serif font-bold text-sm text-[#F0A63A]">{activeJourney?.train?.name || "Mumbai Rajdhani"}</p>
-              <p className="font-mono text-xs text-gray-300">Train #{activeJourney?.train?.no || "12951"} · Status: On Time</p>
+              <p className="font-mono text-xs text-gray-300">
+                Train #{activeJourney?.train?.no || "12951"} · Speed: <span className="text-emerald-400 font-bold">{liveTelemetry?.currentSpeedKmH || 115} km/h</span>
+              </p>
             </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono">LIVE GPS</span>
+            <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> LIVE GPS
+            </span>
           </div>
-          <div className="space-y-2">
-            {[
-              { station: `${activeJourney?.train?.from || "NDLS"} (Origin)`, time: activeJourney?.train?.dep || "16:35", status: "Departed", done: true },
-              { station: "Mathura Jn (MTJ)", time: "18:02", status: "Departed", done: true },
-              { station: "Kota Jn (KOTA)", time: "20:45", status: "Current Location", active: true },
-              { station: "Ratlam Jn (RTM)", time: "00:15", status: "Next Stop", done: false },
-              { station: "Vadodara Jn (BRC)", time: "03:55", status: "Upcoming", done: false },
-              { station: `${activeJourney?.train?.to || "MMCT"} (Destination)`, time: activeJourney?.train?.arr || "08:35", status: "Destination", done: false },
-            ].map((s, i, arr) => (
-              <div key={s.station} className="flex gap-4">
+
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 mb-4 flex justify-between items-center text-xs">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-amber-900 block">Current Halt</span>
+              <span className="font-bold text-amber-950">{liveTelemetry?.currentStation?.name || activeJourney?.train?.from || "NDLS"} ({liveTelemetry?.currentStation?.platform || "PF 1"})</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] uppercase font-bold text-amber-900 block">Next Stoppage</span>
+              <span className="font-bold text-amber-950">{liveTelemetry?.nextStation?.name || activeJourney?.train?.to || "MMCT"} · ETA {liveTelemetry?.nextStation?.etaMinutes || 18}m</span>
+            </div>
+          </div>
+
+          <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+            {(liveTelemetry?.allStops || [
+              { name: activeJourney?.train?.from || "Origin", arr: "--:--", dep: activeJourney?.train?.dep || "16:35", passed: true, current: false },
+              { name: "Mathura Jn", arr: "18:00", dep: "18:02", passed: true, current: true },
+              { name: "Kota Jn", arr: "20:40", dep: "20:45", passed: false, current: false },
+              { name: "Ratlam Jn", arr: "00:10", dep: "00:15", passed: false, current: false },
+              { name: "Vadodara Jn", arr: "03:50", dep: "03:55", passed: false, current: false },
+              { name: activeJourney?.train?.to || "Destination", arr: activeJourney?.train?.arr || "08:35", dep: "--:--", passed: false, current: false },
+            ]).map((s, i, arr) => (
+              <div key={i} className="flex gap-4 items-start">
                 <div className="flex flex-col items-center">
-                  <div className={`h-4 w-4 rounded-full flex-shrink-0 relative ${s.active ? "bg-blue-600 ring-4 ring-blue-100" : s.done ? "bg-emerald-600" : "bg-gray-300"}`} />
-                  {i < arr.length - 1 && <div className={`w-[2px] flex-1 my-1 ${s.done ? "bg-emerald-600" : "bg-gray-200"}`} style={{ minHeight: 30 }} />}
+                  <div className={`h-4 w-4 rounded-full flex-shrink-0 relative ${
+                    s.current ? "bg-amber-500 ring-4 ring-amber-100" : s.passed ? "bg-emerald-600" : "bg-gray-300"
+                  }`} />
+                  {i < arr.length - 1 && <div className={`w-[2px] flex-1 my-1 ${s.passed ? "bg-emerald-600" : "bg-gray-200"}`} style={{ minHeight: 28 }} />}
                 </div>
-                <div className="pb-4 w-full flex justify-between items-start">
+                <div className="pb-3 w-full flex justify-between items-start">
                   <div>
-                    <p className={`text-xs font-bold ${s.active ? "text-blue-700" : s.done ? "text-[#0A1626]" : "text-gray-400"}`}>{s.station}</p>
-                    <p className="text-[10px] text-gray-500">{s.status}</p>
+                    <p className={`text-xs font-bold ${s.current ? "text-amber-700" : s.passed ? "text-[#0A1626]" : "text-gray-400"}`}>
+                      {s.name} {s.current && <span className="text-[10px] px-1.5 py-0.2 bg-amber-100 rounded text-amber-900 ml-1">Current</span>}
+                    </p>
+                    <p className="text-[10px] text-gray-500 font-mono">Arr: {s.arr || "--"} · Dep: {s.dep || "--"}</p>
                   </div>
-                  <p className="font-mono text-xs font-bold text-[#0A1626]">{s.time}</p>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    s.passed ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"
+                  }`}>
+                    {s.passed ? "Departed" : "Scheduled"}
+                  </span>
                 </div>
               </div>
             ))}
@@ -267,7 +305,11 @@ export default function MyTripsScreen() {
                   <p className="text-xs font-mono text-gray-300">Train #{activeJourney.train?.no || "12951"} · Class: {activeJourney.cls || "3A"}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono">CONFIRMED</span>
+                  <span className={`text-xs font-bold px-2.5 py-1 rounded font-mono ${
+                    activeJourney.status === "CANCELLED" ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
+                  }`}>
+                    {activeJourney.status === "CANCELLED" ? "CANCELLED" : "CONFIRMED"}
+                  </span>
                   <p className="text-[11px] font-mono text-gray-300 mt-1">PNR: {activeJourney.pnr}</p>
                 </div>
               </div>
@@ -295,8 +337,12 @@ export default function MyTripsScreen() {
                         <p className="text-[10px] text-gray-500">{p.age || "28"} Yrs · {p.gender === "M" ? "Male" : "Female"}</p>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-bold font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          Coach {p.coach || activeJourney.coach || "B4"} · Berth {p.seat || 22 + i * 3} ({p.berth || "Lower"})
+                        <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded border ${
+                          activeJourney.status === "CANCELLED" 
+                            ? "bg-rose-50 text-rose-800 border-rose-200" 
+                            : "bg-emerald-50 text-emerald-800 border-emerald-200"
+                        }`}>
+                          {activeJourney.status === "CANCELLED" ? "CAN / REFUND" : `Coach ${p.coach || activeJourney.coach || "B4"} · Berth ${p.seat || 22 + i * 3} (${p.berth || "Lower"})`}
                         </span>
                       </div>
                     </div>
@@ -310,16 +356,32 @@ export default function MyTripsScreen() {
               </div>
             </div>
 
-            <button 
-              onClick={() => {
-                setDownloadSuccess(true);
-                setTimeout(() => setDownloadSuccess(false), 2500);
-              }}
-              className="mt-4 w-full h-12 rounded-xl font-bold text-xs md:text-sm bg-[#0A1626] text-[#F0A63A] hover:bg-black transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-            >
-              <Download size={16} /> 
-              <span>{downloadSuccess ? "✓ E-Ticket PDF Downloaded!" : "Download Official ERS PDF"}</span>
-            </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+              <button 
+                onClick={() => {
+                  setDownloadSuccess(true);
+                  setTimeout(() => setDownloadSuccess(false), 2500);
+                }}
+                className="h-12 rounded-xl font-bold text-xs bg-[#0A1626] text-[#F0A63A] hover:bg-black transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                <Download size={16} /> 
+                <span>{downloadSuccess ? "✓ E-Ticket Saved!" : "Download PDF Slip"}</span>
+              </button>
+
+              {activeJourney.status !== "CANCELLED" ? (
+                <button
+                  onClick={() => handleCancelTicket(activeJourney.pnr)}
+                  className="h-12 rounded-xl font-bold text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <AlertTriangle size={15} />
+                  <span>{cancelSuccess ? "Cancellation Submitted!" : "Cancel Ticket & Refund"}</span>
+                </button>
+              ) : (
+                <div className="h-12 rounded-xl font-bold text-xs bg-gray-100 text-gray-600 flex items-center justify-center">
+                  Refund Processed (₹{activeJourney.fare || 1680})
+                </div>
+              )}
+            </div>
           </div>
         )}
       </Modal>

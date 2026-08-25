@@ -15,7 +15,7 @@ import { useAuthStore } from '../lib/store.ts';
 
 function AccountScreen({ onLogout }) {
   const [activeModal, setActiveModal] = useState(null);
-  const { user, logout } = useAuthStore();
+  const { user, logout, savedPassengers, paymentMethods } = useAuthStore();
   
   const displayName = user?.name || "Ananya Rao";
   const displayEmail = user?.email || "ananya.rao@gmail.com";
@@ -29,8 +29,8 @@ function AccountScreen({ onLogout }) {
 
   const rows = [
     { id: "profile", icon: User, label: "Profile", detail: `${displayName}, ${displayMobile}` },
-    { id: "passengers", icon: Users, label: "Saved passengers", detail: "4 saved (Aadhaar verified)" },
-    { id: "payments", icon: CreditCard, label: "Payment methods", detail: "2 UPI IDs, 1 IRCTC Card" },
+    { id: "passengers", icon: Users, label: "Saved passengers", detail: `${savedPassengers?.length || 4} saved (Aadhaar verified)` },
+    { id: "payments", icon: CreditCard, label: "Payment methods", detail: `${paymentMethods?.length || 2} active methods (UPI & Cards)` },
     { id: "kyc", icon: BadgeCheck, label: "KYC / Aadhaar", detail: "Verified · DigiLocker Connected" },
     { id: "language", icon: Languages, label: "Language", detail: "English (Default)" },
     { id: "notifications", icon: Bell, label: "Notifications", detail: "SMS + WhatsApp alerts enabled" },

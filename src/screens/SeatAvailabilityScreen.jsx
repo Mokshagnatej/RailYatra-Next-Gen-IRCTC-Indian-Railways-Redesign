@@ -386,14 +386,19 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                         onClick={() => {
                           if (onBook) {
                             onBook({
-                              trainNo: trainResult.trainNo,
-                              trainName: trainResult.trainName,
+                              train: {
+                                no: trainResult.trainNo,
+                                name: trainResult.trainName,
+                                type: trainResult.type || "Express",
+                                from: trainResult.fromStationCode || "NDLS",
+                                to: trainResult.toStationCode || "MMCT",
+                                dep: trainResult.depTime || "16:35",
+                                arr: trainResult.arrTime || "08:35",
+                                dur: trainResult.totalDuration || "16h 00m",
+                                classes: trainResult.classes || {}
+                              },
                               cls,
                               fare: info.fare,
-                              from: trainResult.fromStationCode,
-                              to: trainResult.toStationCode,
-                              dep: trainResult.depTime,
-                              arr: trainResult.arrTime,
                               date
                             });
                           } else if (onNavigate) {
@@ -476,14 +481,19 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                         const fare = t.classes?.[firstCls]?.fare || 1150;
                         if (onBook) {
                           onBook({
-                            trainNo: t.no,
-                            trainName: t.name,
+                            train: {
+                              no: t.no,
+                              name: t.name,
+                              type: t.type || "Express",
+                              from: t.from || fromStation,
+                              to: t.to || toStation,
+                              dep: t.dep || "12:00",
+                              arr: t.arr || "18:00",
+                              dur: t.dur || "6h 00m",
+                              classes: t.classes || {}
+                            },
                             cls: firstCls,
                             fare,
-                            from: t.from,
-                            to: t.to,
-                            dep: t.dep,
-                            arr: t.arr,
                             date
                           });
                         } else if (onNavigate) {
@@ -503,12 +513,13 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
       </div>
 
       {/* Train Timetable Modal */}
-      {selectedTimetableTrain && (
-        <TrainTimetableModal
-          train={selectedTimetableTrain}
-          onClose={() => setSelectedTimetableTrain(null)}
-        />
-      )}
+      <TrainTimetableModal
+        train={selectedTimetableTrain}
+        isOpen={!!selectedTimetableTrain}
+        onClose={() => setSelectedTimetableTrain(null)}
+        selectedFromCode={fromStation}
+        selectedToCode={toStation}
+      />
     </div>
   );
 }

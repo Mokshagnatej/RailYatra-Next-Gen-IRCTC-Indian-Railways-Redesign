@@ -42,6 +42,27 @@ export default defineConfig(() => {
     build: {
       outDir: "dist",
       chunkSizeWarningLimit: 10000,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("trainSearchIndex.json") || id.includes("trainRoutesData.json")) {
+              return "train-schedules-data";
+            }
+            if (id.includes("stationsData.json")) {
+              return "stations-database";
+            }
+            if (id.includes("node_modules/three") || id.includes("node_modules/@react-three")) {
+              return "three-vendor";
+            }
+            if (id.includes("node_modules/framer-motion") || id.includes("node_modules/lucide-react")) {
+              return "ui-vendor";
+            }
+            if (id.includes("node_modules/react") || id.includes("node_modules/react-dom") || id.includes("node_modules/zustand")) {
+              return "react-vendor";
+            }
+          }
+        }
+      }
     },
     server: {
       host: true,

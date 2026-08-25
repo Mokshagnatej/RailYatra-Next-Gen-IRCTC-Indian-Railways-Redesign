@@ -15,6 +15,7 @@ export default function ExploreScreen({ onNavigate }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeModal, setActiveModal] = useState(null);
   const [selectedTimetableTrain, setSelectedTimetableTrain] = useState(null);
+  const [bookingNotice, setBookingNotice] = useState(null);
   const [toolState, setToolState] = useState({
     trains: { from: "NDLS", to: "MMCT", searched: true },
     fare: { classType: "3A", quota: "General", base: 1820 },
@@ -413,13 +414,24 @@ export default function ExploreScreen({ onNavigate }) {
                   </div>
                   <div className="text-right">
                     <span className="font-extrabold text-sm text-blue-900 block">{r.tariff}</span>
-                    <button onClick={() => alert(`Reserved slot for ${r.name} at ${toolState.room.station}!`)} className="mt-1.5 text-xs font-bold px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                    <button 
+                      onClick={() => {
+                        setBookingNotice(`✓ Reserved slot for ${r.name} at ${toolState.room.station}! Details sent via SMS.`);
+                        setTimeout(() => setBookingNotice(null), 3000);
+                      }} 
+                      className="mt-1.5 text-xs font-bold px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 cursor-pointer transition-all"
+                    >
                       Book Room
                     </button>
                   </div>
                 </div>
               ))}
             </div>
+            {bookingNotice && (
+              <div className="mt-3 p-2.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold text-center border border-emerald-200 anim-fade-up">
+                {bookingNotice}
+              </div>
+            )}
           </div>
         )}
 
@@ -466,11 +478,26 @@ export default function ExploreScreen({ onNavigate }) {
               </div>
             </div>
 
+            {bookingNotice ? (
+              <div className="p-3 mb-3 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold text-center border border-emerald-200 anim-fade-up">
+                {bookingNotice}
+              </div>
+            ) : null}
+
             <div className="flex gap-2">
-              <button onClick={() => { alert(`Thank you! Booking inquiry initiated for ${activeModal.name}. Our IRCTC tourism executive will contact you shortly.`); setActiveModal(null); }} className="flex-1 h-12 rounded-xl font-bold text-sm text-white shadow-md transition-all active:scale-[0.98]" style={{ background: "var(--blue)" }}>
-                Book This Package
+              <button 
+                onClick={() => {
+                  setBookingNotice(`✓ Inquiry sent for ${activeModal.name}! An IRCTC tourism officer will contact you.`);
+                  setTimeout(() => {
+                    setBookingNotice(null);
+                    setActiveModal(null);
+                  }, 1800);
+                }} 
+                className="flex-1 h-12 rounded-xl font-bold text-sm text-[#F0A63A] bg-[#0A1626] hover:bg-black shadow-md transition-all active:scale-[0.98] cursor-pointer"
+              >
+                {bookingNotice ? "Inquiry Confirmed!" : "Book This Package"}
               </button>
-              <button onClick={() => setActiveModal(null)} className="px-5 h-12 rounded-xl font-semibold text-sm border text-gray-700 hover:bg-[var(--paper-2)]">
+              <button onClick={() => setActiveModal(null)} className="px-5 h-12 rounded-xl font-semibold text-sm border text-gray-700 hover:bg-[var(--paper-2)] cursor-pointer">
                 Close
               </button>
             </div>
