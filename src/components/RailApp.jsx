@@ -42,6 +42,7 @@ import CustomCursor from "./common/CustomCursor.jsx";
 import ScrollProgress from "./common/ScrollProgress.jsx";
 import AIAssistFAB from "./common/AIAssistFAB.jsx";
 import { getTrainByNumber } from "../lib/trainRouteService";
+import { getDateStrip, formatDateShort, formatDateMedium, formatDateLong } from "../lib/dateUtils";
 
 /* ---------------------------------------------------------------
    TOKENS
@@ -825,9 +826,16 @@ function SearchScreen({ onSearch, onFooterAction }) {
   const { mode } = useJourneyStore();
   const [flexDates, setFlexDates] = useState(false);
 
-  const dateStrip = ["23 Aug", "24 Aug", "25 Aug", "26 Aug", "27 Aug", "28 Aug", "29 Aug", "30 Aug", "31 Aug", "01 Sep"];
-  const availabilityHint = { "23 Aug": "green", "24 Aug": "amber", "25 Aug": "green", "26 Aug": "green", "27 Aug": "red", "28 Aug": "green", "29 Aug": "amber", "30 Aug": "green", "31 Aug": "green", "01 Sep": "amber" };
-  const dayNames = { "23 Aug": "Sat", "24 Aug": "Sun", "25 Aug": "Mon", "26 Aug": "Tue", "27 Aug": "Wed", "28 Aug": "Thu", "29 Aug": "Fri", "30 Aug": "Sat", "31 Aug": "Sun", "01 Sep": "Mon" };
+  const dateStripData = useMemo(() => getDateStrip(10), []);
+  const dateStrip = dateStripData.dates;
+  const availabilityHint = dateStripData.availabilityHint;
+  const dayNames = dateStripData.dayNames;
+
+  useEffect(() => {
+    if (!date || !dateStrip.includes(date)) {
+      setDate(dateStrip[0]);
+    }
+  }, [dateStrip, date, setDate]);
 
   const handleLocate = () => {
     return new Promise((resolve) => {
@@ -1329,7 +1337,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
     setLoading(true);
     const from = searchParams?.from || "NDLS";
     const to = searchParams?.to || "BCT";
-    const date = searchParams?.date || "25-Aug-2026";
+    const date = searchParams?.date || formatDateMedium(new Date());
     
     searchTrains(from, to, date).then(data => {
       if(mounted) {
@@ -1356,7 +1364,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
 
   const fromDisplay = searchParams?.from || "NDLS";
   const toDisplay = searchParams?.to || "BCT";
-  const dateDisplay = searchParams?.date || "25-Aug-2026";
+  const dateDisplay = searchParams?.date || formatDateMedium(new Date());
   const quotaDisplay = searchParams?.quota || "General";
 
   const FilterPanel = (
@@ -1569,7 +1577,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                         </div>
                         <div className="flex items-center gap-4 bg-white p-2 pl-5 rounded-2xl border shadow-md" style={{ borderColor: "rgba(15,42,69,0.15)" }}>
                           <p className="f-mono text-2xl font-bold tracking-tight" style={{ color: "var(--premium-blue)" }}>₹{info.fare.toLocaleString("en-IN")}</p>
-                          <button onClick={() => onBook({ train: t, cls: c, fare: info.fare })}
+                          <button onClick={() => onBook({ train: t, cls: c, fare: info.fare, date: dateDisplay })}
                             className="h-12 px-7 rounded-xl f-body text-[15px] font-bold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
                             style={{ background: "var(--marigold)", color: "var(--premium-blue)" }}>
                             Book Now
@@ -1624,7 +1632,8 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
       return {
         train: { no: "12951", name: "Mumbai Tejas Rajdhani", from: "NDLS", to: "MMCT", dep: "16:55", arr: "08:35", type: "Rajdhani" },
         cls: "3A",
-        fare: 1680
+        fare: 1680,
+        date: formatDateLong(new Date())
       };
     }
     const trainObj = selection.train || {
@@ -1640,7 +1649,8 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
       ...selection,
       train: trainObj,
       cls: selection.cls || "3A",
-      fare: selection.fare || 1680
+      fare: selection.fare || 1680,
+      date: selection.date || formatDateLong(new Date())
     };
   }, [selection]);
 

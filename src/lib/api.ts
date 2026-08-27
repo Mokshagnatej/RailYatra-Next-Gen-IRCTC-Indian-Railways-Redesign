@@ -5,6 +5,7 @@
 
 import { searchTrainsBetween, getTrainByNumber, getAllTrains, SearchResultTrain, TrainData } from "./trainRouteService";
 import { computeLiveTrainTracking, type LiveTrackingTelemetry } from "./liveTrackingEngine";
+import { formatDateMedium, getRelativeDate } from "./dateUtils";
 
 const API_KEY = import.meta.env.VITE_RAPIDAPI_KEY || "";
 const API_HOST = import.meta.env.VITE_RAPIDAPI_HOST || "irctc1.p.rapidapi.com";
@@ -17,7 +18,7 @@ const MOCK_PNRS: Record<string, any> = {
     pnr: "4517228091",
     trainNo: "12951",
     trainName: "Mumbai Tejas Rajdhani",
-    doj: "24-Aug-2026",
+    doj: formatDateMedium(getRelativeDate(-1)),
     from: "NDLS",
     to: "MMCT",
     boarding: "NDLS",
@@ -32,7 +33,7 @@ const MOCK_PNRS: Record<string, any> = {
     pnr: "8462097315",
     trainNo: "22436",
     trainName: "Vande Bharat Express",
-    doj: "25-Aug-2026",
+    doj: formatDateMedium(new Date()),
     from: "NDLS",
     to: "BSB",
     boarding: "NDLS",
@@ -46,7 +47,7 @@ const MOCK_PNRS: Record<string, any> = {
     pnr: "6291048821",
     trainNo: "12002",
     trainName: "Bhopal Shatabdi Express",
-    doj: "26-Aug-2026",
+    doj: formatDateMedium(getRelativeDate(1)),
     from: "NDLS",
     to: "RKMP",
     boarding: "NDLS",
@@ -130,7 +131,7 @@ export async function getPNRStatus(pnr: string) {
     pnr: cleanPNR || "4517228091",
     trainNo: "12951",
     trainName: "Mumbai Tejas Rajdhani Express",
-    doj: "25-Aug-2026",
+    doj: formatDateMedium(new Date()),
     from: "NDLS",
     to: "MMCT",
     boarding: "NDLS (New Delhi)",
@@ -162,7 +163,7 @@ export async function getLiveTrainStatus(trainNo: string, date?: string): Promis
       trainNo: telemetry.trainNo,
       trainName: telemetry.trainName,
       type: telemetry.type,
-      startDate: date || "25-Aug-2026",
+      startDate: date || formatDateMedium(new Date()),
       currentStation: `${telemetry.currentStation.name} (${telemetry.currentStation.code})`,
       nextStation: `${telemetry.nextStation.name} (${telemetry.nextStation.code})`,
       platform: telemetry.currentStation.platform,
@@ -184,7 +185,7 @@ export async function getLiveTrainStatus(trainNo: string, date?: string): Promis
   return {
     trainNo: cleanNo,
     trainName: "Express Train",
-    startDate: date || "25-Aug-2026",
+    startDate: date || formatDateMedium(new Date()),
     currentStation: "New Delhi (NDLS)",
     nextStation: "Mathura Jn (MTJ)",
     platform: "PF 1",

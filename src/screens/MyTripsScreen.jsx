@@ -5,6 +5,7 @@ import { useAuthStore } from '../lib/store.ts';
 import { Modal } from '../components/common/Shared';
 import { DotNetwork } from '../components/common/CulturalPatterns.jsx';
 import { computeLiveTrainTracking } from '../lib/liveTrackingEngine';
+import { formatDateDisplay, formatDateLong } from '../lib/dateUtils';
 
 export default function MyTripsScreen() {
   const [tab, setTab] = useState("upcoming");
@@ -32,7 +33,7 @@ export default function MyTripsScreen() {
           pnr: matched.pnr,
           status: matched.status === "CANCELLED" ? "CANCELLED" : "CNF",
           train: `${matched.train?.no || "12951"} ${matched.train?.name || "Superfast Express"}`,
-          date: matched.date || "25 Aug 2026",
+          date: matched.date || formatDateDisplay(new Date()),
           from: matched.train?.from || "NDLS",
           to: matched.train?.to || "MMCT",
           cls: matched.cls || "3A",
@@ -45,7 +46,7 @@ export default function MyTripsScreen() {
           pnr: cleanPnr,
           status: "CNF",
           train: "12951 Mumbai Tejas Rajdhani",
-          date: "25 Aug 2026",
+          date: formatDateDisplay(new Date()),
           from: "NDLS",
           to: "MMCT",
           cls: "3A",
@@ -114,7 +115,7 @@ export default function MyTripsScreen() {
                 const toCode = b.train?.to || "MMCT";
                 const depTime = b.train?.dep || "16:55";
                 const arrTime = b.train?.arr || "08:35";
-                const travelDate = b.date || "25 Aug 2026";
+                const travelDate = b.date || formatDateDisplay(new Date());
                 const coachSeat = `${mainPassenger.coach || b.coach || "B4"} / Berth ${mainPassenger.seat || "22"} (${mainPassenger.berth || "Lower"})`;
                 const ticketClass = mainPassenger.class || b.cls || "3A";
 
@@ -318,7 +319,7 @@ export default function MyTripsScreen() {
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Boarding</p>
                   <p className="font-mono text-base font-bold text-[#0A1626]">{activeJourney.train?.from || "NDLS"}</p>
-                  <p className="text-[10px] text-gray-500">{activeJourney.train?.dep || "16:55"} · {activeJourney.date || "25 Aug 2026"}</p>
+                  <p className="text-[10px] text-gray-500">{activeJourney.train?.dep || "16:55"} · {activeJourney.date || formatDateDisplay(new Date())}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Destination</p>

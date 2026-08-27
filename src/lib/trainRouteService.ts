@@ -777,7 +777,7 @@ export function getStationClusterAliases(stationCode: string): string[] {
   return Array.from(set);
 }
 
-export function searchTrainsBetween(fromInput: string, toInput: string, date: string = "25-Aug-2026"): SearchResultTrain[] {
+export function searchTrainsBetween(fromInput: string, toInput: string, date?: string): SearchResultTrain[] {
   const rawFromCode = extractStationCode(fromInput);
   const rawToCode = extractStationCode(toInput);
   const fromAliases = getStationClusterAliases(rawFromCode);

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Train, ShieldCheck, Clock, Wallet, Ticket, MapPin, ChevronDown, ChevronRight,
-  Sparkles, PhoneCall, Landmark, BadgeCheck, CreditCard, Users, Hotel, Loader2
+  Sparkles, PhoneCall, Landmark, BadgeCheck, CreditCard, Users, Hotel, Loader2, CalendarDays
 } from "lucide-react";
 import {
   Reveal, CountUp, RouteMapIllustration, StationIllustration, TrackConnector, TrustIllustration,
@@ -11,6 +11,7 @@ import ScrollLinkedRailLine from "./common/ScrollLinkedRailLine.jsx";
 import TrainTimetableModal from "./common/TrainTimetableModal";
 import { getTrainByNumber, searchTrainsBetween } from "../lib/trainRouteService";
 import { computeLiveTrainTracking } from "../lib/liveTrackingEngine";
+import { getQuickDates, getSeatForecast, formatDateMedium } from "../lib/dateUtils";
 
 /* ---------------- quick tools: PNR / live status / fare ---------------- */
 
@@ -42,32 +43,24 @@ const TOOLS = [
   { 
     key: "seat", 
     label: "Seat Availability", 
-    icon: Users, 
-    placeholder: "Train No (e.g. 12951, 22436)", 
+    icon: ShieldCheck, 
+    placeholder: "Train name/number (e.g. 12951)", 
     cta: "Check seats",
-    samples: ["12951", "22436", "12622", "12301"]
+    samples: ["12951", "22436", "12002", "16052"]
   },
 ];
 
 export function QuickTools() {
   const [tab, setTab] = useState("pnr");
   const [value, setValue] = useState("");
-  const [travelDate, setTravelDate] = useState("25-Aug-2026");
+  const QUICK_DATES = useMemo(() => getQuickDates(10), []);
+  const [travelDate, setTravelDate] = useState(QUICK_DATES[0]?.dateStr || formatDateMedium(new Date()));
   const [travelQuota, setTravelQuota] = useState("General");
   const [dynamicResult, setDynamicResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedTimetableTrain, setSelectedTimetableTrain] = useState(null);
   
   const active = TOOLS.find((t) => t.key === tab) || TOOLS[0];
-
-  const QUICK_DATES = [
-    { label: "Today", dateStr: "23-Aug-2026", day: "Sun" },
-    { label: "Tomorrow", dateStr: "24-Aug-2026", day: "Mon" },
-    { label: "25 Aug", dateStr: "25-Aug-2026", day: "Tue" },
-    { label: "26 Aug", dateStr: "26-Aug-2026", day: "Wed" },
-    { label: "27 Aug", dateStr: "27-Aug-2026", day: "Thu" },
-    { label: "28 Aug", dateStr: "28-Aug-2026", day: "Fri" }
-  ];
 
   const handleCheck = (queryValue, customDate, customQuota) => {
     const q = queryValue !== undefined ? queryValue : (value.trim() || active.samples[0]);
@@ -119,7 +112,7 @@ export function QuickTools() {
         
         // Date and quota specific seat counts
         const isTatkal = quota === "Tatkal" || quota === "Premium Tatkal";
-        const isWeekend = d.includes("23-Aug") || d.includes("28-Aug") || d.includes("29-Aug");
+        const isWeekend = d.toLowerCase().includes("sat") || d.toLowerCase().includes("sun");
 
         const classEntries = train?.classes && Object.keys(train.classes).length > 0
           ? Object.entries(train.classes).map(([cls, info]) => {
@@ -138,15 +131,13 @@ export function QuickTools() {
             ["Sleeper (SL)", isTatkal ? "TATKAL AVAILABLE - 24 Seats" : "AVAILABLE - 92 Seats"]
           ];
 
-        // 6-day forecast
-        const forecastDates = [
-          { date: "23-Aug", day: "Sun", status: "AVAILABLE 24", color: "#1F7A4C" },
-          { date: "24-Aug", day: "Mon", status: "RAC 6", color: "#C97F1F" },
-          { date: "25-Aug", day: "Tue", status: "AVAILABLE 48", color: "#1F7A4C" },
-          { date: "26-Aug", day: "Wed", status: "AVAILABLE 56", color: "#1F7A4C" },
-          { date: "27-Aug", day: "Thu", status: "AVAILABLE 38", color: "#1F7A4C" },
-          { date: "28-Aug", day: "Fri", status: "WL 8", color: "#C23B32" }
-        ];
+        // 6-day dynamic forecast
+        const forecastDates = getSeatForecast(6, new Date()).map(f => ({
+          date: f.d.replace(' ', '-'),
+          day: f.day,
+          status: f.status,
+          color: f.hexColor
+        }));
 
         setDynamicResult({
           title: `Seat Availability · #${train?.trainNo} ${train?.trainName}`,
@@ -253,10 +244,6 @@ export function QuickTools() {
                   {QUICK_DATES.map(d => (
                     <option key={d.dateStr} value={d.dateStr}>{d.dateStr} ({d.day})</option>
                   ))}
-                  <option value="29-Aug-2026">29-Aug-2026 (Sat)</option>
-                  <option value="30-Aug-2026">30-Aug-2026 (Sun)</option>
-                  <option value="31-Aug-2026">31-Aug-2026 (Mon)</option>
-                  <option value="01-Sep-2026">01-Sep-2026 (Tue)</option>
                 </select>
               </div>
 

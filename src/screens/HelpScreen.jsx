@@ -8,6 +8,7 @@ import FadeIn from '../components/common/FadeIn';
 import PageHero from '../components/common/PageHero';
 import { RangoliOverlay } from '../components/common/CulturalPatterns.jsx';
 import { Modal } from '../components/common/Shared';
+import { formatDateDisplay, getRelativeDate } from '../lib/dateUtils';
 
 function HelpScreen() {
   const [openFaq, setOpenFaq] = useState(0);
@@ -25,7 +26,7 @@ function HelpScreen() {
       setComplaintStatus({
         ref: complaintRef.trim().toUpperCase(),
         status: "RESOLVED · ACTION TAKEN",
-        date: "24 Aug 2026",
+        date: formatDateDisplay(getRelativeDate(-1)),
         dep: "Railway Board / Western Railway",
         resolution: "Cleanliness issue addressed by On-Board Housekeeping Staff (OBHS) at Kota Junction."
       });

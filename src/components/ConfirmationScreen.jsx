@@ -4,6 +4,7 @@ import {
   ShieldCheck, Clock, CheckCircle2, Utensils, Bell, ChevronRight, Info, Wallet,
 } from "lucide-react";
 import { WarmGradientWave } from "./common/CulturalPatterns.jsx";
+import { formatDateLong } from "../lib/dateUtils";
 
 const COACHES = ["B2", "B4", "A1", "S6", "C3"];
 const BERTHS = ["Lower", "Middle", "Upper", "Side Lower", "Side Upper"];
@@ -30,7 +31,7 @@ export function buildBooking(selection, passengers) {
     train: selection.train,
     cls: selection.cls,
     fare: selection.fare,
-    date: "Tue, 25 Aug 2026",
+    date: selection.date || formatDateLong(new Date()),
     passengers: passengers
       .filter((p) => true)
       .map((p, i) => ({

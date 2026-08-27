@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Calendar, Train, Sparkles, CheckCircle2, AlertCircle, Clock,
   ArrowRight, ShieldCheck, UserCheck, RefreshCw, ChevronRight,
@@ -9,13 +9,15 @@ import { RangoliOverlay, WarmGradientWave } from '../components/common/CulturalP
 import StationPickerDropdown from '../components/common/StationPickerDropdown';
 import TrainTimetableModal from '../components/common/TrainTimetableModal';
 import { getTrainByNumber, searchTrainsBetween } from '../lib/trainRouteService';
+import { getQuickDates, getSeatForecast, formatDateMedium } from '../lib/dateUtils';
 
 export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
   const [mode, setMode] = useState("train"); // 'train' | 'route'
   const [trainInput, setTrainInput] = useState("16052");
   const [fromStation, setFromStation] = useState("NDLS");
   const [toStation, setToStation] = useState("MMCT");
-  const [date, setDate] = useState("25-Aug-2026");
+  const QUICK_DATES = useMemo(() => getQuickDates(7), []);
+  const [date, setDate] = useState(QUICK_DATES[0]?.value || formatDateMedium(new Date()));
   const [quota, setQuota] = useState("General");
   const [loading, setLoading] = useState(false);
   const [trainResult, setTrainResult] = useState(null);
@@ -29,16 +31,6 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
     { no: "12002", name: "Bhopal Shatabdi (NDLS → RKMP)" },
     { no: "12622", name: "Tamil Nadu Express (NDLS → MAS)" },
     { no: "12301", name: "Howrah Rajdhani (HWH → NDLS)" }
-  ];
-
-  const QUICK_DATES = [
-    { label: "Today", value: "22-Aug-2026" },
-    { label: "Tomorrow", value: "23-Aug-2026" },
-    { label: "24 Aug", value: "24-Aug-2026" },
-    { label: "25 Aug", value: "25-Aug-2026" },
-    { label: "26 Aug", value: "26-Aug-2026" },
-    { label: "27 Aug", value: "27-Aug-2026" },
-    { label: "28 Aug", value: "28-Aug-2026" }
   ];
 
   const QUOTAS = [
@@ -74,17 +66,9 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
     }, 250);
   };
 
-  // Generate 6-day forecast
+  // Generate 6-day dynamic forecast
   const getForecastForClass = (cls) => {
-    const days = [
-      { d: "23 Aug", day: "Sun", status: "AVAILABLE 28", color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { d: "24 Aug", day: "Mon", status: "AVAILABLE 42", color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { d: "25 Aug", day: "Tue", status: "AVAILABLE 54", color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { d: "26 Aug", day: "Wed", status: "RAC 8", color: "text-amber-700 bg-amber-50 border-amber-200" },
-      { d: "27 Aug", day: "Thu", status: "AVAILABLE 16", color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-      { d: "28 Aug", day: "Fri", status: "WL 12", color: "text-rose-700 bg-rose-50 border-rose-200" }
-    ];
-    return days;
+    return getSeatForecast(6, new Date());
   };
 
   return (

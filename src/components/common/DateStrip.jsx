@@ -6,10 +6,9 @@ export default function DateStrip({ dates = [], activeDate, onSelect, availabili
   const isSelected = (d) => {
     if (!activeDate) return false;
     if (d === activeDate) return true;
-    const dNum = d.split(' ')[0];
-    const activeNum = activeDate.replace(/[^0-9]/g, '');
-    if (dNum && activeNum && dNum === activeNum) return true;
-    if (activeDate.includes(d) || d.includes(activeDate)) return true;
+    const normD = String(d).toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normActive = String(activeDate).toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normActive.includes(normD) || normD.includes(normActive)) return true;
     return false;
   };
 

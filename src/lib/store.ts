@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { formatDateShort, formatDateLong, getRelativeDate } from './dateUtils';
 
 export type AppMode = 'interface' | 'journey';
 
@@ -34,7 +35,7 @@ export interface JourneyState {
 export const useBookingStore = create<BookingState>((set) => ({
   from: "New Delhi (NDLS)",
   to: "Mumbai Central (BCT)",
-  date: "23 Aug",
+  date: formatDateShort(new Date()),
   passengers: { adults: 1, children: 0, infants: 0 },
   cls: "All classes",
   quota: "General",
@@ -126,7 +127,7 @@ const getInitialJourneys = () => {
       coach: "B4",
       cls: "3A",
       fare: 1680,
-      date: "Tue, 25 Aug 2026",
+      date: formatDateLong(getRelativeDate(2)),
       train: {
         no: "12951",
         name: "Mumbai Tejas Rajdhani",
@@ -223,7 +224,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       coach: journey.coach || "B4",
       cls: journey.cls || journey.train?.cls || "3A",
       fare: journey.fare || 1680,
-      date: journey.date || "Tue, 25 Aug 2026",
+      date: journey.date || formatDateLong(new Date()),
       train: journey.train || {
         no: "12951",
         name: "Mumbai Tejas Rajdhani",
