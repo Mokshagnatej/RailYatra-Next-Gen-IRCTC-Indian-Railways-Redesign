@@ -922,21 +922,21 @@ function SearchScreen({ onSearch, onFooterAction }) {
         <div className="relative z-10 max-w-6xl mx-auto w-full px-4 md:px-8 pt-24 pb-8 md:pt-32 md:pb-10">
           {/* Badge */}
           <div className="anim-fade-up" style={{ animationDelay:"0.05s" }}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-accent tracking-wide shadow-lg"
-              style={{ borderColor:"rgba(255,255,255,0.3)", color:"white", background:"rgba(0,0,0,0.3)", backdropFilter:"blur(8px)" }}>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-body tracking-wide shadow-lg"
+              style={{ borderColor:"rgba(255,255,255,0.3)", color:"white", background:"rgba(0,0,0,0.3)", backdropFilter:"blur(8px)", fontFamily:"var(--font-body)" }}>
               <span className="h-1.5 w-1.5 rounded-full anim-glow-pulse" style={{ background:"var(--marigold)" }} />
               India's Railways · 13,000+ trains · 7,000+ stations
             </span>
           </div>
 
           {/* Headline */}
-          <h1 className="f-heading font-bold mt-5 leading-[1.08] anim-fade-up-md drop-shadow-xl"
-            style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", color:"white" }}>
+          <h1 className="f-heading font-semibold mt-5 leading-[1.08] anim-fade-up-md drop-shadow-xl"
+            style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", color:"white", fontFamily:"var(--font-heading)", fontWeight:600 }}>
             Journey across India,<br />
-            <em className="not-italic" style={{ color:"var(--marigold)" }}>without the guesswork.</em>
+            <em style={{ color:"var(--marigold)", fontFamily:"var(--font-heading)", fontWeight:600, fontStyle:"italic" }}>without the guesswork.</em>
           </h1>
 
-          <p className="f-body mt-4 max-w-lg anim-fade-up drop-shadow-md" style={{ color:"rgba(255,255,255,0.85)", fontSize:"1.05rem", animationDelay:"0.22s", lineHeight:1.65 }}>
+          <p className="f-body mt-4 max-w-lg anim-fade-up drop-shadow-md" style={{ color:"rgba(255,255,255,0.85)", fontSize:"1.05rem", animationDelay:"0.22s", lineHeight:1.65, fontFamily:"var(--font-body)" }}>
             Honest seat availability. Transparent fares. A booking flow that confirms or refunds clearly — no silent debits, no dead ends.
           </p>
 
@@ -950,8 +950,8 @@ function SearchScreen({ onSearch, onFooterAction }) {
               <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl shadow-xl border border-white/20" style={{ background:"rgba(0,0,0,0.4)", backdropFilter:"blur(12px)" }}>
                 <Icon size={16} style={{ color }} />
                 <div>
-                  <p className="f-accent text-[11px] uppercase tracking-wider font-semibold" style={{ color:"rgba(255,255,255,0.6)" }}>{label}</p>
-                  <p className="f-body text-sm font-semibold leading-tight text-white">{value}</p>
+                  <p className="f-body text-[11px] uppercase tracking-wider font-semibold" style={{ color:"rgba(255,255,255,0.6)", fontFamily:"var(--font-body)" }}>{label}</p>
+                  <p className="f-accent text-sm font-semibold leading-tight text-white" style={{ fontFamily:"var(--font-accent)" }}>{value}</p>
                 </div>
               </div>
             ))}
