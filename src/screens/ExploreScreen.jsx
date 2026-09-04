@@ -99,7 +99,7 @@ export default function ExploreScreen({ onNavigate }) {
           <div>
             <div className="flex items-center gap-2">
               <Sparkles size={16} style={{ color: "var(--marigold-2)" }} />
-              <h2 className="f-display font-semibold text-xl">Trending Destinations</h2>
+              <h2 className="f-heading font-semibold text-xl">Trending Destinations</h2>
             </div>
             <p className="text-sm mt-1" style={{ color: "var(--steel)" }}>
               {searchQuery ? `Showing ${filteredTrending.length} matching destinations` : "Curated packages from IRCTC Tourism — train travel included."}
@@ -167,7 +167,7 @@ export default function ExploreScreen({ onNavigate }) {
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         <div className="flex justify-between items-end mb-5">
           <div>
-            <h2 className="f-display font-semibold text-xl mb-1">All Tourism Packages</h2>
+            <h2 className="f-heading font-semibold text-xl mb-1">All Tourism Packages</h2>
             <p className="text-sm" style={{ color: "var(--steel)" }}>Domestic and international circuits, heritage luxury trains, and spiritual yatras.</p>
           </div>
           {filteredPackages.length !== packages.length && (

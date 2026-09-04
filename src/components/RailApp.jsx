@@ -1045,7 +1045,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
                 <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">ADULTS</label>
                 <div className="flex items-center justify-between bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">−</button>
-                  <span className="text-base font-bold text-[#0A1626]" style={{ fontFamily: "'Oswald', sans-serif" }}>{passengers.adults}</span>
+                  <span className="f-accent text-base font-bold text-[#0A1626]">{passengers.adults}</span>
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, adults: Math.min(6, p.adults + 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">+</button>
                 </div>
               </div>
@@ -1055,7 +1055,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
                 <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">CHILDREN</label>
                 <div className="flex items-center justify-between bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, children: Math.max(0, p.children - 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">−</button>
-                  <span className="text-base font-bold text-[#0A1626]" style={{ fontFamily: "'Oswald', sans-serif" }}>{passengers.children}</span>
+                  <span className="f-accent text-base font-bold text-[#0A1626]">{passengers.children}</span>
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, children: Math.min(4, p.children + 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">+</button>
                 </div>
               </div>
@@ -1066,8 +1066,8 @@ function SearchScreen({ onSearch, onFooterAction }) {
               whileHover={{ scale: 1.005, backgroundColor: "#000000" }}
               whileTap={{ scale: 0.99 }}
               onClick={() => onSearch({ from, to, date, cls, quota, passengers })}
-              className="mt-6 w-full h-14 rounded-xl font-bold text-base tracking-[0.08em] uppercase flex items-center justify-center gap-3 shadow-xl transition-all"
-              style={{ background: "#0A1626", color: "#F3EEE0", fontFamily: "'Oswald', sans-serif" }}
+              className="f-heading mt-6 w-full h-14 rounded-xl font-bold text-base tracking-[0.08em] uppercase flex items-center justify-center gap-3 shadow-xl transition-all"
+              style={{ background: "#0A1626", color: "#F3EEE0" }}
             >
               <span className="w-2.5 h-2.5 rounded-full bg-[var(--green)] animate-pulse shadow-[0_0_8px_#22c55e]" />
               SEARCH TRAINS
@@ -1107,7 +1107,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
                   style={{ background:`color-mix(in srgb,${color} 12%,transparent)` }}>
                   <Icon size={20} style={{ color }} />
                 </div>
-                <h3 className="f-display font-semibold text-base mb-2" style={{ color:"var(--ink)" }}>{title}</h3>
+                <h3 className="f-heading font-semibold text-base mb-2" style={{ color:"var(--ink)" }}>{title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color:"var(--steel)" }}>{body}</p>
               </div>
             </FadeIn>
@@ -1483,7 +1483,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
                         <span className="f-mono text-sm font-bold px-2.5 py-1 rounded-lg shadow-sm tracking-wide" style={{ background: "var(--premium-blue)", color: "var(--marigold)" }}>#{t.no}</span>
-                        <p className="f-display font-bold text-[17px] tracking-tight" style={{ color: "var(--premium-blue)" }}>{t.name}</p>
+                        <p className="f-heading font-bold text-[17px] tracking-tight" style={{ color: "var(--premium-blue)" }}>{t.name}</p>
                       </div>
                       <div className="flex items-center gap-2 mt-2 flex-wrap">
                         <span className="f-body text-[11px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider" style={{ color: "var(--steel)", borderColor: "var(--line)" }}>{t.type}</span>
@@ -1599,7 +1599,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
           <div className="absolute inset-0 bg-black/40" onClick={() => setFiltersOpen(false)} />
           <div className="absolute bottom-0 left-0 right-0 rounded-t-2xl glass-card p-5 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <p className="f-display font-semibold">Filters</p>
+              <p className="f-heading font-semibold">Filters</p>
               <button onClick={() => setFiltersOpen(false)}><X size={20} /></button>
             </div>
             {FilterPanel}

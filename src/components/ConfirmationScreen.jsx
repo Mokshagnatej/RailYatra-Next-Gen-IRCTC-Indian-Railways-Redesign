@@ -100,7 +100,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
             </svg>
           </div>
           <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Booking confirmed</p>
-          <h1 className="f-display text-3xl md:text-4xl font-semibold mt-2" style={{ color: "var(--blue)" }}>Your seats are booked.</h1>
+          <h1 className="f-heading text-3xl md:text-4xl font-semibold mt-2" style={{ color: "var(--blue)" }}>Your seats are booked.</h1>
           <p className="text-sm mt-2 max-w-lg mx-auto" style={{ color: "var(--steel)" }}>
             An e-ticket has been sent to your registered email and mobile number. Carry a government photo ID while travelling.
           </p>
@@ -122,7 +122,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
                 <Train size={18} color="var(--marigold)" />
               </div>
               <div>
-                <p className="f-display font-semibold text-base" style={{ color: "var(--ink)" }}>{t.name}</p>
+                <p className="f-heading font-semibold text-base" style={{ color: "var(--ink)" }}>{t.name}</p>
                 <p className="f-mono text-xs mt-0.5" style={{ color: "var(--steel)" }}>#{t.no} · {t.type} · Class {booking.cls}</p>
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
 
           {/* passengers */}
           <div className="p-5 md:p-6">
-            <p className="f-display font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
+            <p className="f-heading font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
               <Users size={15} style={{ color: "var(--blue)" }} /> Passengers & berth allotment
             </p>
             <div className="overflow-x-auto">
@@ -194,7 +194,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
               </div>
             </div>
             <div className="rounded-xl border bg-white p-4" style={{ borderColor: "var(--line)" }}>
-              <p className="f-display font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: "var(--ink)" }}>
+              <p className="f-heading font-semibold text-sm mb-2 flex items-center gap-2" style={{ color: "var(--ink)" }}>
                 <Wallet size={15} style={{ color: "var(--blue)" }} /> Fare breakdown
               </p>
               <Row label={`Base fare × ${booking.passengers.length}`} value={`₹${(booking.fare * booking.passengers.length).toLocaleString("en-IN")}`} />
@@ -227,7 +227,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
       {/* journey timeline */}
       <div className="max-w-4xl mx-auto px-4 md:px-6 mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="rounded-xl border bg-white p-5" style={{ borderColor: "var(--line)" }}>
-          <p className="f-display font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: "var(--ink)" }}>
+          <p className="f-heading font-semibold text-sm mb-4 flex items-center gap-2" style={{ color: "var(--ink)" }}>
             <Clock size={15} style={{ color: "var(--blue)" }} /> What happens next
           </p>
           <div className="space-y-4">
@@ -248,7 +248,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
 
         <div className="space-y-4">
           <div className="rounded-xl border bg-white p-5" style={{ borderColor: "var(--line)" }}>
-            <p className="f-display font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
+            <p className="f-heading font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: "var(--ink)" }}>
               <Info size={15} style={{ color: "var(--blue)" }} /> Boarding & ID
             </p>
             <Row label="Boarding station" value={`${t.from} · ${t.dep}`} mono={false} />
@@ -257,7 +257,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
             <Row label="Cancellation" value="Free until 48h before" mono={false} />
           </div>
           <div className="rounded-xl border p-5" style={{ borderColor: "var(--line)", background: "var(--paper-2)" }}>
-            <p className="f-display font-semibold text-sm mb-3" style={{ color: "var(--ink)" }}>Add to your journey</p>
+            <p className="f-heading font-semibold text-sm mb-3" style={{ color: "var(--ink)" }}>Add to your journey</p>
             {[
               { icon: Utensils, label: "Order e-Catering to your seat", detail: "Meals at 12 stations en route" },
               { icon: Bell, label: "Get arrival & delay alerts", detail: "SMS and push, free" },

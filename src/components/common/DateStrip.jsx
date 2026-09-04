@@ -52,10 +52,9 @@ export default function DateStrip({ dates = [], activeDate, onSelect, availabili
 
             {/* Day Number */}
             <span
-              className={`relative z-10 font-bold text-lg md:text-xl leading-tight mt-0.5 transition-colors duration-200 ${
+              className={`relative z-10 f-accent font-bold text-lg md:text-xl leading-tight mt-0.5 transition-colors duration-200 ${
                 on ? 'text-[#F3EEE0]' : 'text-[#0A1626]'
               }`}
-              style={{ fontFamily: "'Oswald', sans-serif" }}
             >
               {dateNum}
             </span>

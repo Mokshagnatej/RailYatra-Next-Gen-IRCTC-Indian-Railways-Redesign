@@ -69,7 +69,7 @@ export default function AuthModal({ onClose, onSuccess }) {
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F0A63A] text-[#0A1626] mb-1 font-mono">
                 <ShieldCheck size={11} /> IRCTC Verified Auth
               </span>
-              <h2 className="font-['Oswald'] text-xl sm:text-2xl font-bold tracking-wide">
+              <h2 className="f-heading text-xl sm:text-2xl font-bold tracking-wide">
                 {authMode === 'signup' ? "Create RailYatra Account" : authMode === 'otp' ? "Instant OTP Sign In" : "Welcome Back"}
               </h2>
               <p className="text-[11px] text-blue-200 mt-0.5">

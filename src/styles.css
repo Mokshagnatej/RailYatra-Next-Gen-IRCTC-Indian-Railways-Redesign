@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Fonts loaded via index.html <link> — Fraunces, Inter, Space Grotesk */
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -134,7 +134,7 @@
   body {
     background-color: var(--paper);
     color: var(--ink);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
   }
 }
 
@@ -280,10 +280,11 @@
 }
 
 @layer utilities {
-  .f-display { font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.02em; }
-  .f-body { font-family: 'Inter', system-ui, sans-serif; }
-  .f-mono { font-family: 'IBM Plex Mono', monospace; }
-  .f-serif { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.02em; }
+  .f-heading { font-family: var(--font-heading); letter-spacing: -0.02em; }
+  .f-body { font-family: var(--font-body); }
+  .f-accent { font-family: var(--font-accent); }
+  /* Legacy alias — f-serif mapped to f-heading (both Fraunces) */
+  .f-serif { font-family: var(--font-heading); letter-spacing: -0.02em; }
   
   .paper-texture {
     background-image: radial-gradient(circle, rgba(15,42,69,0.045) 1px, transparent 1px);

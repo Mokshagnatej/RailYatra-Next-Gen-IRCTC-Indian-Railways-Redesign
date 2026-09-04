@@ -34,7 +34,7 @@ export default function LiveJourneyDashboard() {
     <div className="absolute top-24 right-4 md:right-8 z-40 w-80 glass-hero-card p-4 rounded-2xl shadow-xl border border-[rgba(255,255,255,0.8)] bg-[rgba(255,255,255,0.95)]">
       <div className="flex justify-between items-center mb-3">
         <div>
-          <h3 className="f-display text-sm font-bold text-[#0A1626]">Live Journey Radar</h3>
+          <h3 className="f-heading text-sm font-bold text-[#0A1626]">Live Journey Radar</h3>
           <p className="text-[10px] text-[#4B5563] font-mono">#12951 Tejas Rajdhani</p>
         </div>
         <span className="text-[10px] font-mono font-bold px-2 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wide flex items-center gap-1">

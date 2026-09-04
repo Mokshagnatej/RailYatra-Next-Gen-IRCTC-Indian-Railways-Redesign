@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+/* Fonts loaded via index.html <link> — Fraunces, Inter, Space Grotesk */
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -34,17 +34,18 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-display: 'Oswald', sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --font-heading: 'Fraunces', serif;
   --font-body: 'Inter', sans-serif;
+  --font-accent: 'Space Grotesk', sans-serif;
 }
 
 @layer utilities {
-  .f-display {
-    font-family: var(--font-display);
+  .f-heading {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
   }
-  .f-mono {
-    font-family: var(--font-mono);
+  .f-accent {
+    font-family: var(--font-accent);
   }
   .f-body {
     font-family: var(--font-body);
@@ -101,8 +102,11 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     cursor: none;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
   }
   body.touch {
     cursor: auto;
@@ -175,7 +179,7 @@
   position: relative;
   width: 34px; height: 46px;
   perspective: 220px;
-  font-family: var(--font-mono);
+  font-family: var(--font-accent);
   font-weight: 700;
 }
 .flap .layer {

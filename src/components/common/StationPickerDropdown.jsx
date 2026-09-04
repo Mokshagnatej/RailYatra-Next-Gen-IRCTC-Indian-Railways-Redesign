@@ -149,8 +149,7 @@ export default function StationPickerDropdown({
         <div className="flex items-center gap-2.5 overflow-hidden">
           <Train size={18} className="text-[#F0A63A] shrink-0" />
           <span 
-            className="text-lg font-bold text-[#0A1626] truncate" 
-            style={{ fontFamily: "'Oswald', sans-serif" }}
+            className="f-heading text-lg font-bold text-[#0A1626] truncate" 
           >
             {value || placeholder}
           </span>
@@ -273,10 +272,10 @@ export default function StationPickerDropdown({
                           {st.code}
                         </div>
                         <div>
-                          <div className="font-['Oswald'] text-base font-semibold text-[#0A1626] flex items-center gap-2">
+                          <div className="f-heading text-base font-semibold text-[#0A1626] flex items-center gap-2">
                             <span>{st.name || st.label}</span>
                             {st.isMajor && (
-                              <span className="text-[9px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[9px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded f-accent">
                                 MAJOR HUB
                               </span>
                             )}

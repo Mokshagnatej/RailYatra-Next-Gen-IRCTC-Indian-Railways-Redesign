@@ -610,7 +610,7 @@ export function PopularRoutes({ onSearch }) {
                 </div>
 
                 <div className="mt-3">
-                  <p className="font-['Oswald'] font-semibold text-lg leading-snug text-[#0A1626]">
+                  <p className="f-heading font-semibold text-lg leading-snug text-[#0A1626]">
                     {r.from} <span className="text-gray-400 font-normal">→</span> {r.to}
                   </p>
                   <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">
@@ -621,14 +621,14 @@ export function PopularRoutes({ onSearch }) {
                 {/* Live Next Departure Box */}
                 <div className="mt-3.5 p-3 rounded-xl bg-[#F8F6F0] border border-[rgba(10,22,38,0.08)] flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-gray-500 uppercase font-mono block">Next Departure</span>
-                    <span className="font-['Oswald'] font-bold text-base text-[#0A1626]">{r.nextDep}</span>
-                    <span className="text-[10px] text-gray-500 ml-1 font-mono">({r.platform})</span>
+                    <span className="text-[10px] font-bold text-gray-500 uppercase f-accent block">Next Departure</span>
+                    <span className="f-accent font-bold text-base text-[#0A1626]">{r.nextDep}</span>
+                    <span className="text-[10px] text-gray-500 ml-1 f-accent">({r.platform})</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase font-mono block">Arrival</span>
-                    <span className="font-['Oswald'] font-bold text-base text-[#0A1626]">{r.arrTime}</span>
-                    <span className="text-[10px] text-green-700 ml-1 font-mono font-bold">({r.dur})</span>
+                    <span className="text-[10px] font-bold text-gray-500 uppercase f-accent block">Arrival</span>
+                    <span className="f-accent font-bold text-base text-[#0A1626]">{r.arrTime}</span>
+                    <span className="text-[10px] text-green-700 ml-1 f-accent font-bold">({r.dur})</span>
                   </div>
                 </div>
               </div>
