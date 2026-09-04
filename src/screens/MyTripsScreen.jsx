@@ -127,7 +127,7 @@ export default function MyTripsScreen() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="f-accent text-xs font-bold px-2 py-0.5 rounded bg-[#0A1626] text-[#F0A63A]">#{trainNo}</span>
-                          <p className="font-serif font-bold text-base text-[#0A1626]">{trainName}</p>
+                          <p className="f-heading font-bold text-base text-[#0A1626]">{trainName}</p>
                         </div>
                         <p className="f-accent text-xs mt-1 text-[#4B5563]">
                           {travelDate} · {depTime} {fromCode} → {arrTime} {toCode} · Class: <span className="font-bold text-[#0A1626]">{ticketClass}</span>
@@ -170,7 +170,7 @@ export default function MyTripsScreen() {
 
         {tab === "pnr" && (
           <div className="rounded-3xl border bg-white p-6 mb-16 border-[rgba(10,22,38,0.12)] shadow-sm">
-            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Check PNR Status</h3>
+            <h3 className="f-heading font-bold text-base text-[#0A1626] mb-1">Check PNR Status</h3>
             <p className="text-xs text-[#6B7280] mb-4">Enter the 10-digit number printed on your booking confirmation or SMS.</p>
             <div className="flex gap-2">
               <input 
@@ -207,7 +207,7 @@ export default function MyTripsScreen() {
 
         {tab === "refunds" && (
           <div className="rounded-3xl border bg-white p-6 mb-16 border-[rgba(10,22,38,0.12)] shadow-sm">
-            <h3 className="font-serif font-bold text-base text-[#0A1626] mb-1">Refund Status — TDR Tracking</h3>
+            <h3 className="f-heading font-bold text-base text-[#0A1626] mb-1">Refund Status — TDR Tracking</h3>
             <p className="text-xs text-[#6B7280] mb-5">Automated IRCTC auto-refund tracking engine. Monitored in real time.</p>
             <div className="space-y-4">
               {[
@@ -239,7 +239,7 @@ export default function MyTripsScreen() {
         <div className="py-2">
           <div className="mb-4 p-3.5 rounded-xl bg-[#0A1626] text-white flex items-center justify-between shadow-md">
             <div>
-              <p className="font-serif font-bold text-sm text-[#F0A63A]">{activeJourney?.train?.name || "Mumbai Rajdhani"}</p>
+              <p className="f-heading font-bold text-sm text-[#F0A63A]">{activeJourney?.train?.name || "Mumbai Rajdhani"}</p>
               <p className="f-accent text-xs text-gray-300">
                 Train #{activeJourney?.train?.no || "12951"} · Speed: <span className="text-emerald-400 font-bold">{liveTelemetry?.currentSpeedKmH || 115} km/h</span>
               </p>
@@ -302,7 +302,7 @@ export default function MyTripsScreen() {
             <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm bg-white">
               <div className="p-4 bg-[#0A1626] text-white flex justify-between items-center">
                 <div>
-                  <p className="font-serif font-bold text-base text-[#F0A63A]">{activeJourney.train?.name || "Superfast Express"}</p>
+                  <p className="f-heading font-bold text-base text-[#F0A63A]">{activeJourney.train?.name || "Superfast Express"}</p>
                   <p className="text-xs f-accent text-gray-300">Train #{activeJourney.train?.no || "12951"} · Class: {activeJourney.cls || "3A"}</p>
                 </div>
                 <div className="text-right">

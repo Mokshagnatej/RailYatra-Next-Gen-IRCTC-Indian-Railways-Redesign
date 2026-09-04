@@ -145,7 +145,7 @@ export default function ExploreScreen({ onNavigate }) {
                   </span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="text-white font-bold text-lg leading-tight mb-1.5 drop-shadow">{p.name}</h3>
+                  <h3 className="f-heading text-white font-bold text-lg leading-tight mb-1.5 drop-shadow">{p.name}</h3>
                   <p className="text-white/80 text-xs mb-3 line-clamp-2" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{p.desc}</p>
                   <div className="flex items-center justify-between pt-2 border-t border-white/15">
                     <div>
@@ -211,7 +211,7 @@ export default function ExploreScreen({ onNavigate }) {
                 <div className="p-5 flex flex-col justify-between flex-1">
                   <div>
                     <div className="flex items-start justify-between gap-2 mb-1.5">
-                      <h3 className="f-body font-bold text-[16px] transition-colors" style={{ color: "var(--blue)" }}>{p.name}</h3>
+                      <h3 className="f-heading font-bold text-[16px] transition-colors" style={{ color: "var(--blue)" }}>{p.name}</h3>
                     </div>
                     <p className="text-xs text-gray-600 mb-3 leading-relaxed">{p.desc}</p>
                     <div className="flex flex-wrap gap-2 text-[11px] text-gray-500 mb-4">

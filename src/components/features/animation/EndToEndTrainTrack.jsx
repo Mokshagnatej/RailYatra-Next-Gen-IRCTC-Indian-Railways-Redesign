@@ -28,7 +28,7 @@ function EndToEndTrainTrack() {
               KERALA ⟷ CENTRAL GOVT.
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-2 leading-tight drop-shadow-lg">
+          <h2 className="text-3xl md:text-5xl f-heading font-bold text-white mb-2 leading-tight drop-shadow-lg">
             Experience the Soul of India
           </h2>
           <p className="text-white/80 text-sm md:text-base font-medium max-w-md drop-shadow-md">

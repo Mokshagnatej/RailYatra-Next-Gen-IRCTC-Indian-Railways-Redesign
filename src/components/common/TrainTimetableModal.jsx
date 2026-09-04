@@ -86,7 +86,7 @@ export default function TrainTimetableModal({
                 Train #{train.trainNo}
               </span>
             </div>
-            <h2 className="font-serif font-bold text-xl sm:text-2xl text-white tracking-tight">
+            <h2 className="f-heading font-bold text-xl sm:text-2xl text-white tracking-tight">
               {train.trainName}
             </h2>
             <p className="text-xs text-[#94A3B8] mt-1 flex items-center gap-1.5 font-medium">

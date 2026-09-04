@@ -70,6 +70,12 @@
   --color-brand-ink: var(--ink);
   --color-brand-marigold: var(--marigold);
   --color-brand-marigold-2: var(--marigold-2);
+  --font-serif: var(--font-heading);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-accent);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  --font-accent: var(--font-accent);
 }
 
 :root {
@@ -138,6 +144,30 @@
     background-color: var(--paper);
     color: var(--ink);
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    line-height: 1.55;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 1.8vw, 1.6rem);
   }
 }
 
@@ -285,10 +315,22 @@
 @layer utilities {
   .f-heading { font-family: var(--font-heading); letter-spacing: -0.02em; }
   .f-body { font-family: var(--font-body); }
-  .f-accent { font-family: var(--font-accent); }
+  .f-accent {
+    font-family: var(--font-accent);
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
   /* Legacy aliases mapped to new tokens */
   .f-serif { font-family: var(--font-heading); letter-spacing: -0.02em; }
-  .f-mono { font-family: var(--font-accent); }
+  .f-mono {
+    font-family: var(--font-accent);
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+  .tabular-nums {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
   
   .paper-texture {
     background-image: radial-gradient(circle, rgba(15,42,69,0.045) 1px, transparent 1px);

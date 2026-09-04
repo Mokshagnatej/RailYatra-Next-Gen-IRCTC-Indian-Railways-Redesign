@@ -85,7 +85,7 @@ function HelpScreen() {
           )}
         </div>
         <div className="flex justify-between items-center mb-3">
-          <p className="font-serif font-bold text-lg text-[#0A1626]">Frequently asked questions</p>
+          <p className="f-heading font-bold text-lg text-[#0A1626]">Frequently asked questions</p>
           {query && <span className="text-xs text-gray-500">{filteredFaqs.length} results</span>}
         </div>
         <div className="rounded-2xl border border-[rgba(10,22,38,0.12)] bg-white overflow-hidden shadow-sm">

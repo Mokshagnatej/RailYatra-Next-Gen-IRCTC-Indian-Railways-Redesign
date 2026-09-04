@@ -264,7 +264,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                   <span className="px-3 py-1 rounded-xl bg-[#0A1626] text-[#F0A63A] f-accent font-extrabold text-sm shadow-xs">
                     #{trainResult.trainNo}
                   </span>
-                  <h2 className="text-xl font-extrabold text-[#0A1626]">
+                  <h2 className="f-heading text-xl font-extrabold text-[#0A1626]">
                     {trainResult.trainName}
                   </h2>
                   <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200">
@@ -299,7 +299,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
             {/* Class Cards Grid */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-base text-[#0A1626]">
+                <h3 className="f-heading font-bold text-base text-[#0A1626]">
                   Available Classes for {date} ({quota} Quota)
                 </h3>
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
@@ -406,7 +406,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
         {mode === "route" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold text-base text-[#0A1626]">
+              <h3 className="f-heading font-bold text-base text-[#0A1626]">
                 Direct Trains between {fromStation} and {toStation} ({routeResults.length} Found)
               </h3>
             </div>
@@ -428,7 +428,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                       <span className="f-accent font-extrabold text-xs px-2.5 py-0.5 rounded-lg bg-[#0A1626] text-[#F0A63A]">
                         #{t.no}
                       </span>
-                      <h4 className="font-bold text-base text-[#0A1626]">{t.name}</h4>
+                      <h4 className="f-heading font-bold text-base text-[#0A1626]">{t.name}</h4>
                       <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-700">
                         {t.type}
                       </span>

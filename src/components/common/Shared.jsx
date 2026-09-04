@@ -28,7 +28,7 @@ export function Modal({ title, isOpen, onClose, children }) {
         onClick={e => e.stopPropagation()}
       >
         <div className="h-14 px-5 border-b flex items-center justify-between bg-[#0A1626] text-white">
-          <h3 className="font-serif font-bold text-base text-white tracking-tight">{title}</h3>
+          <h3 className="f-heading font-bold text-base text-white tracking-tight">{title}</h3>
           <button onClick={onClose} className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer">
             <X size={16} />
           </button>
@@ -340,7 +340,7 @@ export function KycModal({ isOpen, onClose }) {
         <div className="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center mb-3 text-emerald-700">
           <BadgeCheck size={36} />
         </div>
-        <h4 className="font-serif font-bold text-base text-[#0A1626]">DigiLocker Verified Successfully</h4>
+        <h4 className="f-heading font-bold text-base text-[#0A1626]">DigiLocker Verified Successfully</h4>
         <p className="text-xs mt-1 text-[#6B7280] max-w-xs leading-relaxed">
           Aadhaar ending in <strong className="f-accent text-[#0A1626]">•••• {aadhaarLast4}</strong> is active and unlocks 12 monthly ticket bookings.
         </p>

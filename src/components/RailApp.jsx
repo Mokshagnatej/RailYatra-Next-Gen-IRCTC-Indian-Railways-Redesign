@@ -1445,7 +1445,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
         {/* desktop left rail */}
         <aside className="hidden md:block">
           <div className="rounded-3xl border border-[rgba(10,22,38,0.12)] bg-white p-5 sticky top-32 shadow-sm">
-            <h3 className="font-serif font-bold text-sm text-[#0A1626] mb-4">Refine Search</h3>
+            <h3 className="f-heading font-bold text-sm text-[#0A1626] mb-4">Refine Search</h3>
             {FilterPanel}
           </div>
         </aside>
@@ -1756,7 +1756,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
         <div className="rounded-3xl bg-[#0A1626] text-white p-5 md:p-6 mb-6 shadow-xl flex flex-wrap items-center justify-between gap-4 border border-[rgba(255,255,255,0.1)]">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0A63A] f-accent block mb-1">Journey Summary</span>
-            <h2 className="font-serif font-bold text-lg md:text-xl text-white">{safeSelection.train.name} · #{safeSelection.train.no}</h2>
+            <h2 className="f-heading font-bold text-lg md:text-xl text-white">{safeSelection.train.name} · #{safeSelection.train.no}</h2>
             <p className="f-accent text-xs text-blue-200 mt-1">
               {safeSelection.train.dep} {safeSelection.train.from} → {safeSelection.train.arr} {safeSelection.train.to} · Class: <span className="font-bold text-[#F0A63A]">{safeSelection.cls}</span> · Quota: General
             </p>
@@ -1773,7 +1773,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="font-serif font-bold text-lg text-[#0A1626]">Passenger Details</h3>
+                  <h3 className="f-heading font-bold text-lg text-[#0A1626]">Passenger Details</h3>
                   <p className="text-xs text-[#6B7280]">Enter passenger details as printed on government ID card.</p>
                 </div>
                 <span className="text-xs font-bold f-accent px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-full">
@@ -1855,7 +1855,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
             </div>
 
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
-              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-1">Contact Details</h3>
+              <h3 className="f-heading font-bold text-lg text-[#0A1626] mb-1">Contact Details</h3>
               <p className="text-xs text-[#6B7280] mb-4">E-ticket and PNR SMS updates will be sent here.</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1876,7 +1876,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
             </div>
 
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
-              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-3">Preferences & Add-ons</h3>
+              <h3 className="f-heading font-bold text-lg text-[#0A1626] mb-3">Preferences & Add-ons</h3>
               <div className="space-y-3">
                 <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-gray-200 bg-[#FAF8F2] cursor-pointer hover:border-gray-300 transition-colors">
                   <input type="checkbox" className="h-4 w-4 mt-0.5 accent-[#0A1626]" defaultChecked />
@@ -1916,7 +1916,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
           <div className="space-y-5">
             {/* Fare Breakdown Card */}
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
-              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-3">Fare Breakdown</h3>
+              <h3 className="f-heading font-bold text-lg text-[#0A1626] mb-3">Fare Breakdown</h3>
               <div className="space-y-2.5">
                 <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Base Fare ({passengers.length} passenger{passengers.length > 1 ? 's' : ''})</span><span className="f-accent font-bold text-[#0A1626]">₹{(fare * passengers.length).toLocaleString("en-IN")}</span></div>
                 <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Reservation Charge</span><span className="f-accent font-bold text-[#0A1626]">₹60</span></div>
@@ -1933,7 +1933,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 
             {/* Interactive Payment Methods Card */}
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
-              <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-1">Select Payment Method</h3>
+              <h3 className="f-heading font-bold text-lg text-[#0A1626] mb-1">Select Payment Method</h3>
               <p className="text-xs text-[#6B7280] mb-5">All transactions are 256-bit encrypted with instant IRCTC PRS confirmation.</p>
 
               {payState === "idle" && (
@@ -2185,7 +2185,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                   <div className="w-14 h-14 rounded-2xl bg-[#0A1626] flex items-center justify-center shadow-lg animate-bounce">
                     <Train size={28} className="text-[#F0A63A]" />
                   </div>
-                  <p className="font-serif font-bold text-lg text-[#0A1626]">Communicating with IRCTC PRS Gateway…</p>
+                  <p className="f-heading font-bold text-lg text-[#0A1626]">Communicating with IRCTC PRS Gateway…</p>
                   <p className="text-xs text-[#6B7280]">Encrypting transaction token and securing berth allocation.</p>
                   <div className="w-48 h-1.5 bg-gray-200 rounded-full overflow-hidden mt-2">
                     <div className="w-full h-full bg-[#F0A63A] animate-pulse" />
@@ -2248,7 +2248,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
               <span className="text-[11px] f-accent font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-700 text-emerald-100 mb-1">
                 Booking Confirmed (CNF)
               </span>
-              <h2 className="font-serif font-bold text-2xl md:text-3xl text-white">
+              <h2 className="f-heading font-bold text-2xl md:text-3xl text-white">
                 Ticket Issued Successfully!
               </h2>
               <div className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-800/80 f-accent text-sm font-bold text-white border border-emerald-500">
@@ -2262,7 +2262,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
               <div className="p-5 rounded-2xl bg-[#FAF8F2] border border-gray-200">
                 <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-gray-200">
                   <div>
-                    <h3 className="font-serif font-bold text-lg text-[#0A1626]">
+                    <h3 className="f-heading font-bold text-lg text-[#0A1626]">
                       {selection.train.name} (#{selection.train.no})
                     </h3>
                     <p className="text-xs text-gray-500 f-accent">Class {selection.cls} · Quota: General</p>
