@@ -63,7 +63,7 @@
   <tbody>
     <tr>
       <td align="center" valign="top">
-        <img src="./public/wdp4d.jpg" alt="WDP4D Diesel Locomotive" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
+        <img src="assets/wdp4d.jpg" alt="WDP4D Diesel Locomotive" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
         <br/><br/>
         <b>Classic Diesel Traction (4500 HP)</b>
         <p align="left">
@@ -73,7 +73,7 @@
         </p>
       </td>
       <td align="center" valign="top">
-        <img src="./public/double-decker.jpg" alt="Double Decker Express" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
+        <img src="assets/double-decker.jpg" alt="Double Decker Express" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
         <br/><br/>
         <b>Bi-Level Commuter Express</b>
         <p align="left">
@@ -83,7 +83,7 @@
         </p>
       </td>
       <td align="center" valign="top">
-        <img src="./public/vande-bharat.jpg" alt="Vande Bharat Express" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
+        <img src="assets/vande-bharat.jpg" alt="Vande Bharat Express" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12);" />
         <br/><br/>
         <b>Train 18 (EMU Trainset)</b>
         <p align="left">
@@ -227,12 +227,12 @@ The color palette pays homage to Indian Railways' heritage while maintaining an 
 
 | Swatch | Token Name | CSS Variable | Hex Code | Semantic Role |
 | :---: | :--- | :--- | :--- | :--- |
-| <img src="https://via.placeholder.com/20/0F2A45/0F2A45.png" width="20" height="20" alt="#0F2A45"/> | **Deep Rail Blue** | `--blue` | `#0F2A45` | Primary brand surfaces, top navigation, headers |
-| <img src="https://via.placeholder.com/20/E5A93D/E5A93D.png" width="20" height="20" alt="#E5A93D"/> | **Marigold Yellow** | `--marigold` | `#E5A93D` | Call-to-action buttons, active badges, highlights |
-| <img src="https://via.placeholder.com/20/F7F4EC/F7F4EC.png" width="20" height="20" alt="#F7F4EC"/> | **Heritage Paper** | `--paper` | `#F7F4EC` | Warm textured canvas background (Light Mode) |
-| <img src="https://via.placeholder.com/20/162436/162436.png" width="20" height="20" alt="#162436"/> | **Midnight Surface**| `--surface` | `#FFFFFF` / `#162436` | High-contrast card surfaces with dark mode support |
-| <img src="https://via.placeholder.com/20/1F7A4C/1F7A4C.png" width="20" height="20" alt="#1F7A4C"/> | **Signal Green** | `--green` | `#1F7A4C` | Confirmed berths, on-time alerts, verified KYC |
-| <img src="https://via.placeholder.com/20/C23B32/C23B32.png" width="20" height="20" alt="#C23B32"/> | **Alert Red** | `--red` | `#C23B32` | Cancellations, Tatkal urgency, refund alerts |
+| <img src="assets/tokens/blue.svg" width="20" height="20" alt="#0F2A45" style="vertical-align: middle;"/> | **Deep Rail Blue** | `--blue` | `#0F2A45` | Primary brand surfaces, top navigation, headers |
+| <img src="assets/tokens/marigold.svg" width="20" height="20" alt="#E5A93D" style="vertical-align: middle;"/> | **Marigold Yellow** | `--marigold` | `#E5A93D` | Call-to-action buttons, active badges, highlights |
+| <img src="assets/tokens/paper.svg" width="20" height="20" alt="#F7F4EC" style="vertical-align: middle;"/> | **Heritage Paper** | `--paper` | `#F7F4EC` | Warm textured canvas background (Light Mode) |
+| <img src="assets/tokens/surface.svg" width="20" height="20" alt="#162436" style="vertical-align: middle;"/> | **Midnight Surface**| `--surface` | `#FFFFFF` / `#162436` | High-contrast card surfaces with dark mode support |
+| <img src="assets/tokens/green.svg" width="20" height="20" alt="#1F7A4C" style="vertical-align: middle;"/> | **Signal Green** | `--green` | `#1F7A4C` | Confirmed berths, on-time alerts, verified KYC |
+| <img src="assets/tokens/red.svg" width="20" height="20" alt="#C23B32" style="vertical-align: middle;"/> | **Alert Red** | `--red` | `#C23B32` | Cancellations, Tatkal urgency, refund alerts |
 
 ---
 
