@@ -123,7 +123,7 @@ export default function AuthModal({ onClose, onSuccess }) {
               <div className="w-14 h-14 rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-3">
                 <CheckCircle2 size={32} />
               </div>
-              <h3 className="text-lg font-bold text-[#0A1626]">Signed In Successfully!</h3>
+              <h3 className="f-heading text-lg font-bold text-[#0A1626]">Signed In Successfully!</h3>
               <p className="text-xs text-gray-500 mt-1">Connecting to your IRCTC journeys & profile...</p>
             </div>
           ) : (
