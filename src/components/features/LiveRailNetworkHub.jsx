@@ -251,7 +251,7 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
                     {perk.badge}
                   </span>
                 </div>
-                <h4 className="font-bold text-sm text-[var(--ink)] mb-1">{perk.title}</h4>
+                <h4 className="f-heading font-bold text-sm text-[var(--ink)] mb-1">{perk.title}</h4>
                 <p className="text-xs text-[var(--steel)] leading-relaxed">{perk.desc}</p>
               </div>
             </div>

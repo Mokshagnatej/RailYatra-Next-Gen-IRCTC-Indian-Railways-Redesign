@@ -64,7 +64,7 @@ function LiveRailRadarCard({ onQuickAction }) {
       {/* Train Name and Route Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-bold text-sm text-white flex items-center gap-1.5">
+          <h3 className="f-heading font-bold text-sm text-white flex items-center gap-1.5">
             <Train size={15} className="text-amber-400" />
             #{curr.trainNo} {curr.trainName}
           </h3>
