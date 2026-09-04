@@ -132,7 +132,7 @@ export default function StationPickerDropdown({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {label && (
-        <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">
+        <label className="block text-[11px] f-accent tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">
           {label}
         </label>
       )}
@@ -195,7 +195,7 @@ export default function StationPickerDropdown({
 
               {/* Quick Hub Chips */}
               <div className="mt-3">
-                <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-blue-200 mb-1.5">
+                <div className="flex items-center justify-between text-[10px] f-accent uppercase tracking-wider text-blue-200 mb-1.5">
                   <span className="flex items-center gap-1"><Sparkles size={11} className="text-[#F0A63A]" /> POPULAR RAIL HUBS</span>
                   <button 
                     type="button" 
@@ -212,7 +212,7 @@ export default function StationPickerDropdown({
                       key={hub.code}
                       type="button"
                       onClick={() => handleSelect(hub.label)}
-                      className={`px-2 py-1 rounded-md text-[11px] font-mono font-bold transition-all ${
+                      className={`px-2 py-1 rounded-md text-[11px] f-accent font-bold transition-all ${
                         value === hub.label
                           ? 'bg-[#F0A63A] text-[#0A1626] shadow-sm'
                           : 'bg-white/15 text-white hover:bg-white/25 hover:text-[#F0A63A]'
@@ -226,7 +226,7 @@ export default function StationPickerDropdown({
             </div>
 
             {/* Zone Filter Strip */}
-            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#F8F6F0] border-b border-gray-200 overflow-x-auto text-[11px] font-mono">
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#F8F6F0] border-b border-gray-200 overflow-x-auto text-[11px] f-accent">
               {ZONE_FILTERS.map((z) => (
                 <button
                   key={z.id}
@@ -266,7 +266,7 @@ export default function StationPickerDropdown({
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-xs ${
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center f-accent font-bold text-xs ${
                           isSelected ? 'bg-[#0A1626] text-[#F0A63A]' : 'bg-gray-100 text-[#0A1626] group-hover:bg-[#0A1626] group-hover:text-white transition-colors'
                         }`}>
                           {st.code}
@@ -280,7 +280,7 @@ export default function StationPickerDropdown({
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] font-mono text-gray-500">
+                          <div className="text-[11px] f-accent text-gray-500">
                             {st.state ? `${st.state}` : ''} {st.zoneCode ? `· ${st.zoneCode} Zone` : ''}
                           </div>
                         </div>
@@ -289,7 +289,7 @@ export default function StationPickerDropdown({
                       {isSelected ? (
                         <Check size={16} className="text-[#1F7A4C] shrink-0" />
                       ) : (
-                        <span className="text-[11px] font-mono text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-[11px] f-accent text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
                           Select ➔
                         </span>
                       )}
@@ -300,7 +300,7 @@ export default function StationPickerDropdown({
             </div>
 
             {/* Bottom Status Bar */}
-            <div className="px-3.5 py-2 bg-[#F8F6F0] border-t border-gray-200 flex items-center justify-between text-[10px] font-mono text-gray-500">
+            <div className="px-3.5 py-2 bg-[#F8F6F0] border-t border-gray-200 flex items-center justify-between text-[10px] f-accent text-gray-500">
               <span>Showing {filteredStations.length} matching stations</span>
               <span className="text-green-700 font-bold">● 8,965 Indian Stations Indexed</span>
             </div>

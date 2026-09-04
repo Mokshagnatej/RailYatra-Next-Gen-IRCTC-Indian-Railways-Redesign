@@ -53,10 +53,10 @@ export default function CinematicPlatformPanel() {
           className="flex items-center gap-3"
         >
           <span className="w-4 h-0.5 bg-[var(--amber)]" />
-          <p className="f-mono text-xs tracking-[0.2em] uppercase text-[var(--amber)] font-bold">The moment this is all built around</p>
+          <p className="f-accent text-xs tracking-[0.2em] uppercase text-[var(--amber)] font-bold">The moment this is all built around</p>
         </motion.div>
 
-        <h2 className="f-serif text-5xl md:text-7xl font-bold text-white leading-[1.1] mt-6 max-w-3xl flex flex-wrap gap-x-4 gap-y-2">
+        <h2 className="f-heading text-5xl md:text-7xl font-bold text-white leading-[1.1] mt-6 max-w-3xl flex flex-wrap gap-x-4 gap-y-2">
           {titleWords.map((word, i) => {
             const isAmber = i >= titleWords.length - 3;
             return (
@@ -82,7 +82,7 @@ export default function CinematicPlatformPanel() {
           className="mt-12 flex items-center gap-6 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/20 p-4 md:p-6 shadow-2xl"
         >
           <div>
-            <p className="f-mono text-[10px] uppercase tracking-wider text-white/60 mb-1">Status</p>
+            <p className="f-accent text-[10px] uppercase tracking-wider text-white/60 mb-1">Status</p>
             <p className="f-body text-sm font-bold text-white flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse" />
               BOARDING
@@ -90,13 +90,13 @@ export default function CinematicPlatformPanel() {
           </div>
           <div className="w-[1px] h-10 bg-white/20" />
           <div>
-            <p className="f-mono text-[10px] uppercase tracking-wider text-white/60 mb-1">Platform</p>
+            <p className="f-accent text-[10px] uppercase tracking-wider text-white/60 mb-1">Platform</p>
             <p className="f-body text-sm font-bold text-white">04</p>
           </div>
           <div className="w-[1px] h-10 bg-white/20" />
           <div>
-            <p className="f-mono text-[10px] uppercase tracking-wider text-white/60 mb-1">Route</p>
-            <p className="f-body text-sm font-bold text-white font-mono">NDLS ⇄ MMCT (RAJDHANI)</p>
+            <p className="f-accent text-[10px] uppercase tracking-wider text-white/60 mb-1">Route</p>
+            <p className="f-body text-sm font-bold text-white f-accent">NDLS ⇄ MMCT (RAJDHANI)</p>
           </div>
         </motion.div>
       </div>

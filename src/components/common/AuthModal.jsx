@@ -66,7 +66,7 @@ export default function AuthModal({ onClose, onSuccess }) {
         <div className="bg-[#0A1626] text-white p-4 sm:p-5 relative shrink-0">
           <div className="flex justify-between items-start">
             <div>
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F0A63A] text-[#0A1626] mb-1 font-mono">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#F0A63A] text-[#0A1626] mb-1 f-accent">
                 <ShieldCheck size={11} /> IRCTC Verified Auth
               </span>
               <h2 className="f-heading text-xl sm:text-2xl font-bold tracking-wide">
@@ -131,7 +131,7 @@ export default function AuthModal({ onClose, onSuccess }) {
               {/* Quick 1-Click Demo Profiles */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider font-mono">1-Click Fast Sign In</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider f-accent">1-Click Fast Sign In</span>
                   <span className="text-[10px] text-[#F0A63A] font-bold">Demo Login</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -165,7 +165,7 @@ export default function AuthModal({ onClose, onSuccess }) {
 
               <div className="relative flex items-center justify-center my-3.5">
                 <div className="border-t border-gray-200 w-full"></div>
-                <span className="bg-white px-2 text-[10px] text-gray-400 font-medium absolute uppercase font-mono">Or enter credentials</span>
+                <span className="bg-white px-2 text-[10px] text-gray-400 font-medium absolute uppercase f-accent">Or enter credentials</span>
               </div>
 
               {/* Form */}
@@ -208,7 +208,7 @@ export default function AuthModal({ onClose, onSuccess }) {
                   <div>
                     <label className="block text-xs font-bold text-[#0A1626] mb-1">Indian Mobile Number</label>
                     <div className="relative flex">
-                      <span className="inline-flex items-center px-2.5 rounded-l-xl border border-r-0 border-gray-300 bg-gray-50 text-xs font-bold text-gray-600 font-mono">
+                      <span className="inline-flex items-center px-2.5 rounded-l-xl border border-r-0 border-gray-300 bg-gray-50 text-xs font-bold text-gray-600 f-accent">
                         +91
                       </span>
                       <input 
@@ -241,7 +241,7 @@ export default function AuthModal({ onClose, onSuccess }) {
                           maxLength={6}
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl border-2 border-green-500 focus:outline-none text-center font-mono text-base tracking-widest font-bold"
+                          className="w-full px-3 py-2 rounded-xl border-2 border-green-500 focus:outline-none text-center f-accent text-base tracking-widest font-bold"
                           placeholder="123456"
                         />
                       </div>

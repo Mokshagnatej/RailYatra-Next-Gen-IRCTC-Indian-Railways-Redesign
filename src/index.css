@@ -37,6 +37,9 @@
   --font-heading: 'Fraunces', serif;
   --font-body: 'Inter', sans-serif;
   --font-accent: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Grotesk', monospace, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
 }
 
 @layer utilities {
@@ -49,6 +52,13 @@
   }
   .f-body {
     font-family: var(--font-body);
+  }
+  .f-serif {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+  .f-mono {
+    font-family: var(--font-accent);
   }
 }
 

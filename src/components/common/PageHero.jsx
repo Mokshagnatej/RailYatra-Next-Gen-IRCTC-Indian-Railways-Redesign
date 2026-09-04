@@ -17,7 +17,7 @@ export default function PageHero({ eyebrow, title, sub, small }) {
             className="flex items-center gap-2 mb-2.5"
           >
             <span className="w-2 h-2 rounded-full bg-[#C97F1F] animate-pulse" />
-            <p className="font-mono text-xs tracking-widest uppercase font-bold text-[#C97F1F]">
+            <p className="f-accent text-xs tracking-widest uppercase font-bold text-[#C97F1F]">
               {eyebrow}
             </p>
           </motion.div>
@@ -27,7 +27,7 @@ export default function PageHero({ eyebrow, title, sub, small }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.08 }}
-          className={`f-serif font-bold ${
+          className={`f-heading font-bold ${
             small ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl lg:text-5xl"
           } text-[#0A1626] tracking-tight max-w-2xl leading-tight drop-shadow-sm`}
         >

@@ -75,8 +75,8 @@ export default function CinematicStory() {
 
           {/* Cinematic Title Overlay */}
           <div className={`relative z-10 text-center space-y-4 transition-all duration-1000 delay-300 ${index === activeShot ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <p className="f-mono text-sm tracking-widest uppercase text-white/70">Cinematic Shot {index + 1}</p>
-            <h2 className="f-serif text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">{shot.title}</h2>
+            <p className="f-accent text-sm tracking-widest uppercase text-white/70">Cinematic Shot {index + 1}</p>
+            <h2 className="f-heading text-4xl md:text-6xl font-bold text-white drop-shadow-2xl">{shot.title}</h2>
           </div>
         </div>
       ))}

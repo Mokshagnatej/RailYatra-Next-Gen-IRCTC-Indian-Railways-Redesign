@@ -91,7 +91,7 @@ export default function AIAssistFAB() {
           >
             <div className="px-4 py-3 border-b flex items-center gap-2" style={{ borderColor: 'rgba(15,42,69,0.08)' }}>
               <span className="w-2 h-2 rounded-full bg-[var(--marigold)] animate-pulse" />
-              <span className="f-mono text-[11px] uppercase tracking-wider font-bold text-[var(--premium-blue)]">
+              <span className="f-accent text-[11px] uppercase tracking-wider font-bold text-[var(--premium-blue)]">
                 RailYatra AI · Scanning live fares
               </span>
             </div>

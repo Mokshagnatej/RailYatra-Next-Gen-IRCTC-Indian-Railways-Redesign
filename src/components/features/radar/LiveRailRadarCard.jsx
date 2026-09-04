@@ -37,9 +37,9 @@ function LiveRailRadarCard({ onQuickAction }) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          <span className="font-mono text-[11px] font-bold tracking-widest text-emerald-400 uppercase">Live Rail Radar</span>
+          <span className="f-accent text-[11px] font-bold tracking-widest text-emerald-400 uppercase">Live Rail Radar</span>
         </div>
-        <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+        <span className="f-accent text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
           GPS REAL-TIME
         </span>
       </div>
@@ -72,14 +72,14 @@ function LiveRailRadarCard({ onQuickAction }) {
             {curr.from.code} ({curr.from.name}) → {curr.to.code} ({curr.to.name})
           </p>
         </div>
-        <span className="text-[11px] font-mono font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+        <span className="text-[11px] f-accent font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
           {curr.currentSpeedKmH} km/h
         </span>
       </div>
 
       {/* Live Route Progress Bar */}
       <div className="mt-4 mb-3">
-        <div className="flex justify-between text-[10px] font-mono text-slate-300 mb-1.5">
+        <div className="flex justify-between text-[10px] f-accent text-slate-300 mb-1.5">
           <span>Dep: {curr.from.dep}</span>
           <span className="text-amber-300 font-bold">{curr.status}</span>
           <span>Arr: {curr.to.arr}</span>
@@ -104,11 +104,11 @@ function LiveRailRadarCard({ onQuickAction }) {
         </div>
         <div className="flex items-center justify-between text-[11px]">
           <span className="text-slate-300">Countdown ETA / Platform:</span>
-          <span className="font-mono text-amber-300 font-bold">ETA {curr.nextStation.etaMinutes} mins · {curr.nextStation.platform}</span>
+          <span className="f-accent text-amber-300 font-bold">ETA {curr.nextStation.etaMinutes} mins · {curr.nextStation.platform}</span>
         </div>
         <div className="flex items-center justify-between text-[11px] pt-1 border-t border-white/10">
           <span className="text-slate-300">Distance Remaining:</span>
-          <span className="font-mono text-emerald-300 font-medium">{curr.distanceRemainingKm} km ({curr.progressPercent}% covered)</span>
+          <span className="f-accent text-emerald-300 font-medium">{curr.distanceRemainingKm} km ({curr.progressPercent}% covered)</span>
         </div>
       </div>
 

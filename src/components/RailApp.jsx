@@ -50,9 +50,9 @@ import { getDateStrip, formatDateShort, formatDateMedium, formatDateLong } from 
              (Tatkal/CTA — festival-ticket accent), Track Green #1F7A4C
              (available), Caution Amber #C9861F (RAC), Alert Red #C23B32
              (waitlisted/error), Paper #F6F3EC (background), Ink #1C1B19
-   Type    : Space Grotesk (display, restrained use) / IBM Plex Sans
-             (UI + body — the typeface of record on Indian gov. digital
-             services) / IBM Plex Mono (tabular data: times, fares, PNR)
+   Type    : Fraunces (editorial display & headings) / Inter
+             (UI & body text) / Space Grotesk (accent: times, fares,
+             PNR, speeds & countdown timers)
    Motif   : the "track line" — a horizontal rail with station-node
              dividers, reused as section divider and as the booking
              stepper — plus a ticket-stub punch-hole edge on cards,
@@ -230,7 +230,7 @@ function TopNav({ screen, setScreen }) {
       <div className="relative z-50 text-center py-2 px-4 f-body text-xs font-medium"
         style={{ background: "var(--marigold)", color: "var(--blue)" }}>
         ✦ Concept redesign &mdash; for real bookings call{" "}
-        <span className="f-mono font-semibold">139</span> or visit irctc.co.in
+        <span className="f-accent font-semibold">139</span> or visit irctc.co.in
       </div>
 
       <header className="sticky top-4 z-40 transition-all duration-500 mx-auto max-w-7xl px-4 md:px-8 mt-2 w-full"
@@ -259,7 +259,7 @@ function TopNav({ screen, setScreen }) {
               style={{ background: "var(--marigold)" }}>
               <Train size={20} color="var(--blue)" />
             </motion.div>
-            <span className="f-serif font-bold text-xl tracking-tight" style={{ color: "var(--blue)" }}>
+            <span className="f-heading font-bold text-xl tracking-tight" style={{ color: "var(--blue)" }}>
               Rail<span style={{ color: "var(--marigold)" }}>Yatra</span>
             </span>
           </button>
@@ -322,7 +322,7 @@ function TopNav({ screen, setScreen }) {
                       <div className="p-2">
                         <p className="text-xs font-bold text-[#0A1626] truncate">{user?.name}</p>
                         <p className="text-[10px] text-gray-500 truncate">{user?.email}</p>
-                        <span className="inline-block mt-1 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-200">
+                        <span className="inline-block mt-1 text-[9px] f-accent font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-200">
                           IRCTC ID: {user?.irctcId || "verified.user"}
                         </span>
                       </div>
@@ -524,7 +524,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
               placeholder="Enter 10-digit PNR"
               value={pnrInput} 
               onChange={e => setPnrInput(e.target.value)}
-              className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm font-mono font-semibold outline-none"
+              className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm f-accent font-semibold outline-none"
             />
             <button 
               onClick={() => handleFetch('pnr')}
@@ -538,7 +538,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
           {pnrData ? (
             <div className="p-4 rounded-xl border bg-green-50/60 border-green-200">
               <div className="flex justify-between items-center pb-2 border-b border-green-200 mb-2">
-                <span className="font-mono text-xs font-bold text-green-900">PNR {pnrData.pnr}</span>
+                <span className="f-accent text-xs font-bold text-green-900">PNR {pnrData.pnr}</span>
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white">{pnrData.chartStatus}</span>
               </div>
               <div className="space-y-1.5 text-xs text-gray-700">
@@ -610,7 +610,7 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
               placeholder="10-digit PNR number"
               value={pnrInput} 
               onChange={e => setPnrInput(e.target.value)}
-              className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm font-mono font-semibold outline-none"
+              className="flex-1 h-12 px-3.5 rounded-xl border bg-gray-50 text-sm f-accent font-semibold outline-none"
             />
             <button 
               onClick={() => handleSimulate()}
@@ -682,9 +682,9 @@ function QuickLinksModal({ modal, onClose, onNavigate }) {
                 <div className="grid grid-cols-3 gap-2">
                   {Object.entries(trainData.classes || {}).map(([cls, info]) => (
                     <div key={cls} className="p-2 rounded-lg bg-white border border-emerald-200 text-center">
-                      <span className="font-mono font-bold text-xs block text-[#0A1626]">{cls}</span>
+                      <span className="f-accent font-bold text-xs block text-[#0A1626]">{cls}</span>
                       <span className="text-[11px] font-extrabold text-emerald-700 block">AVL {info.n || 42}</span>
-                      <span className="text-[10px] text-gray-500 font-mono">₹{info.fare}</span>
+                      <span className="text-[10px] text-gray-500 f-accent">₹{info.fare}</span>
                     </div>
                   ))}
                 </div>
@@ -765,7 +765,7 @@ function Footer({ onAction }) {
             <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-[#F0A63A] shadow-md">
               <Train size={20} className="text-[#0A1626]" />
             </div>
-            <span className="f-serif font-bold text-white text-2xl tracking-tight">Rail<span className="text-[#F0A63A]">Yatra</span></span>
+            <span className="f-heading font-bold text-white text-2xl tracking-tight">Rail<span className="text-[#F0A63A]">Yatra</span></span>
           </div>
           <p className="text-xs leading-relaxed mb-6 max-w-[240px] text-[#94A3B8]">Indian Railway Catering &amp; Tourism Corporation — Mini Ratna (Category-I) PSU, Ministry of Railways, Govt. of India.</p>
           <div className="flex items-center gap-2.5 mb-6">
@@ -786,7 +786,7 @@ function Footer({ onAction }) {
 
         {cols.map((c) => (
           <div key={c.title}>
-            <p className="text-white text-xs font-bold uppercase tracking-widest mb-4 font-mono">{c.title}</p>
+            <p className="text-white text-xs font-bold uppercase tracking-widest mb-4 f-accent">{c.title}</p>
             <ul className="space-y-3 text-xs">
               {c.items.map((item) => (
                 <li key={item} onClick={() => onAction && onAction(item)}
@@ -803,7 +803,7 @@ function Footer({ onAction }) {
         <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center text-[11px] text-[#64748B]">
           <div className="space-y-1">
             <span className="text-[#94A3B8] font-medium">© IRCTC Ltd — redesign concept · not the live site</span>
-            <span className="block font-mono text-[#64748B]">CIN: L74899DL1999GOI101707</span>
+            <span className="block f-accent text-[#64748B]">CIN: L74899DL1999GOI101707</span>
           </div>
           <div className="flex gap-5 flex-wrap">
             {["Privacy Policy", "Terms of Service", "Refund Policy", "Security"].map((t) => (
@@ -922,7 +922,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
         <div className="relative z-10 max-w-6xl mx-auto w-full px-4 md:px-8 pt-24 pb-8 md:pt-32 md:pb-10">
           {/* Badge */}
           <div className="anim-fade-up" style={{ animationDelay:"0.05s" }}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-mono tracking-wide shadow-lg"
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold f-accent tracking-wide shadow-lg"
               style={{ borderColor:"rgba(255,255,255,0.3)", color:"white", background:"rgba(0,0,0,0.3)", backdropFilter:"blur(8px)" }}>
               <span className="h-1.5 w-1.5 rounded-full anim-glow-pulse" style={{ background:"var(--marigold)" }} />
               India's Railways · 13,000+ trains · 7,000+ stations
@@ -930,7 +930,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
           </div>
 
           {/* Headline */}
-          <h1 className="f-serif font-bold mt-5 leading-[1.08] anim-fade-up-md drop-shadow-xl"
+          <h1 className="f-heading font-bold mt-5 leading-[1.08] anim-fade-up-md drop-shadow-xl"
             style={{ fontSize:"clamp(2.2rem,5.5vw,4.2rem)", animationDelay:"0.12s", color:"white" }}>
             Journey across India,<br />
             <em className="not-italic" style={{ color:"var(--marigold)" }}>without the guesswork.</em>
@@ -950,7 +950,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
               <div key={label} className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl shadow-xl border border-white/20" style={{ background:"rgba(0,0,0,0.4)", backdropFilter:"blur(12px)" }}>
                 <Icon size={16} style={{ color }} />
                 <div>
-                  <p className="f-mono text-[11px] uppercase tracking-wider font-semibold" style={{ color:"rgba(255,255,255,0.6)" }}>{label}</p>
+                  <p className="f-accent text-[11px] uppercase tracking-wider font-semibold" style={{ color:"rgba(255,255,255,0.6)" }}>{label}</p>
                   <p className="f-body text-sm font-semibold leading-tight text-white">{value}</p>
                 </div>
               </div>
@@ -1010,7 +1010,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
             <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Class */}
               <div>
-                <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">CLASS</label>
+                <label className="block text-[11px] f-accent tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">CLASS</label>
                 <div className="relative flex items-center bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <select 
                     value={cls} 
@@ -1026,7 +1026,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
 
               {/* Quota */}
               <div>
-                <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">QUOTA</label>
+                <label className="block text-[11px] f-accent tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">QUOTA</label>
                 <div className="relative flex items-center bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <select 
                     value={quota} 
@@ -1042,7 +1042,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
 
               {/* Adults */}
               <div>
-                <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">ADULTS</label>
+                <label className="block text-[11px] f-accent tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">ADULTS</label>
                 <div className="flex items-center justify-between bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, adults: Math.max(1, p.adults - 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">−</button>
                   <span className="f-accent text-base font-bold text-[#0A1626]">{passengers.adults}</span>
@@ -1052,7 +1052,7 @@ function SearchScreen({ onSearch, onFooterAction }) {
 
               {/* Children */}
               <div>
-                <label className="block text-[11px] font-mono tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">CHILDREN</label>
+                <label className="block text-[11px] f-accent tracking-[0.14em] uppercase text-[#6b6250] font-bold mb-2">CHILDREN</label>
                 <div className="flex items-center justify-between bg-white border border-[rgba(10,22,38,0.14)] hover:border-amber-500 rounded-xl px-3.5 py-3 shadow-sm transition-all">
                   <button type="button" onClick={() => setPassengers(p => ({ ...p, children: Math.max(0, p.children - 1) }))} className="text-[#6b6250] hover:text-[#0A1626] font-bold px-2 text-lg">−</button>
                   <span className="f-accent text-base font-bold text-[#0A1626]">{passengers.children}</span>
@@ -1086,8 +1086,8 @@ function SearchScreen({ onSearch, onFooterAction }) {
       {/* Feature cards */}
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-14 md:py-20">
         <FadeIn className="text-center mb-10">
-          <p className="f-mono text-xs tracking-widest uppercase mb-2" style={{ color:"var(--marigold)" }}>Why RailYatra</p>
-          <h2 className="f-serif font-bold text-3xl md:text-4xl" style={{ color:"var(--blue)" }}>
+          <p className="f-accent text-xs tracking-widest uppercase mb-2" style={{ color:"var(--marigold)" }}>Why RailYatra</p>
+          <h2 className="f-heading font-bold text-3xl md:text-4xl" style={{ color:"var(--blue)" }}>
             Built for the modern traveller
           </h2>
           <p className="mt-3 max-w-md mx-auto text-base" style={{ color:"var(--steel)", lineHeight:1.7 }}>
@@ -1216,7 +1216,7 @@ function Field({ label, icon: Icon, value, onChange, onLocate }) {
           {/* Quick Popular Station Junctions */}
           {!search && (
             <div className="p-3 bg-slate-50 border-b" style={{ borderColor: "var(--line)" }}>
-              <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold mb-2 flex items-center gap-1.5">
+              <p className="text-[10px] f-accent uppercase tracking-wider text-slate-500 font-bold mb-2 flex items-center gap-1.5">
                 <span>⚡ POPULAR RAIL HUBS</span>
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -1254,7 +1254,7 @@ function Field({ label, icon: Icon, value, onChange, onLocate }) {
                   <div>
                     <div className="flex items-center gap-1.5">
                       <span className="font-semibold text-sm text-slate-900 group-hover:text-blue-900">{station.name}</span>
-                      <span className="font-mono text-xs font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                      <span className="f-accent text-xs font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
                         {station.code}
                       </span>
                     </div>
@@ -1271,7 +1271,7 @@ function Field({ label, icon: Icon, value, onChange, onLocate }) {
                     </span>
                   )}
                   {station.routes > 0 && (
-                    <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-100">
+                    <span className="text-[10px] f-accent font-medium px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-100">
                       {station.routes} routes
                     </span>
                   )}
@@ -1370,7 +1370,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
   const FilterPanel = (
     <div className="space-y-6">
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Train Type</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 f-accent">Train Type</p>
         <div className="space-y-2">
           {["Rajdhani", "Shatabdi", "Duronto", "Superfast", "Express", "Mail/Exp"].map((t) => (
             <label key={t} className="flex items-center gap-2 text-xs font-bold text-[#0A1626] cursor-pointer hover:text-blue-700">
@@ -1381,11 +1381,11 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
         </div>
       </div>
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Class</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 f-accent">Class</p>
         <div className="flex flex-wrap gap-1.5">
           {["SL", "3A", "2A", "1A", "CC", "EC"].map((c) => (
             <button key={c} onClick={() => toggle(classesF, setClassesF, c)}
-              className={`px-3 h-8 rounded-xl border font-mono text-xs font-bold transition-all cursor-pointer shadow-xs ${
+              className={`px-3 h-8 rounded-xl border f-accent text-xs font-bold transition-all cursor-pointer shadow-xs ${
                 classesF.includes(c)
                   ? "bg-[#0A1626] text-[#F0A63A] border-[#0A1626]"
                   : "bg-white text-[#0A1626] border-gray-300 hover:border-gray-500"
@@ -1394,7 +1394,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
         </div>
       </div>
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 font-mono">Departure Time</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2.5 f-accent">Departure Time</p>
         <div className="grid grid-cols-2 gap-2">
           {[
             { label: "Early morning", sub: "00:00–06:00" },
@@ -1404,13 +1404,13 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
           ].map((slot) => (
             <button key={slot.label} className="px-2.5 py-2 rounded-xl border border-gray-200 bg-[#FAF8F2] hover:border-[#0A1626] text-left text-xs cursor-pointer transition-all">
               <span className="font-bold text-[#0A1626] block text-[11px]">{slot.label}</span>
-              <span className="text-[10px] text-gray-500 font-mono">{slot.sub}</span>
+              <span className="text-[10px] text-gray-500 f-accent">{slot.sub}</span>
             </button>
           ))}
         </div>
       </div>
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 font-mono">Amenities</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 f-accent">Amenities</p>
         <label className="flex items-center gap-2 text-xs font-bold text-[#0A1626] cursor-pointer">
           <input type="checkbox" className="h-4 w-4 accent-[#0A1626]" />
           Pantry / Food on Board
@@ -1427,7 +1427,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
           <button onClick={onBack} className="flex items-center gap-2 text-xs md:text-sm font-bold cursor-pointer text-[#0A1626] hover:text-blue-700">
             <ChevronRight size={16} className="rotate-180" /> Edit Search
           </button>
-          <div className="flex items-center gap-2 font-mono text-xs md:text-sm font-bold text-[#0A1626]">
+          <div className="flex items-center gap-2 f-accent text-xs md:text-sm font-bold text-[#0A1626]">
             <span>{fromDisplay}</span>
             <ArrowLeftRight size={14} className="text-[#F0A63A]" />
             <span>{toDisplay}</span>
@@ -1482,7 +1482,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
-                        <span className="f-mono text-sm font-bold px-2.5 py-1 rounded-lg shadow-sm tracking-wide" style={{ background: "var(--premium-blue)", color: "var(--marigold)" }}>#{t.no}</span>
+                        <span className="f-accent text-sm font-bold px-2.5 py-1 rounded-lg shadow-sm tracking-wide" style={{ background: "var(--premium-blue)", color: "var(--marigold)" }}>#{t.no}</span>
                         <p className="f-heading font-bold text-[17px] tracking-tight" style={{ color: "var(--premium-blue)" }}>{t.name}</p>
                       </div>
                       <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -1514,7 +1514,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-center md:justify-end gap-5 f-mono text-sm font-bold text-center flex-1 mt-4 md:mt-0" style={{ color: "var(--premium-blue)" }}>
+                    <div className="flex items-center justify-center md:justify-end gap-5 f-accent text-sm font-bold text-center flex-1 mt-4 md:mt-0" style={{ color: "var(--premium-blue)" }}>
                       <div className="text-right">
                         <p className="text-2xl">{t.dep}</p>
                         <p className="text-[11px] font-bold mt-1" style={{ color: "var(--steel)" }}>{t.from}</p>
@@ -1527,7 +1527,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                           <div className="flex-1 h-[2px] border-t-2 border-dashed mx-1" style={{ borderColor: "var(--steel)", opacity: 0.5 }} />
                           <div className="h-2.5 w-2.5 rounded-full border-[2.5px]" style={{ borderColor: "var(--marigold)", background: "white" }} />
                         </div>
-                        <span className="text-[10px] mt-2 f-mono font-bold" style={{ color: "var(--steel)" }}>{t.distance} km · {t.stops === 0 ? "Non-stop" : `${t.stops} stops`}</span>
+                        <span className="text-[10px] mt-2 f-accent font-bold" style={{ color: "var(--steel)" }}>{t.distance} km · {t.stops === 0 ? "Non-stop" : `${t.stops} stops`}</span>
                       </div>
                       
                       <div className="text-left">
@@ -1544,7 +1544,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                       const isOpen = expanded === `${t.no}-${c}`;
                       return (
                         <button key={c} onClick={() => setExpanded(isOpen ? null : `${t.no}-${c}`)}
-                          className="px-4 h-10 rounded-xl text-xs font-bold f-mono flex items-center gap-2 border shadow-sm transition-all hover:-translate-y-0.5"
+                          className="px-4 h-10 rounded-xl text-xs font-bold f-accent flex items-center gap-2 border shadow-sm transition-all hover:-translate-y-0.5"
                           style={{ 
                             background: isOpen ? s.fg : s.bg, 
                             color: isOpen ? "white" : s.fg, 
@@ -1576,7 +1576,7 @@ function ResultsScreen({ searchParams, onBook, onBack }) {
                           </p>
                         </div>
                         <div className="flex items-center gap-4 bg-white p-2 pl-5 rounded-2xl border shadow-md" style={{ borderColor: "rgba(15,42,69,0.15)" }}>
-                          <p className="f-mono text-2xl font-bold tracking-tight" style={{ color: "var(--premium-blue)" }}>₹{info.fare.toLocaleString("en-IN")}</p>
+                          <p className="f-accent text-2xl font-bold tracking-tight" style={{ color: "var(--premium-blue)" }}>₹{info.fare.toLocaleString("en-IN")}</p>
                           <button onClick={() => onBook({ train: t, cls: c, fare: info.fare, date: dateDisplay })}
                             className="h-12 px-7 rounded-xl f-body text-[15px] font-bold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
                             style={{ background: "var(--marigold)", color: "var(--premium-blue)" }}>
@@ -1734,7 +1734,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
           {STEPS.map((s, i) => (
             <React.Fragment key={s}>
               <div className="flex flex-col items-center gap-1.5 flex-1">
-                <div className="h-9 w-9 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all duration-300 shadow-sm"
+                <div className="h-9 w-9 rounded-full flex items-center justify-center f-accent text-xs font-bold transition-all duration-300 shadow-sm"
                   style={{
                     background: i <= step ? "#0A1626" : "white",
                     color: i <= step ? "#F0A63A" : "#6B7280",
@@ -1755,15 +1755,15 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
         {/* journey summary */}
         <div className="rounded-3xl bg-[#0A1626] text-white p-5 md:p-6 mb-6 shadow-xl flex flex-wrap items-center justify-between gap-4 border border-[rgba(255,255,255,0.1)]">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0A63A] font-mono block mb-1">Journey Summary</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0A63A] f-accent block mb-1">Journey Summary</span>
             <h2 className="font-serif font-bold text-lg md:text-xl text-white">{safeSelection.train.name} · #{safeSelection.train.no}</h2>
-            <p className="font-mono text-xs text-blue-200 mt-1">
+            <p className="f-accent text-xs text-blue-200 mt-1">
               {safeSelection.train.dep} {safeSelection.train.from} → {safeSelection.train.arr} {safeSelection.train.to} · Class: <span className="font-bold text-[#F0A63A]">{safeSelection.cls}</span> · Quota: General
             </p>
           </div>
           <div className="text-right">
-            <span className="text-[10px] text-blue-200 uppercase font-mono block">Total Amount</span>
-            <p className="font-mono font-black text-2xl text-[#F0A63A]">₹{total.toLocaleString("en-IN")}</p>
+            <span className="text-[10px] text-blue-200 uppercase f-accent block">Total Amount</span>
+            <p className="f-accent font-black text-2xl text-[#F0A63A]">₹{total.toLocaleString("en-IN")}</p>
             <span className="text-[10px] text-gray-400 block">{passengers.length} Passenger{passengers.length > 1 ? "s" : ""}</span>
           </div>
         </div>
@@ -1776,7 +1776,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                   <h3 className="font-serif font-bold text-lg text-[#0A1626]">Passenger Details</h3>
                   <p className="text-xs text-[#6B7280]">Enter passenger details as printed on government ID card.</p>
                 </div>
-                <span className="text-xs font-bold font-mono px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-full">
+                <span className="text-xs font-bold f-accent px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-full">
                   {passengers.length} of 6 Seats
                 </span>
               </div>
@@ -1784,7 +1784,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                 {passengers.map((p, i) => (
                   <div key={i} className="rounded-2xl border border-[rgba(10,22,38,0.08)] p-4.5 bg-[#FAF8F2]">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-xs font-bold text-[#0A1626] font-mono flex items-center gap-1.5">
+                      <p className="text-xs font-bold text-[#0A1626] f-accent flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-[#F0A63A]" /> Passenger {i + 1}
                       </p>
                       {passengers.length > 1 && (
@@ -1918,15 +1918,15 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
             <div className="rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] p-6 shadow-sm">
               <h3 className="font-serif font-bold text-lg text-[#0A1626] mb-3">Fare Breakdown</h3>
               <div className="space-y-2.5">
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Base Fare ({passengers.length} passenger{passengers.length > 1 ? 's' : ''})</span><span className="font-mono font-bold text-[#0A1626]">₹{(fare * passengers.length).toLocaleString("en-IN")}</span></div>
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Reservation Charge</span><span className="font-mono font-bold text-[#0A1626]">₹60</span></div>
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Superfast Surcharge</span><span className="font-mono font-bold text-[#0A1626]">₹45</span></div>
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">GST (5%)</span><span className="font-mono font-bold text-[#0A1626]">₹{Math.round(fare * passengers.length * 0.05)}</span></div>
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Convenience Fee (incl. GST)</span><span className="font-mono font-bold text-[#0A1626]">₹{convenience}</span></div>
-                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Travel Insurance</span><span className="font-mono font-bold text-[#0A1626]">₹{(0.45 * passengers.length).toFixed(2)}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Base Fare ({passengers.length} passenger{passengers.length > 1 ? 's' : ''})</span><span className="f-accent font-bold text-[#0A1626]">₹{(fare * passengers.length).toLocaleString("en-IN")}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Reservation Charge</span><span className="f-accent font-bold text-[#0A1626]">₹60</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Superfast Surcharge</span><span className="f-accent font-bold text-[#0A1626]">₹45</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">GST (5%)</span><span className="f-accent font-bold text-[#0A1626]">₹{Math.round(fare * passengers.length * 0.05)}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Convenience Fee (incl. GST)</span><span className="f-accent font-bold text-[#0A1626]">₹{convenience}</span></div>
+                <div className="flex justify-between text-xs md:text-sm"><span className="text-[#6B7280]">Travel Insurance</span><span className="f-accent font-bold text-[#0A1626]">₹{(0.45 * passengers.length).toFixed(2)}</span></div>
                 <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between text-base">
                   <span className="font-bold text-[#0A1626]">Total Payable</span>
-                  <span className="font-mono font-black text-2xl text-[#0A1626]">₹{total.toLocaleString("en-IN")}</span>
+                  <span className="f-accent font-black text-2xl text-[#0A1626]">₹{total.toLocaleString("en-IN")}</span>
                 </div>
               </div>
             </div>
@@ -1997,7 +1997,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                               <input
                                 value={upiId}
                                 onChange={(e) => setUpiId(e.target.value)}
-                                className="h-11 flex-1 rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] outline-none focus:border-[#0A1626] shadow-xs font-mono"
+                                className="h-11 flex-1 rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-semibold text-[#0A1626] outline-none focus:border-[#0A1626] shadow-xs f-accent"
                                 placeholder="mobilenumber@upi"
                               />
                             </div>
@@ -2045,10 +2045,10 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                             <input
                               value={cardNumber}
                               onChange={(e) => setCardNumber(e.target.value)}
-                              className="flex-1 outline-none text-xs md:text-sm font-mono font-bold text-[#0A1626] bg-transparent"
+                              className="flex-1 outline-none text-xs md:text-sm f-accent font-bold text-[#0A1626] bg-transparent"
                               placeholder="4532 •••• •••• 1092"
                             />
-                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-900 font-mono">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-900 f-accent">
                               RuPay / VISA
                             </span>
                           </div>
@@ -2061,7 +2061,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                             <input
                               value={cardExpiry}
                               onChange={(e) => setCardExpiry(e.target.value)}
-                              className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-mono font-bold text-[#0A1626] outline-none shadow-xs text-center"
+                              className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm f-accent font-bold text-[#0A1626] outline-none shadow-xs text-center"
                               placeholder="MM/YY"
                             />
                           </div>
@@ -2074,7 +2074,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                               maxLength={4}
                               value={cardCvv}
                               onChange={(e) => setCardCvv(e.target.value)}
-                              className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm font-mono font-bold text-[#0A1626] outline-none shadow-xs text-center"
+                              className="h-11 w-full rounded-xl border border-gray-300 bg-white px-3 text-xs md:text-sm f-accent font-bold text-[#0A1626] outline-none shadow-xs text-center"
                               placeholder="•••"
                             />
                           </div>
@@ -2126,7 +2126,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                             <p className="text-xs font-bold text-amber-950">IRCTC iMudra eWallet</p>
                             <p className="text-[11px] text-amber-800">Available Balance: ₹5,420.00</p>
                           </div>
-                          <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono">
+                          <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white f-accent">
                             SUFFICIENT
                           </span>
                         </div>
@@ -2139,7 +2139,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                             maxLength={4}
                             value={walletPin}
                             onChange={(e) => setWalletPin(e.target.value)}
-                            className="h-11 w-40 rounded-xl border border-gray-300 bg-white px-3 text-sm font-mono font-bold text-[#0A1626] tracking-widest text-center shadow-xs outline-none focus:border-[#0A1626]"
+                            className="h-11 w-40 rounded-xl border border-gray-300 bg-white px-3 text-sm f-accent font-bold text-[#0A1626] tracking-widest text-center shadow-xs outline-none focus:border-[#0A1626]"
                             placeholder="••••"
                           />
                         </div>
@@ -2158,7 +2158,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 
                   {/* Demo Outcome Simulation Buttons */}
                   <div className="pt-2 border-t border-gray-100">
-                    <p className="text-[11px] text-[#6B7280] mb-2 font-mono text-center">
+                    <p className="text-[11px] text-[#6B7280] mb-2 f-accent text-center">
                       Interactive Evaluation: test edge-case recovery
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -2245,13 +2245,13 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
               <div className="h-16 w-16 rounded-full bg-white flex items-center justify-center mb-3 shadow-lg">
                 <Check size={32} className="text-emerald-600 stroke-[3]" />
               </div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-700 text-emerald-100 mb-1">
+              <span className="text-[11px] f-accent font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-700 text-emerald-100 mb-1">
                 Booking Confirmed (CNF)
               </span>
               <h2 className="font-serif font-bold text-2xl md:text-3xl text-white">
                 Ticket Issued Successfully!
               </h2>
-              <div className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-800/80 font-mono text-sm font-bold text-white border border-emerald-500">
+              <div className="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-800/80 f-accent text-sm font-bold text-white border border-emerald-500">
                 <span>PNR: 8462-097-315</span>
               </div>
             </div>
@@ -2265,26 +2265,26 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                     <h3 className="font-serif font-bold text-lg text-[#0A1626]">
                       {selection.train.name} (#{selection.train.no})
                     </h3>
-                    <p className="text-xs text-gray-500 font-mono">Class {selection.cls} · Quota: General</p>
+                    <p className="text-xs text-gray-500 f-accent">Class {selection.cls} · Quota: General</p>
                   </div>
-                  <span className="px-3 py-1 rounded-lg text-xs font-bold bg-[#0A1626] text-[#F0A63A] font-mono">
+                  <span className="px-3 py-1 rounded-lg text-xs font-bold bg-[#0A1626] text-[#F0A63A] f-accent">
                     ₹{total.toLocaleString("en-IN")} PAID
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-4">
                   <div>
-                    <p className="font-mono font-bold text-lg text-[#0A1626]">{selection.train.dep}</p>
+                    <p className="f-accent font-bold text-lg text-[#0A1626]">{selection.train.dep}</p>
                     <p className="text-xs font-bold text-gray-600">{selection.train.from}</p>
                   </div>
                   <div className="flex flex-col items-center px-4">
-                    <span className="text-[10px] text-gray-400 font-mono">Direct Superfast</span>
+                    <span className="text-[10px] text-gray-400 f-accent">Direct Superfast</span>
                     <div className="w-24 h-0.5 bg-gray-300 my-1 relative">
                       <div className="w-2 h-2 rounded-full bg-[#0A1626] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                     </div>
                     <span className="text-[10px] font-bold text-emerald-700">On Time</span>
                   </div>
                   <div className="text-right">
-                    <p className="font-mono font-bold text-lg text-[#0A1626]">{selection.train.arr}</p>
+                    <p className="f-accent font-bold text-lg text-[#0A1626]">{selection.train.arr}</p>
                     <p className="text-xs font-bold text-gray-600">{selection.train.to}</p>
                   </div>
                 </div>
@@ -2292,7 +2292,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
 
               {/* Passenger & Berth Allocation Table */}
               <div>
-                <h4 className="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2.5 font-mono">
+                <h4 className="font-bold text-xs uppercase tracking-wider text-gray-500 mb-2.5 f-accent">
                   Allocated Coach & Berths
                 </h4>
                 <div className="space-y-2">
@@ -2302,7 +2302,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                       className="p-3.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-6 h-6 rounded-full bg-gray-100 text-gray-700 text-xs font-bold flex items-center justify-center font-mono">
+                        <span className="w-6 h-6 rounded-full bg-gray-100 text-gray-700 text-xs font-bold flex items-center justify-center f-accent">
                           {i + 1}
                         </span>
                         <div>
@@ -2311,7 +2311,7 @@ function BookingScreen({ selection, onDone, onBack, onConfirmed }) {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono text-xs font-bold">
+                        <span className="px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 f-accent text-xs font-bold">
                           Coach B4 · Berth {42 + i * 3} ({p.berth === "LB" ? "Lower" : p.berth === "MB" ? "Middle" : "Upper"})
                         </span>
                       </div>

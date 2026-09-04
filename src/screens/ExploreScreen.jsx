@@ -137,7 +137,7 @@ export default function ExploreScreen({ onNavigate }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent"></div>
                 <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-                  <span className="text-[11px] font-bold f-mono px-2.5 py-1 rounded-full text-white bg-black/50 backdrop-blur-md border border-white/20">
+                  <span className="text-[11px] font-bold f-accent px-2.5 py-1 rounded-full text-white bg-black/50 backdrop-blur-md border border-white/20">
                     {p.days}
                   </span>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/90 text-[var(--ink)]">
@@ -204,7 +204,7 @@ export default function ExploreScreen({ onNavigate }) {
                     }}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 text-[10px] font-bold f-mono px-2 py-0.5 rounded-md text-white bg-black/60 backdrop-blur-md">
+                  <span className="absolute top-3 left-3 text-[10px] font-bold f-accent px-2 py-0.5 rounded-md text-white bg-black/60 backdrop-blur-md">
                     {p.days}
                   </span>
                 </div>
@@ -222,7 +222,7 @@ export default function ExploreScreen({ onNavigate }) {
                   <div className="flex items-center justify-between pt-3 border-t mt-auto" style={{ borderColor: "rgba(15,42,69,0.06)" }}>
                     <div>
                       <span className="text-[10px] text-gray-400 block uppercase font-medium">All-Inclusive</span>
-                      <span className="f-mono text-base font-extrabold" style={{ color: "var(--ink)" }}>{p.price}</span>
+                      <span className="f-accent text-base font-extrabold" style={{ color: "var(--ink)" }}>{p.price}</span>
                     </div>
                     <button className="text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition-all hover:opacity-90" style={{ background: "var(--marigold)", color: "var(--blue)" }}>
                       View Details
@@ -290,7 +290,7 @@ export default function ExploreScreen({ onNavigate }) {
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className="font-mono text-xs font-bold text-[#F0A63A] bg-[#0A1626] px-2 py-0.5 rounded mr-2">#{t.no}</span>
+                        <span className="f-accent text-xs font-bold text-[#F0A63A] bg-[#0A1626] px-2 py-0.5 rounded mr-2">#{t.no}</span>
                         <span className="font-bold text-sm text-[#0A1626]">{t.name}</span>
                       </div>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
@@ -450,7 +450,7 @@ export default function ExploreScreen({ onNavigate }) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
-                <span className="text-xs f-mono font-bold px-2.5 py-1 rounded-full text-white bg-black/50 backdrop-blur-md border border-white/20">{activeModal.days}</span>
+                <span className="text-xs f-accent font-bold px-2.5 py-1 rounded-full text-white bg-black/50 backdrop-blur-md border border-white/20">{activeModal.days}</span>
                 <div className="text-right">
                   <span className="text-[10px] text-white/70 block uppercase font-medium">Package Fare</span>
                   <span className="text-white font-extrabold text-xl">{activeModal.price}</span>

@@ -255,7 +255,7 @@ export function PaymentsModal({ isOpen, onClose }) {
             </div>
             <div className="flex-1">
               <p className="font-bold text-xs md:text-sm text-[#0A1626]">{pm.title}</p>
-              <p className="text-[11px] text-[#6B7280] font-mono">{pm.subtitle}</p>
+              <p className="text-[11px] text-[#6B7280] f-accent">{pm.subtitle}</p>
             </div>
             <button 
               onClick={() => removePaymentMethod(pm.id)}
@@ -296,7 +296,7 @@ export function PaymentsModal({ isOpen, onClose }) {
               value={subtitle} 
               onChange={e => setSubtitle(e.target.value)} 
               placeholder={type === 'upi' ? 'yourname@okaxis' : 'Card Ending in •••• 1234'}
-              className="w-full h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs font-mono outline-none" 
+              className="w-full h-10 px-3 rounded-xl border border-gray-300 bg-white text-xs f-accent outline-none" 
             />
             <div className="flex gap-2 pt-1">
               <button type="submit" className="flex-1 h-9 rounded-xl bg-[#0A1626] text-[#F0A63A] font-bold text-xs cursor-pointer">
@@ -342,7 +342,7 @@ export function KycModal({ isOpen, onClose }) {
         </div>
         <h4 className="font-serif font-bold text-base text-[#0A1626]">DigiLocker Verified Successfully</h4>
         <p className="text-xs mt-1 text-[#6B7280] max-w-xs leading-relaxed">
-          Aadhaar ending in <strong className="font-mono text-[#0A1626]">•••• {aadhaarLast4}</strong> is active and unlocks 12 monthly ticket bookings.
+          Aadhaar ending in <strong className="f-accent text-[#0A1626]">•••• {aadhaarLast4}</strong> is active and unlocks 12 monthly ticket bookings.
         </p>
 
         {isEditing ? (
@@ -354,7 +354,7 @@ export function KycModal({ isOpen, onClose }) {
               value={tempInput}
               onChange={e => setTempInput(e.target.value.replace(/\D/g, ''))}
               placeholder="e.g. 5921"
-              className="h-10 w-36 mx-auto px-3 rounded-xl border border-gray-300 font-mono font-bold text-center text-sm outline-none block"
+              className="h-10 w-36 mx-auto px-3 rounded-xl border border-gray-300 f-accent font-bold text-center text-sm outline-none block"
             />
             <div className="flex gap-2 justify-center">
               <button type="submit" className="h-8 px-4 rounded-lg bg-[#0A1626] text-[#F0A63A] text-xs font-bold cursor-pointer">

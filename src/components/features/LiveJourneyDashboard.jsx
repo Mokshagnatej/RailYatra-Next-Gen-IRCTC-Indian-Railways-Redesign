@@ -35,9 +35,9 @@ export default function LiveJourneyDashboard() {
       <div className="flex justify-between items-center mb-3">
         <div>
           <h3 className="f-heading text-sm font-bold text-[#0A1626]">Live Journey Radar</h3>
-          <p className="text-[10px] text-[#4B5563] font-mono">#12951 Tejas Rajdhani</p>
+          <p className="text-[10px] text-[#4B5563] f-accent">#12951 Tejas Rajdhani</p>
         </div>
-        <span className="text-[10px] font-mono font-bold px-2 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wide flex items-center gap-1">
+        <span className="text-[10px] f-accent font-bold px-2 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wide flex items-center gap-1">
           <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
           Live GPS
         </span>
@@ -46,7 +46,7 @@ export default function LiveJourneyDashboard() {
       <div className="space-y-4">
         {/* Route Progress */}
         <div className="relative pt-2 pb-1">
-          <div className="flex justify-between text-[10px] font-mono font-bold text-[#4B5563] mb-1">
+          <div className="flex justify-between text-[10px] f-accent font-bold text-[#4B5563] mb-1">
             <span>{from ? from.split('(')[0].trim() : "New Delhi"}</span>
             <span>{to ? to.split('(')[0].trim() : "Mumbai Central"}</span>
           </div>
@@ -56,7 +56,7 @@ export default function LiveJourneyDashboard() {
               style={{ width: `${liveProgress}%` }}
             />
           </div>
-          <div className="flex justify-between text-[9px] text-[#4B5563] mt-1 font-mono">
+          <div className="flex justify-between text-[9px] text-[#4B5563] mt-1 f-accent">
             <span>{liveProgress}% completed</span>
             <span>{statusLabel}</span>
           </div>
@@ -75,7 +75,7 @@ export default function LiveJourneyDashboard() {
           <div className="text-right">
             <p className="text-[10px] uppercase font-bold tracking-wide text-slate-500">Next Stop</p>
             <p className="text-sm font-bold text-[#0A1626]">{nextStation}</p>
-            <p className="text-xs font-mono font-bold text-amber-700">{eta}</p>
+            <p className="text-xs f-accent font-bold text-amber-700">{eta}</p>
           </div>
         </div>
 
@@ -85,7 +85,7 @@ export default function LiveJourneyDashboard() {
             <Activity size={14} className="text-amber-600" />
             <div>
               <p className="text-[10px] uppercase font-bold tracking-wide text-slate-500">Speed</p>
-              <p className="text-xs font-mono font-bold text-[#0A1626]">{speed}</p>
+              <p className="text-xs f-accent font-bold text-[#0A1626]">{speed}</p>
             </div>
           </div>
           <div className="w-px h-6 bg-slate-300" />
@@ -93,7 +93,7 @@ export default function LiveJourneyDashboard() {
             <Navigation size={14} className="text-blue-600" />
             <div>
               <p className="text-[10px] uppercase font-bold tracking-wide text-slate-500">Remaining</p>
-              <p className="text-xs font-mono font-bold text-[#0A1626]">{distanceRemaining}</p>
+              <p className="text-xs f-accent font-bold text-[#0A1626]">{distanceRemaining}</p>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function LiveJourneyDashboard() {
           <div className="w-full max-w-md bg-[#F3EEE0] rounded-2xl shadow-2xl overflow-hidden anim-fade-up border border-gray-300">
             <div className="flex justify-between items-center p-5 border-b border-gray-200 bg-white">
               <div>
-                <h2 className="f-serif text-xl font-bold text-[#0A1626]">IRCTC eCatering</h2>
+                <h2 className="f-heading text-xl font-bold text-[#0A1626]">IRCTC eCatering</h2>
                 <p className="text-xs text-[#4B5563]">Upcoming Delivery: {nextStation} ({eta})</p>
               </div>
               <button onClick={() => setShowFoodModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-600">
@@ -137,7 +137,7 @@ export default function LiveJourneyDashboard() {
                     <div className="flex-1">
                       <p className="font-bold text-sm text-[#0A1626]">{restaurant.name}</p>
                       <p className="text-xs text-[#4B5563]">{restaurant.desc}</p>
-                      <p className="text-xs mt-1 font-mono font-bold text-emerald-700">{restaurant.time}</p>
+                      <p className="text-xs mt-1 f-accent font-bold text-emerald-700">{restaurant.time}</p>
                     </div>
                   </div>
                 ))}

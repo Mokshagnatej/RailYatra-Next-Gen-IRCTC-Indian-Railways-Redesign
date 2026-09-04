@@ -105,10 +105,10 @@ export default function ScrollLinkedRailLine({ steps = [] }) {
             key={step.n || i}
             className="p-5 rounded-2xl border bg-white/70 dark:bg-black/30 backdrop-blur-sm border-[var(--line)] shadow-sm hover:shadow-md transition-all hover:-translate-y-1 flex flex-col items-start"
           >
-            <div className="w-8 h-8 rounded-full bg-[var(--navy)] text-[var(--marigold)] f-mono text-xs font-bold flex items-center justify-center mb-3 shadow-inner">
+            <div className="w-8 h-8 rounded-full bg-[var(--navy)] text-[var(--marigold)] f-accent text-xs font-bold flex items-center justify-center mb-3 shadow-inner">
               0{i + 1}
             </div>
-            <h3 className="f-serif font-bold text-lg text-[var(--ink)] mb-1.5">
+            <h3 className="f-heading font-bold text-lg text-[var(--ink)] mb-1.5">
               {step.title}
             </h3>
             <p className="text-xs md:text-sm text-[var(--steel)] leading-relaxed">

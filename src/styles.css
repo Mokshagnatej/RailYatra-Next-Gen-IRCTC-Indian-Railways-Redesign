@@ -124,6 +124,9 @@
   --steel: #4B5563;
   --red-bg: #FEE2E2;
   --green-bg: #DCFCE7;
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Space Grotesk', sans-serif;
 }
 
 @layer base {
@@ -283,8 +286,9 @@
   .f-heading { font-family: var(--font-heading); letter-spacing: -0.02em; }
   .f-body { font-family: var(--font-body); }
   .f-accent { font-family: var(--font-accent); }
-  /* Legacy alias — f-serif mapped to f-heading (both Fraunces) */
+  /* Legacy aliases mapped to new tokens */
   .f-serif { font-family: var(--font-heading); letter-spacing: -0.02em; }
+  .f-mono { font-family: var(--font-accent); }
   
   .paper-texture {
     background-image: radial-gradient(circle, rgba(15,42,69,0.045) 1px, transparent 1px);

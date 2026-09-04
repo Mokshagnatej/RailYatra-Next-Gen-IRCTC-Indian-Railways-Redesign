@@ -43,7 +43,7 @@ export default function DateStrip({ dates = [], activeDate, onSelect, availabili
 
             {/* Day Text Label */}
             <span
-              className={`relative z-10 font-mono text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 ${
+              className={`relative z-10 f-accent text-[11px] font-bold uppercase tracking-wider transition-colors duration-200 ${
                 on ? 'text-[#F3EEE0]/90' : 'text-[#6b6250]'
               }`}
             >

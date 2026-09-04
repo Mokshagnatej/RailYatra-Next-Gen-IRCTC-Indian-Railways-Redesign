@@ -261,7 +261,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
             <div className="p-6 rounded-3xl bg-white border border-[rgba(10,22,38,0.12)] shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                  <span className="px-3 py-1 rounded-xl bg-[#0A1626] text-[#F0A63A] font-mono font-extrabold text-sm shadow-xs">
+                  <span className="px-3 py-1 rounded-xl bg-[#0A1626] text-[#F0A63A] f-accent font-extrabold text-sm shadow-xs">
                     #{trainResult.trainNo}
                   </span>
                   <h2 className="text-xl font-extrabold text-[#0A1626]">
@@ -320,12 +320,12 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                       <div>
                         <div className="flex items-center justify-between mb-3">
                           <div>
-                            <span className="font-mono font-black text-lg text-[#0A1626]">{cls}</span>
+                            <span className="f-accent font-black text-lg text-[#0A1626]">{cls}</span>
                             <span className="text-xs text-[#6B7280] block font-medium">
                               {cls === "1A" ? "AC First Class" : cls === "2A" ? "AC 2-Tier" : cls === "3A" ? "AC 3-Tier" : cls === "CC" ? "AC Chair Car" : cls === "EC" ? "Exec Chair Car" : "Sleeper Class"}
                             </span>
                           </div>
-                          <span className="font-mono font-extrabold text-base text-[#0A1626]">
+                          <span className="f-accent font-extrabold text-base text-[#0A1626]">
                             ₹{info.fare}
                           </span>
                         </div>
@@ -339,7 +339,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                           <div className="flex items-center gap-2">
                             <CheckCircle2 size={18} className={isAvailable ? "text-emerald-600" : "text-amber-600"} />
                             <div>
-                              <span className="font-mono font-extrabold text-sm block">
+                              <span className="f-accent font-extrabold text-sm block">
                                 {isAvailable ? `AVAILABLE - ${info.n || 42}` : `RAC ${info.n || 8}`}
                               </span>
                               <span className="text-[10px] font-bold text-emerald-700 block">
@@ -356,7 +356,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                           </span>
                           <div className="grid grid-cols-6 gap-1 text-center">
                             {forecast.map(f => (
-                              <div key={f.d} className={`p-1 rounded-lg border text-[9px] font-bold font-mono ${f.color}`}>
+                              <div key={f.d} className={`p-1 rounded-lg border text-[9px] font-bold f-accent ${f.color}`}>
                                 <span className="block opacity-75">{f.d.split(" ")[0]}</span>
                                 <span className="block truncate">{f.status.split(" ")[0]}</span>
                               </div>
@@ -425,7 +425,7 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-mono font-extrabold text-xs px-2.5 py-0.5 rounded-lg bg-[#0A1626] text-[#F0A63A]">
+                      <span className="f-accent font-extrabold text-xs px-2.5 py-0.5 rounded-lg bg-[#0A1626] text-[#F0A63A]">
                         #{t.no}
                       </span>
                       <h4 className="font-bold text-base text-[#0A1626]">{t.name}</h4>
@@ -442,8 +442,8 @@ export default function SeatAvailabilityScreen({ onBook, onNavigate }) {
                     <div className="flex items-center gap-2 mt-3 flex-wrap">
                       {Object.entries(t.classes || {}).map(([cls, info]) => (
                         <div key={cls} className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs flex items-center gap-2">
-                          <span className="font-mono font-bold text-emerald-950">{cls}</span>
-                          <span className="font-mono text-emerald-700 font-extrabold">₹{info.fare}</span>
+                          <span className="f-accent font-bold text-emerald-950">{cls}</span>
+                          <span className="f-accent text-emerald-700 font-extrabold">₹{info.fare}</span>
                           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-600 text-white">
                             {info.status === "AVAILABLE" ? `AVL ${info.n || 32}` : "RAC"}
                           </span>

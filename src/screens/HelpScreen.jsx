@@ -116,7 +116,7 @@ function HelpScreen() {
               value={complaintRef}
               onChange={e => setComplaintRef(e.target.value)}
               placeholder="e.g. RM20260824901"
-              className="flex-1 h-12 px-3.5 rounded-xl border border-gray-300 bg-white text-xs md:text-sm font-mono font-bold text-[#0A1626] outline-none"
+              className="flex-1 h-12 px-3.5 rounded-xl border border-gray-300 bg-white text-xs md:text-sm f-accent font-bold text-[#0A1626] outline-none"
             />
             <button 
               onClick={handleTrackComplaint}
@@ -130,7 +130,7 @@ function HelpScreen() {
           {complaintStatus && (
             <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs space-y-2 anim-fade-up">
               <div className="flex justify-between items-center pb-2 border-b border-emerald-200">
-                <span className="font-mono font-bold text-emerald-950">Ref: {complaintStatus.ref}</span>
+                <span className="f-accent font-bold text-emerald-950">Ref: {complaintStatus.ref}</span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-600 text-white">{complaintStatus.status}</span>
               </div>
               <p className="text-[#0A1626] font-semibold">Department: <span className="text-emerald-900">{complaintStatus.dep}</span></p>

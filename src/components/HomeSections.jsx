@@ -285,7 +285,7 @@ export function QuickTools() {
         {/* Quick Date Chips (When tab is seat availability) */}
         {tab === "seat" ? (
           <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-mono font-bold text-gray-500 uppercase">Select Journey Date:</span>
+            <span className="text-xs f-accent font-bold text-gray-500 uppercase">Select Journey Date:</span>
             {QUICK_DATES.map((d) => (
               <button
                 key={d.dateStr}
@@ -293,7 +293,7 @@ export function QuickTools() {
                   setTravelDate(d.dateStr);
                   handleCheck(undefined, d.dateStr);
                 }}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-lg text-xs f-accent font-bold transition-all cursor-pointer ${
                   travelDate === d.dateStr
                     ? 'bg-[#0A1626] text-[#F0A63A] shadow-sm ring-1 ring-[#F0A63A]'
                     : 'bg-[#F3EEE0] text-[#0A1626] hover:bg-[#F0A63A] hover:text-[#0A1626]'
@@ -330,7 +330,7 @@ export function QuickTools() {
               style={{ borderColor: "rgba(255,255,255,0.8)", background: "rgba(255,255,255,0.95)", backdropFilter: "blur(12px)" }}>
               
               <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-gray-200/60">
-                <p className="f-mono text-base font-bold text-[#0A1626]">{dynamicResult.title}</p>
+                <p className="f-accent text-base font-bold text-[#0A1626]">{dynamicResult.title}</p>
                 <span className="text-xs font-bold px-3 py-1 rounded-full text-white shadow-sm" style={{ background: dynamicResult.badgeColor }}>
                   {dynamicResult.badge}
                 </span>
@@ -339,7 +339,7 @@ export function QuickTools() {
               {/* 6-Day Availability Forecast Strip for Seat Availability */}
               {dynamicResult.forecast && (
                 <div className="mb-5 p-3 rounded-xl bg-[#F8F6F0] border border-[rgba(10,22,38,0.08)]">
-                  <div className="text-[11px] font-mono font-bold text-gray-500 uppercase mb-2 flex items-center justify-between">
+                  <div className="text-[11px] f-accent font-bold text-gray-500 uppercase mb-2 flex items-center justify-between">
                     <span>📅 6-Day Availability Forecast</span>
                     <span className="text-[10px] text-green-700 font-bold">Click date to switch</span>
                   </div>
@@ -354,8 +354,8 @@ export function QuickTools() {
                             : 'bg-white text-[#0A1626] border-gray-200 hover:border-[#0A1626]'
                         }`}
                       >
-                        <div className="text-[10px] font-mono opacity-70">{fc.day}</div>
-                        <div className="text-xs font-bold font-mono">{fc.date}</div>
+                        <div className="text-[10px] f-accent opacity-70">{fc.day}</div>
+                        <div className="text-xs font-bold f-accent">{fc.date}</div>
                         <div className="text-[10px] font-bold mt-1" style={{ color: travelDate.includes(fc.date) ? '#F0A63A' : fc.color }}>
                           {fc.status}
                         </div>
@@ -369,7 +369,7 @@ export function QuickTools() {
                 {dynamicResult.lines.map(([k, v]) => (
                   <div key={k} className="flex flex-col sm:flex-row sm:items-center justify-between text-sm py-1.5 border-b border-dashed last:border-none border-gray-200">
                     <span className="font-semibold text-xs sm:text-sm text-[#4B5563]">{k}</span>
-                    <span className="font-mono font-bold text-xs sm:text-sm mt-0.5 sm:mt-0 text-[#0A1626]">{v}</span>
+                    <span className="f-accent font-bold text-xs sm:text-sm mt-0.5 sm:mt-0 text-[#0A1626]">{v}</span>
                   </div>
                 ))}
               </div>
@@ -421,7 +421,7 @@ export function StatsBand() {
         {STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.09}>
             <div className="relative">
-              <p className="f-serif font-bold" style={{ fontSize:"clamp(2rem,3.5vw,3rem)", color:"var(--marigold)", lineHeight:1.1 }}>
+              <p className="f-heading font-bold" style={{ fontSize:"clamp(2rem,3.5vw,3rem)", color:"var(--marigold)", lineHeight:1.1 }}>
                 {(() => {
                   const m = String(s.value).match(/^([^\d]*)([\d,]+)(.*)$/);
                   if (!m) return s.value;
@@ -582,10 +582,10 @@ export function PopularRoutes({ onSearch }) {
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#1F7A4C] animate-pulse" />
-            <p className="f-mono text-xs tracking-widest uppercase font-bold" style={{ color: "var(--marigold-2)" }}>Live Train Timings & Popular Corridors</p>
+            <p className="f-accent text-xs tracking-widest uppercase font-bold" style={{ color: "var(--marigold-2)" }}>Live Train Timings & Popular Corridors</p>
           </div>
-          <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Where India is travelling this week</h2>
-          <p className="text-xs text-[#6B7280] mt-1 font-mono">Live GPS synchronized departure schedule · updated in real time</p>
+          <h2 className="f-heading font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Where India is travelling this week</h2>
+          <p className="text-xs text-[#6B7280] mt-1 f-accent">Live GPS synchronized departure schedule · updated in real time</p>
         </div>
         <div className="hidden md:block w-56 flex-shrink-0"><RouteMapIllustration /></div>
       </div>
@@ -600,11 +600,11 @@ export function PopularRoutes({ onSearch }) {
               {/* Header Info */}
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[#0A1626]">
+                  <div className="flex items-center gap-1.5 f-accent text-xs font-bold text-[#0A1626]">
                     <Train size={13} className="text-[#F0A63A]" /> 
                     <span>{r.code}</span>
                   </div>
-                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md bg-green-50 text-green-700 border border-green-200/80 flex items-center gap-1">
+                  <span className="text-[10px] font-bold f-accent px-2 py-0.5 rounded-md bg-green-50 text-green-700 border border-green-200/80 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" /> {r.status}
                   </span>
                 </div>
@@ -636,8 +636,8 @@ export function PopularRoutes({ onSearch }) {
               {/* Progress Bar & Actions */}
               <div className="mt-4 pt-3 border-t border-gray-100">
                 <div className="flex items-center justify-between text-xs mb-3">
-                  <span className="text-gray-500 text-[11px] font-mono">{r.trains} daily trains</span>
-                  <span className="font-mono font-bold text-xs text-[#1F7A4C]">from ₹{r.from_fare}</span>
+                  <span className="text-gray-500 text-[11px] f-accent">{r.trains} daily trains</span>
+                  <span className="f-accent font-bold text-xs text-[#1F7A4C]">from ₹{r.from_fare}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -646,7 +646,7 @@ export function PopularRoutes({ onSearch }) {
                       const t = getTrainByNumber(r.trainNo) || getTrainByNumber("12951");
                       setModalTrain(t);
                     }}
-                    className="py-2 px-2 text-center rounded-xl bg-white border border-[#0A1626]/20 hover:border-[#0A1626] hover:bg-gray-50 text-[#0A1626] font-bold text-[11px] font-mono transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
+                    className="py-2 px-2 text-center rounded-xl bg-white border border-[#0A1626]/20 hover:border-[#0A1626] hover:bg-gray-50 text-[#0A1626] font-bold text-[11px] f-accent transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
                   >
                     <Clock size={12} className="text-[#F0A63A]" /> Live Timings
                   </button>
@@ -660,7 +660,7 @@ export function PopularRoutes({ onSearch }) {
                       quota: "General", 
                       passengers: { adults: 1, children: 0, infants: 0 } 
                     })}
-                    className="py-2 px-2 text-center rounded-xl bg-[#0A1626] hover:bg-black text-white font-bold text-[11px] font-mono transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
+                    className="py-2 px-2 text-center rounded-xl bg-[#0A1626] hover:bg-black text-white font-bold text-[11px] f-accent transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1"
                   >
                     Book Seat →
                   </button>
@@ -699,8 +699,8 @@ export function Services() {
     <section className="max-w-6xl mx-auto px-4 md:px-6 mt-14">
       <div className="grid md:grid-cols-[1fr_0.8fr] gap-6 items-center">
         <div>
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Everything on one platform</p>
-          <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>More than a ticket window</h2>
+          <p className="f-accent text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Everything on one platform</p>
+          <h2 className="f-heading font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>More than a ticket window</h2>
           <p className="text-sm mt-2 max-w-md leading-relaxed" style={{ color: "var(--steel)" }}>
             Tickets, stays, meals and refunds — handled end to end, from the platform bench to the berth.
           </p>
@@ -740,8 +740,8 @@ export function HowItWorks() {
     <section className="mt-20 relative overflow-hidden" style={{ background:"var(--paper-2)" }}>
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-16">
         <Reveal className="text-center mb-12">
-          <p className="f-mono text-xs tracking-widest uppercase mb-2" style={{ color: "var(--marigold-2)" }}>How it works</p>
-          <h2 className="f-serif font-bold text-3xl md:text-4xl" style={{ color: "var(--ink)" }}>Four stops, start to seat</h2>
+          <p className="f-accent text-xs tracking-widest uppercase mb-2" style={{ color: "var(--marigold-2)" }}>How it works</p>
+          <h2 className="f-heading font-bold text-3xl md:text-4xl" style={{ color: "var(--ink)" }}>Four stops, start to seat</h2>
         </Reveal>
         
         <ScrollLinkedRailLine steps={STEPS} />
@@ -801,8 +801,8 @@ export function FAQ() {
   const [open, setOpen] = useState(0);
   return (
     <section className="max-w-3xl mx-auto px-4 md:px-6 mt-14 pb-16">
-      <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Questions</p>
-      <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>The things people actually ask</h2>
+      <p className="f-accent text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Questions</p>
+      <h2 className="f-heading font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>The things people actually ask</h2>
       <div className="mt-5 rounded-xl border bg-[var(--surface)] overflow-hidden" style={{ borderColor: "var(--line)" }}>
         {FAQS.map((f, i) => {
           const on = open === i;
@@ -838,8 +838,8 @@ export function DestinationDiscovery() {
     <section className="max-w-6xl mx-auto px-4 md:px-6 mt-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Explore</p>
-          <h2 className="f-serif font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Find your next journey</h2>
+          <p className="f-accent text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Explore</p>
+          <h2 className="f-heading font-bold text-3xl mt-1" style={{ color: "var(--ink)" }}>Find your next journey</h2>
         </div>
       </div>
       
@@ -855,7 +855,7 @@ export function DestinationDiscovery() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             
             <div className="absolute bottom-0 left-0 right-0 p-5">
-              <h3 className="f-serif font-bold text-xl text-white mb-1">{dest.title}</h3>
+              <h3 className="f-heading font-bold text-xl text-white mb-1">{dest.title}</h3>
               <p className="f-body text-sm text-white/80">{dest.subtitle}</p>
             </div>
           </div>

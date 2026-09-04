@@ -82,7 +82,7 @@ export default function TrainTimetableModal({
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#F0A63A] text-[#0A1626] uppercase tracking-wider">
                 {train.type}
               </span>
-              <span className="font-mono text-xs text-[#94A3B8] font-semibold">
+              <span className="f-accent text-xs text-[#94A3B8] font-semibold">
                 Train #{train.trainNo}
               </span>
             </div>
@@ -108,22 +108,22 @@ export default function TrainTimetableModal({
         <div className="bg-[#F3EEE0] border-b border-[rgba(10,22,38,0.1)] px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-4 text-[#0A1626] font-semibold">
             <div>
-              <span className="text-[#6B7280] block text-[10px] uppercase font-mono">Distance</span>
+              <span className="text-[#6B7280] block text-[10px] uppercase f-accent">Distance</span>
               <span>{train.totalDistanceKm} km</span>
             </div>
             <div className="h-6 w-px bg-black/10" />
             <div>
-              <span className="text-[#6B7280] block text-[10px] uppercase font-mono">Total Time</span>
+              <span className="text-[#6B7280] block text-[10px] uppercase f-accent">Total Time</span>
               <span className="font-bold">{train.duration || train.totalDuration || "3h 30m"}</span>
             </div>
             <div className="h-6 w-px bg-black/10" />
             <div>
-              <span className="text-[#6B7280] block text-[10px] uppercase font-mono">Avg Speed</span>
+              <span className="text-[#6B7280] block text-[10px] uppercase f-accent">Avg Speed</span>
               <span className="font-bold">{avgSpeed} km/h</span>
             </div>
             <div className="h-6 w-px bg-black/10" />
             <div>
-              <span className="text-[#6B7280] block text-[10px] uppercase font-mono">Halts</span>
+              <span className="text-[#6B7280] block text-[10px] uppercase f-accent">Halts</span>
               <span className="font-bold">{(train.schedule || []).length} Stops</span>
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function TrainTimetableModal({
               <span
                 key={i}
                 title={d.full}
-                className={`h-5 w-5 rounded text-[10px] font-bold font-mono flex items-center justify-center ${
+                className={`h-5 w-5 rounded text-[10px] font-bold f-accent flex items-center justify-center ${
                   d.active
                     ? "bg-[#0A1626] text-white shadow-xs"
                     : "bg-black/5 text-[#9CA3AF]"
@@ -174,13 +174,13 @@ export default function TrainTimetableModal({
         {/* Coach Sequence visualization */}
         {train.coachComposition && (
           <div className="px-6 py-2.5 bg-gray-50 border-b border-[rgba(10,22,38,0.06)] overflow-x-auto flex items-center gap-1.5 scrollbar-thin">
-            <span className="text-[10px] font-mono uppercase font-bold text-[#6B7280] mr-1 flex-shrink-0">
+            <span className="text-[10px] f-accent uppercase font-bold text-[#6B7280] mr-1 flex-shrink-0">
               Rake Layout:
             </span>
             {train.coachComposition.map((c, i) => (
               <span
                 key={i}
-                className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold flex-shrink-0 border ${
+                className={`px-2 py-0.5 rounded text-[10px] f-accent font-bold flex-shrink-0 border ${
                   c === "ENG"
                     ? "bg-amber-100 text-amber-900 border-amber-300"
                     : c === "PC"
@@ -200,7 +200,7 @@ export default function TrainTimetableModal({
 
         {/* Interactive Schedule Table / Timeline */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-5 space-y-3">
-          <div className="flex items-center justify-between text-xs font-mono font-bold text-[#6B7280] px-3 pb-1 border-b border-[rgba(10,22,38,0.1)]">
+          <div className="flex items-center justify-between text-xs f-accent font-bold text-[#6B7280] px-3 pb-1 border-b border-[rgba(10,22,38,0.1)]">
             <span className="w-10">SEQ</span>
             <span className="flex-1">STATION</span>
             <span className="w-16 text-center">ARR</span>
@@ -228,11 +228,11 @@ export default function TrainTimetableModal({
                     key={`skip-${item.stationCode}-${idx}`}
                     className="flex items-center justify-between text-xs py-1 px-3 rounded-lg bg-gray-50/70 border border-dashed border-gray-200 text-[#9CA3AF] opacity-70"
                   >
-                    <span className="w-10 font-mono text-[10px] text-gray-400">---</span>
+                    <span className="w-10 f-accent text-[10px] text-gray-400">---</span>
                     <div className="flex-1 flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-gray-300 flex-shrink-0" />
                       <span className="font-medium text-gray-600">{item.stationName}</span>
-                      <span className="font-mono text-[10px] text-gray-400">({item.stationCode})</span>
+                      <span className="f-accent text-[10px] text-gray-400">({item.stationCode})</span>
                       <span className="text-[9px] px-1.5 py-0.2 rounded bg-gray-200 text-gray-600 uppercase font-bold">
                         Pass Through · No Halt
                       </span>
@@ -240,7 +240,7 @@ export default function TrainTimetableModal({
                     <span className="w-16 text-center text-gray-400">--:--</span>
                     <span className="w-16 text-center text-gray-400">--:--</span>
                     <span className="w-16 text-center text-gray-400">Speed</span>
-                    <span className="w-14 text-right font-mono text-gray-400">{item.distKm} km</span>
+                    <span className="w-14 text-right f-accent text-gray-400">{item.distKm} km</span>
                     <span className="w-12 text-right hidden sm:inline text-gray-400">-</span>
                   </div>
                 );
@@ -260,7 +260,7 @@ export default function TrainTimetableModal({
                       : "bg-white border-[rgba(10,22,38,0.08)] hover:bg-[#F3EEE0]/50"
                   }`}
                 >
-                  <span className="w-10 font-mono font-bold text-[#6B7280]">
+                  <span className="w-10 f-accent font-bold text-[#6B7280]">
                     {item.seq || idx + 1}
                   </span>
 
@@ -278,22 +278,22 @@ export default function TrainTimetableModal({
                       <span className="font-bold text-[#0A1626] text-[13px] block truncate">
                         {item.stationName}
                       </span>
-                      <span className="font-mono text-[10px] text-[#6B7280] font-semibold">
+                      <span className="f-accent text-[10px] text-[#6B7280] font-semibold">
                         {item.stationCode} {item.state && `· ${item.state}`} {item.day && `· Day ${item.day}`}
                       </span>
                     </div>
                   </div>
 
-                  <span className="w-16 text-center font-mono font-bold text-[#0A1626]">
+                  <span className="w-16 text-center f-accent font-bold text-[#0A1626]">
                     {item.arr}
                   </span>
-                  <span className="w-16 text-center font-mono font-bold text-[#0A1626]">
+                  <span className="w-16 text-center f-accent font-bold text-[#0A1626]">
                     {item.dep}
                   </span>
 
                   <span className="w-16 text-center">
                     <span
-                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold inline-block ${
+                      className={`px-1.5 py-0.5 rounded text-[10px] f-accent font-bold inline-block ${
                         isOrigin || isDest
                           ? "bg-gray-100 text-gray-700 font-semibold"
                           : "bg-amber-100 text-amber-900 border border-amber-200"
@@ -303,11 +303,11 @@ export default function TrainTimetableModal({
                     </span>
                   </span>
 
-                  <span className="w-14 text-right font-mono font-bold text-[#4B5563]">
+                  <span className="w-14 text-right f-accent font-bold text-[#4B5563]">
                     {item.distKm} km
                   </span>
 
-                  <span className="w-12 text-right hidden sm:inline font-mono text-[11px] font-bold text-[#0A1626]">
+                  <span className="w-12 text-right hidden sm:inline f-accent text-[11px] font-bold text-[#0A1626]">
                     {item.platform || "PF 1"}
                   </span>
                 </div>

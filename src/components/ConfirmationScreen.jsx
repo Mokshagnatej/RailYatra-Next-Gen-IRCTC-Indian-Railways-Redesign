@@ -50,7 +50,7 @@ function Row({ label, value, mono = true, strong }) {
   return (
     <div className="flex items-baseline justify-between gap-4 py-1.5">
       <span className="text-xs" style={{ color: "var(--steel)" }}>{label}</span>
-      <span className={`${mono ? "f-mono" : ""} text-sm ${strong ? "font-semibold" : "font-medium"}`} style={{ color: "var(--ink)" }}>
+      <span className={`${mono ? "f-accent" : ""} text-sm ${strong ? "font-semibold" : "font-medium"}`} style={{ color: "var(--ink)" }}>
         {value}
       </span>
     </div>
@@ -99,14 +99,14 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
                 style={{ strokeDasharray: 24, strokeDashoffset: 24, animation: "draw-check 0.5s 0.2s ease-out forwards" }} />
             </svg>
           </div>
-          <p className="f-mono text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Booking confirmed</p>
+          <p className="f-accent text-xs tracking-widest uppercase" style={{ color: "var(--marigold-2)" }}>Booking confirmed</p>
           <h1 className="f-heading text-3xl md:text-4xl font-semibold mt-2" style={{ color: "var(--blue)" }}>Your seats are booked.</h1>
           <p className="text-sm mt-2 max-w-lg mx-auto" style={{ color: "var(--steel)" }}>
             An e-ticket has been sent to your registered email and mobile number. Carry a government photo ID while travelling.
           </p>
           <div className="mt-5 inline-flex items-center gap-3 rounded-full px-5 py-2.5 bg-white border" style={{ borderColor: "var(--line)", boxShadow: "var(--shadow-sm)" }}>
             <span className="text-xs uppercase tracking-wide" style={{ color: "var(--steel)" }}>PNR</span>
-            <span className="f-mono text-lg font-semibold" style={{ color: "var(--ink)" }}>
+            <span className="f-accent text-lg font-semibold" style={{ color: "var(--ink)" }}>
               {booking.pnr.slice(0, 3)} {booking.pnr.slice(3, 6)} {booking.pnr.slice(6)}
             </span>
           </div>
@@ -123,7 +123,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
               </div>
               <div>
                 <p className="f-heading font-semibold text-base" style={{ color: "var(--ink)" }}>{t.name}</p>
-                <p className="f-mono text-xs mt-0.5" style={{ color: "var(--steel)" }}>#{t.no} · {t.type} · Class {booking.cls}</p>
+                <p className="f-accent text-xs mt-0.5" style={{ color: "var(--steel)" }}>#{t.no} · {t.type} · Class {booking.cls}</p>
               </div>
             </div>
             <span className="px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>
@@ -134,8 +134,8 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
           {/* journey band */}
           <div className="p-5 md:p-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-dashed" style={{ borderColor: "var(--line)" }}>
             <div>
-              <p className="f-mono text-2xl font-semibold" style={{ color: "var(--ink)" }}>{t.dep}</p>
-              <p className="f-mono text-xs font-semibold mt-1" style={{ color: "var(--blue)" }}>{t.from}</p>
+              <p className="f-accent text-2xl font-semibold" style={{ color: "var(--ink)" }}>{t.dep}</p>
+              <p className="f-accent text-xs font-semibold mt-1" style={{ color: "var(--blue)" }}>{t.from}</p>
               <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>{booking.date}</p>
             </div>
             <div className="text-center px-2">
@@ -144,8 +144,8 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
               <p className="text-[11px] mt-1" style={{ color: "var(--steel)" }}>Direct</p>
             </div>
             <div className="text-right">
-              <p className="f-mono text-2xl font-semibold" style={{ color: "var(--ink)" }}>{t.arr}</p>
-              <p className="f-mono text-xs font-semibold mt-1" style={{ color: "var(--blue)" }}>{t.to}</p>
+              <p className="f-accent text-2xl font-semibold" style={{ color: "var(--ink)" }}>{t.arr}</p>
+              <p className="f-accent text-xs font-semibold mt-1" style={{ color: "var(--blue)" }}>{t.to}</p>
               <p className="text-xs mt-0.5" style={{ color: "var(--steel)" }}>Next day arrival</p>
             </div>
           </div>
@@ -170,9 +170,9 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
                   {booking.passengers.map((p, i) => (
                     <tr key={i} className="border-t" style={{ borderColor: "var(--line)" }}>
                       <td className="py-2.5 font-medium" style={{ color: "var(--ink)" }}>{p.name}</td>
-                      <td className="py-2.5 f-mono text-xs" style={{ color: "var(--steel)" }}>{p.age} / {p.gender}</td>
-                      <td className="py-2.5 f-mono text-xs font-semibold" style={{ color: "var(--blue)" }}>{p.coach}</td>
-                      <td className="py-2.5 f-mono text-xs" style={{ color: "var(--ink)" }}>{p.seat} · {p.berth}</td>
+                      <td className="py-2.5 f-accent text-xs" style={{ color: "var(--steel)" }}>{p.age} / {p.gender}</td>
+                      <td className="py-2.5 f-accent text-xs font-semibold" style={{ color: "var(--blue)" }}>{p.coach}</td>
+                      <td className="py-2.5 f-accent text-xs" style={{ color: "var(--ink)" }}>{p.seat} · {p.berth}</td>
                       <td className="py-2.5">
                         <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold" style={{ background: "var(--green-bg)", color: "var(--green)" }}>{p.status}</span>
                       </td>
@@ -189,7 +189,7 @@ export default function ConfirmationScreen({ booking, onTrips, onHome }) {
               <FauxQR seed={booking.pnr} />
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--steel)" }}>Scan at boarding</p>
-                <p className="f-mono text-xs mt-1" style={{ color: "var(--ink)" }}>TXN {booking.txnId}</p>
+                <p className="f-accent text-xs mt-1" style={{ color: "var(--ink)" }}>TXN {booking.txnId}</p>
                 <p className="text-xs mt-1" style={{ color: "var(--steel)" }}>Booked {booking.bookedAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
               </div>
             </div>

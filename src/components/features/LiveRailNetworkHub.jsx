@@ -94,11 +94,11 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="h-2 w-2 rounded-full bg-[var(--green)] animate-pulse" />
-            <p className="f-mono text-xs tracking-widest uppercase font-bold text-[var(--marigold)]">
+            <p className="f-accent text-xs tracking-widest uppercase font-bold text-[var(--marigold)]">
               Indian Railways Flagship Showcase
             </p>
           </div>
-          <h2 className="f-serif font-bold text-3xl md:text-4xl text-[var(--blue)]">
+          <h2 className="f-heading font-bold text-3xl md:text-4xl text-[var(--blue)]">
             Explore India’s Finest Corridors
           </h2>
           <p className="text-sm md:text-base text-[var(--steel)] mt-1 max-w-xl">
@@ -152,17 +152,17 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
                 <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse" />
                 Live Status: On-Time ({activeTrain.onTimeRate})
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-black/40 backdrop-blur-md border border-white/20 text-white font-mono flex items-center gap-1 shadow-lg">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-black/40 backdrop-blur-md border border-white/20 text-white f-accent flex items-center gap-1 shadow-lg">
                 <Zap size={12} className="text-[var(--marigold)]" /> Top Speed {activeTrain.speed}
               </span>
             </div>
 
             {/* Bottom Overlay Info on Image */}
             <div className="absolute bottom-6 left-6 right-6 text-white z-10">
-              <span className="f-mono text-xs uppercase tracking-widest text-[var(--marigold)] font-bold">
+              <span className="f-accent text-xs uppercase tracking-widest text-[var(--marigold)] font-bold">
                 {activeTrain.category}
               </span>
-              <h3 className="f-serif text-2xl md:text-3xl font-bold mt-1 leading-tight text-white drop-shadow-md">
+              <h3 className="f-heading text-2xl md:text-3xl font-bold mt-1 leading-tight text-white drop-shadow-md">
                 {activeTrain.title}
               </h3>
               <p className="text-white/80 text-xs md:text-sm mt-1 max-w-lg drop-shadow">
@@ -178,14 +178,14 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
               <div className="p-4 rounded-2xl bg-[var(--paper-2)] border border-[var(--line)] mb-6">
                 <div className="flex items-center justify-between text-xs font-semibold text-[var(--steel)] uppercase tracking-wider mb-2">
                   <span>Departure</span>
-                  <span className="flex items-center gap-1 text-[var(--ink)] font-mono">
+                  <span className="flex items-center gap-1 text-[var(--ink)] f-accent">
                     <Clock size={12} /> {activeTrain.duration}
                   </span>
                   <span>Arrival</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-lg md:text-xl font-bold font-mono text-[var(--ink)]">{activeTrain.departure.split(' ')[0]}</p>
+                    <p className="text-lg md:text-xl font-bold f-accent text-[var(--ink)]">{activeTrain.departure.split(' ')[0]}</p>
                     <p className="text-xs text-[var(--steel)]">{activeTrain.departure.split('(')[1]?.replace(')', '') || 'Origin'}</p>
                   </div>
                   {/* Dotted Flight/Train Line */}
@@ -194,14 +194,14 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
                     <Train size={16} className="absolute text-[var(--marigold)]" />
                   </div>
                   <div className="text-right">
-                    <p className="text-lg md:text-xl font-bold font-mono text-[var(--ink)]">{activeTrain.arrival.split(' ')[0]}</p>
+                    <p className="text-lg md:text-xl font-bold f-accent text-[var(--ink)]">{activeTrain.arrival.split(' ')[0]}</p>
                     <p className="text-xs text-[var(--steel)]">{activeTrain.arrival.split('(')[1]?.replace(')', '') || 'Destination'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Perks Checklist */}
-              <h4 className="f-mono text-xs uppercase tracking-wider font-bold text-[var(--steel)] mb-3">
+              <h4 className="f-accent text-xs uppercase tracking-wider font-bold text-[var(--steel)] mb-3">
                 Experience Inclusions
               </h4>
               <div className="space-y-2.5 mb-6">
@@ -247,7 +247,7 @@ export default function LiveRailNetworkHub({ onSelectRoute }) {
                   <div className="w-10 h-10 rounded-xl bg-[var(--paper-2)] flex items-center justify-center text-[var(--marigold-2)]">
                     <Icon size={20} />
                   </div>
-                  <span className="text-[10px] font-bold font-mono px-2.5 py-1 rounded-full bg-[var(--paper-2)] text-[var(--blue)] border border-[var(--line)]">
+                  <span className="text-[10px] font-bold f-accent px-2.5 py-1 rounded-full bg-[var(--paper-2)] text-[var(--blue)] border border-[var(--line)]">
                     {perk.badge}
                   </span>
                 </div>

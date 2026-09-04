@@ -126,14 +126,14 @@ export default function MyTripsScreen() {
                     }`}>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#0A1626] text-[#F0A63A]">#{trainNo}</span>
+                          <span className="f-accent text-xs font-bold px-2 py-0.5 rounded bg-[#0A1626] text-[#F0A63A]">#{trainNo}</span>
                           <p className="font-serif font-bold text-base text-[#0A1626]">{trainName}</p>
                         </div>
-                        <p className="font-mono text-xs mt-1 text-[#4B5563]">
+                        <p className="f-accent text-xs mt-1 text-[#4B5563]">
                           {travelDate} · {depTime} {fromCode} → {arrTime} {toCode} · Class: <span className="font-bold text-[#0A1626]">{ticketClass}</span>
                         </p>
                       </div>
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full font-mono shadow-xs ${
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full f-accent shadow-xs ${
                         isItemCancelled ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
                       }`}>
                         {isItemCancelled ? "Cancelled · Refund Processed" : "Confirmed (CNF)"}
@@ -142,11 +142,11 @@ export default function MyTripsScreen() {
                     <div className="p-5 flex flex-wrap gap-6 items-center bg-white">
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">PNR Number</p>
-                        <p className="font-mono text-sm font-bold text-[#0A1626]">{b.pnr}</p>
+                        <p className="f-accent text-sm font-bold text-[#0A1626]">{b.pnr}</p>
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Coach / Seat</p>
-                        <p className="font-mono text-sm font-bold text-[#0A1626]">{coachSeat}</p>
+                        <p className="f-accent text-sm font-bold text-[#0A1626]">{coachSeat}</p>
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Passenger Manifest</p>
@@ -177,7 +177,7 @@ export default function MyTripsScreen() {
                 value={pnr} 
                 onChange={(e) => setPnr(e.target.value)} 
                 placeholder="e.g. 8462097315"
-                className="flex-1 h-12 rounded-xl border border-gray-300 px-3 text-sm font-mono font-bold text-[#0A1626] outline-none focus:border-[#0A1626] shadow-xs" 
+                className="flex-1 h-12 rounded-xl border border-gray-300 px-3 text-sm f-accent font-bold text-[#0A1626] outline-none focus:border-[#0A1626] shadow-xs" 
               />
               <button 
                 onClick={checkPnr} 
@@ -190,15 +190,15 @@ export default function MyTripsScreen() {
             {pnrResult && !isSearchingPnr && (
               <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5 anim-fade-up">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="font-mono text-sm font-bold text-[#0A1626]">PNR: {pnrResult.pnr}</p>
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full font-mono ${
+                  <p className="f-accent text-sm font-bold text-[#0A1626]">PNR: {pnrResult.pnr}</p>
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full f-accent ${
                     pnrResult.status === "CANCELLED" ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
                   }`}>
                     {pnrResult.status === "CANCELLED" ? "Cancelled" : "CNF — Confirmed"}
                   </span>
                 </div>
                 <p className="text-sm font-bold text-[#0A1626]">{pnrResult.train} · {pnrResult.date}</p>
-                <p className="font-mono text-xs mt-1 text-[#4B5563]">{pnrResult.from} → {pnrResult.to} · Class: {pnrResult.cls} · Coach {pnrResult.coach} · Seat {pnrResult.seat}</p>
+                <p className="f-accent text-xs mt-1 text-[#4B5563]">{pnrResult.from} → {pnrResult.to} · Class: {pnrResult.cls} · Coach {pnrResult.coach} · Seat {pnrResult.seat}</p>
                 <p className="text-xs mt-2 text-emerald-800 font-medium">Chart status: {pnrResult.chart}.</p>
               </div>
             )}
@@ -225,7 +225,7 @@ export default function MyTripsScreen() {
                   </div>
                   <div className="pb-2">
                     <p className="text-xs md:text-sm font-bold text-[#0A1626]">{s.label}</p>
-                    <p className="text-[11px] text-[#6B7280] font-mono">{s.note}</p>
+                    <p className="text-[11px] text-[#6B7280] f-accent">{s.note}</p>
                   </div>
                 </div>
               ))}
@@ -240,11 +240,11 @@ export default function MyTripsScreen() {
           <div className="mb-4 p-3.5 rounded-xl bg-[#0A1626] text-white flex items-center justify-between shadow-md">
             <div>
               <p className="font-serif font-bold text-sm text-[#F0A63A]">{activeJourney?.train?.name || "Mumbai Rajdhani"}</p>
-              <p className="font-mono text-xs text-gray-300">
+              <p className="f-accent text-xs text-gray-300">
                 Train #{activeJourney?.train?.no || "12951"} · Speed: <span className="text-emerald-400 font-bold">{liveTelemetry?.currentSpeedKmH || 115} km/h</span>
               </p>
             </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white font-mono flex items-center gap-1">
+            <span className="text-xs font-bold px-2.5 py-1 rounded bg-emerald-600 text-white f-accent flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> LIVE GPS
             </span>
           </div>
@@ -281,7 +281,7 @@ export default function MyTripsScreen() {
                     <p className={`text-xs font-bold ${s.current ? "text-amber-700" : s.passed ? "text-[#0A1626]" : "text-gray-400"}`}>
                       {s.name} {s.current && <span className="text-[10px] px-1.5 py-0.2 bg-amber-100 rounded text-amber-900 ml-1">Current</span>}
                     </p>
-                    <p className="text-[10px] text-gray-500 font-mono">Arr: {s.arr || "--"} · Dep: {s.dep || "--"}</p>
+                    <p className="text-[10px] text-gray-500 f-accent">Arr: {s.arr || "--"} · Dep: {s.dep || "--"}</p>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
                     s.passed ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"
@@ -303,33 +303,33 @@ export default function MyTripsScreen() {
               <div className="p-4 bg-[#0A1626] text-white flex justify-between items-center">
                 <div>
                   <p className="font-serif font-bold text-base text-[#F0A63A]">{activeJourney.train?.name || "Superfast Express"}</p>
-                  <p className="text-xs font-mono text-gray-300">Train #{activeJourney.train?.no || "12951"} · Class: {activeJourney.cls || "3A"}</p>
+                  <p className="text-xs f-accent text-gray-300">Train #{activeJourney.train?.no || "12951"} · Class: {activeJourney.cls || "3A"}</p>
                 </div>
                 <div className="text-right">
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded font-mono ${
+                  <span className={`text-xs font-bold px-2.5 py-1 rounded f-accent ${
                     activeJourney.status === "CANCELLED" ? "bg-rose-600 text-white" : "bg-emerald-600 text-white"
                   }`}>
                     {activeJourney.status === "CANCELLED" ? "CANCELLED" : "CONFIRMED"}
                   </span>
-                  <p className="text-[11px] font-mono text-gray-300 mt-1">PNR: {activeJourney.pnr}</p>
+                  <p className="text-[11px] f-accent text-gray-300 mt-1">PNR: {activeJourney.pnr}</p>
                 </div>
               </div>
 
               <div className="p-4 bg-[#FAF8F2] border-b border-gray-200 grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Boarding</p>
-                  <p className="font-mono text-base font-bold text-[#0A1626]">{activeJourney.train?.from || "NDLS"}</p>
+                  <p className="f-accent text-base font-bold text-[#0A1626]">{activeJourney.train?.from || "NDLS"}</p>
                   <p className="text-[10px] text-gray-500">{activeJourney.train?.dep || "16:55"} · {activeJourney.date || formatDateDisplay(new Date())}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">Destination</p>
-                  <p className="font-mono text-base font-bold text-[#0A1626]">{activeJourney.train?.to || "MMCT"}</p>
+                  <p className="f-accent text-base font-bold text-[#0A1626]">{activeJourney.train?.to || "MMCT"}</p>
                   <p className="text-[10px] text-gray-500">{activeJourney.train?.arr || "08:35"}</p>
                 </div>
               </div>
 
               <div className="p-4">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 font-mono">Passenger Manifest</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280] mb-2 f-accent">Passenger Manifest</p>
                 <div className="space-y-2">
                   {(activeJourney.passengers || [{ name: "Passenger 1", age: "28", gender: "M", coach: "B4", seat: "22", berth: "Lower" }]).map((p, i) => (
                     <div key={i} className="flex justify-between items-center p-2.5 rounded-xl border border-gray-200 bg-white">
@@ -338,7 +338,7 @@ export default function MyTripsScreen() {
                         <p className="text-[10px] text-gray-500">{p.age || "28"} Yrs · {p.gender === "M" ? "Male" : "Female"}</p>
                       </div>
                       <div className="text-right">
-                        <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded border ${
+                        <span className={`text-xs font-bold f-accent px-2 py-0.5 rounded border ${
                           activeJourney.status === "CANCELLED" 
                             ? "bg-rose-50 text-rose-800 border-rose-200" 
                             : "bg-emerald-50 text-emerald-800 border-emerald-200"
@@ -352,7 +352,7 @@ export default function MyTripsScreen() {
 
                 <div className="flex flex-col items-center justify-center mt-4 p-3 bg-gray-50 rounded-xl border border-dashed border-gray-300 text-center">
                   <ScanLine size={32} className="text-[#0A1626] mb-1" />
-                  <p className="text-[10px] text-gray-600 font-mono">Authorized Indian Railways Ticket QR · Show to TTE on Board</p>
+                  <p className="text-[10px] text-gray-600 f-accent">Authorized Indian Railways Ticket QR · Show to TTE on Board</p>
                 </div>
               </div>
             </div>

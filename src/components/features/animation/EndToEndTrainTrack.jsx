@@ -43,7 +43,7 @@ function EndToEndTrainTrack() {
               <span className="text-[10px] text-white/60 font-semibold tracking-wider uppercase mb-0.5">Status</span>
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981] animate-pulse"></div>
-                <span className="text-sm font-mono font-bold text-white">BOARDING</span>
+                <span className="text-sm f-accent font-bold text-white">BOARDING</span>
               </div>
             </div>
             
@@ -51,7 +51,7 @@ function EndToEndTrainTrack() {
             
             <div className="flex flex-col">
               <span className="text-[10px] text-white/60 font-semibold tracking-wider uppercase mb-0.5">Platform</span>
-              <span className="text-sm font-mono font-bold text-white flex items-center gap-1"><MapPin size={14}/> 04</span>
+              <span className="text-sm f-accent font-bold text-white flex items-center gap-1"><MapPin size={14}/> 04</span>
             </div>
 
             <div className="w-px h-8 bg-white/20 mx-2"></div>
