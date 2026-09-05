@@ -188,7 +188,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   paymentMethods: getInitialPayments(),
 
   login: (name, email, irctcId = "ananya.rao", mobile = "+91 98765 43210") => {
-    const cleanName = name ? name.trim() : (email.includes("@") ? email.split("@")[0] : "Passenger");
+    const cleanName = name ? name.trim() : (email.includes("@") ? (email.split("@")[0] ?? "Passenger") : "Passenger");
     const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
     const userObj = { name: formattedName, email, irctcId, mobile };
     try {

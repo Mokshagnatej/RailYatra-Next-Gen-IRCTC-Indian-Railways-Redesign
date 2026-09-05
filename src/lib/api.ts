@@ -7,8 +7,8 @@ import { searchTrainsBetween, getTrainByNumber, getAllTrains, SearchResultTrain,
 import { computeLiveTrainTracking, type LiveTrackingTelemetry } from "./liveTrackingEngine";
 import { formatDateMedium, getRelativeDate } from "./dateUtils";
 
-const API_KEY = import.meta.env.VITE_RAPIDAPI_KEY || "";
-const API_HOST = import.meta.env.VITE_RAPIDAPI_HOST || "irctc1.p.rapidapi.com";
+const API_KEY = import.meta.env['VITE_RAPIDAPI_KEY'] || "";
+const API_HOST = import.meta.env['VITE_RAPIDAPI_HOST'] || "irctc1.p.rapidapi.com";
 
 // -----------------------------------------------------------------------------
 // Live PNR Dataset
@@ -68,7 +68,11 @@ async function fetchFromApi(endpoint: string, params: Record<string, string>) {
   }
 
   const url = new URL(`https://${API_HOST}${endpoint}`);
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  Object.entries(params).forEach(([key, val]) => {
+    if (val !== undefined) {
+      url.searchParams.append(key, val);
+    }
+  });
 
   const response = await fetch(url.toString(), {
     method: "GET",

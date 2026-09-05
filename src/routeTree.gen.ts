@@ -14,6 +14,7 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as ResultsRouteImport } from './routes/results'
+import { Route as SeatAvailabilityRouteImport } from './routes/seat-availability'
 import { Route as TripsRouteImport } from './routes/trips'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const ResultsRoute = ResultsRouteImport.update({
   path: '/results',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeatAvailabilityRoute = SeatAvailabilityRouteImport.update({
+  id: '/seat-availability',
+  path: '/seat-availability',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TripsRoute = TripsRouteImport.update({
   id: '/trips',
   path: '/trips',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/help': typeof HelpRoute
   '/results': typeof ResultsRoute
+  '/seat-availability': typeof SeatAvailabilityRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/help': typeof HelpRoute
   '/results': typeof ResultsRoute
+  '/seat-availability': typeof SeatAvailabilityRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRoutesById {
@@ -70,15 +78,37 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/help': typeof HelpRoute
   '/results': typeof ResultsRoute
+  '/seat-availability': typeof SeatAvailabilityRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/explore' | '/help' | '/results' | '/trips'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/explore'
+    | '/help'
+    | '/results'
+    | '/seat-availability'
+    | '/trips'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/explore' | '/help' | '/results' | '/trips'
+  to:
+    | '/'
+    | '/account'
+    | '/explore'
+    | '/help'
+    | '/results'
+    | '/seat-availability'
+    | '/trips'
   id:
-    '__root__' | '/' | '/account' | '/explore' | '/help' | '/results' | '/trips'
+    | '__root__'
+    | '/'
+    | '/account'
+    | '/explore'
+    | '/help'
+    | '/results'
+    | '/seat-availability'
+    | '/trips'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,6 +117,7 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   HelpRoute: typeof HelpRoute
   ResultsRoute: typeof ResultsRoute
+  SeatAvailabilityRoute: typeof SeatAvailabilityRoute
   TripsRoute: typeof TripsRoute
 }
 
@@ -127,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/seat-availability': {
+      id: '/seat-availability'
+      path: '/seat-availability'
+      fullPath: '/seat-availability'
+      preLoaderRoute: typeof SeatAvailabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trips': {
       id: '/trips'
       path: '/trips'
@@ -143,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   HelpRoute: HelpRoute,
   ResultsRoute: ResultsRoute,
+  SeatAvailabilityRoute: SeatAvailabilityRoute,
   TripsRoute: TripsRoute,
 }
 export const routeTree = rootRouteImport

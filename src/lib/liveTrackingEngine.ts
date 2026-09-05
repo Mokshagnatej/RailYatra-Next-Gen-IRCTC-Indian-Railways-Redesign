@@ -17,8 +17,8 @@ export interface LiveTrackingTelemetry {
   currentSpeedKmH: number;
   delayMinutes: number;
   delayString: string;
-  currentStation: { code: string; name: string; platform: string; state?: string };
-  nextStation: { code: string; name: string; platform: string; arr: string; etaMinutes: number; state?: string };
+  currentStation: { code: string; name: string; platform: string; state?: string | undefined };
+  nextStation: { code: string; name: string; platform: string; arr: string; etaMinutes: number; state?: string | undefined };
   progressPercent: number;
   distanceCoveredKm: number;
   distanceRemainingKm: number;
@@ -34,8 +34,11 @@ function parseTimeToMinutes(timeStr: string, day: number = 1): number {
   if (!timeStr || timeStr === "--:--" || timeStr === "Starts" || timeStr === "Ends") return 0;
   const parts = timeStr.split(":");
   if (parts.length < 2) return 0;
-  const hours = parseInt(parts[0], 10) || 0;
-  const minutes = parseInt(parts[1], 10) || 0;
+  const p0 = parts[0];
+  const p1 = parts[1];
+  if (!p0 || !p1) return 0;
+  const hours = parseInt(p0, 10) || 0;
+  const minutes = parseInt(p1, 10) || 0;
   return (day - 1) * 1440 + hours * 60 + minutes;
 }
 
@@ -54,6 +57,10 @@ export function computeLiveTrainTracking(
   const schedule = train.schedule;
   const origin = schedule[0];
   const destination = schedule[schedule.length - 1];
+
+  if (!origin || !destination) {
+    return null;
+  }
 
   // Current real time in minutes of the day
   const currentHour = referenceDate.getHours();
@@ -83,7 +90,9 @@ export function computeLiveTrainTracking(
   // Find intermediate halts
   let currentStopIdx = 0;
   for (let i = 0; i < schedule.length; i++) {
-    const sDist = schedule[i].distKm || (totalDist * (i / (schedule.length - 1)));
+    const s = schedule[i];
+    if (!s) continue;
+    const sDist = s.distKm || (totalDist * (i / (schedule.length - 1)));
     if (distanceCoveredKm >= sDist) {
       currentStopIdx = i;
     } else {
@@ -91,8 +100,8 @@ export function computeLiveTrainTracking(
     }
   }
 
-  const currentStop = schedule[currentStopIdx] || origin;
-  const nextStop = schedule[Math.min(schedule.length - 1, currentStopIdx + 1)] || destination;
+  const currentStop = schedule[currentStopIdx] ?? origin;
+  const nextStop = schedule[Math.min(schedule.length - 1, currentStopIdx + 1)] ?? destination;
   const isAtDestination = currentStopIdx === schedule.length - 1;
   const isHalting = currentStopIdx > 0 && Math.abs(distanceCoveredKm - (currentStop.distKm || 0)) < 4;
 

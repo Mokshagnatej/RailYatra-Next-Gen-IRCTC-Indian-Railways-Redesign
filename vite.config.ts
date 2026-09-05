@@ -5,7 +5,7 @@ import tsConfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(() => {
-  const base = process.env.VITE_BASE_PATH || "/";
+  const base = process.env['VITE_BASE_PATH'] || "/";
 
   return {
     base,
@@ -47,7 +47,7 @@ export default defineConfig(() => {
       chunkSizeWarningLimit: 10000,
       rollupOptions: {
         output: {
-          manualChunks(id) {
+          manualChunks(id): string | undefined {
             if (id.includes("trainSearchIndex.json") || id.includes("trainRoutesData.json")) {
               return "train-schedules-data";
             }
@@ -63,6 +63,7 @@ export default defineConfig(() => {
             if (id.includes("node_modules/react") || id.includes("node_modules/react-dom") || id.includes("node_modules/zustand")) {
               return "react-vendor";
             }
+            return undefined;
           }
         }
       }

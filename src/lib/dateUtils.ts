@@ -64,7 +64,7 @@ export function formatDateDisplay(date: Date = new Date()): string {
  * Returns the short day of week: "Thu", "Fri", etc.
  */
 export function getDayName(date: Date = new Date()): string {
-  return DAYS_SHORT[date.getDay()];
+  return DAYS_SHORT[date.getDay()] ?? "Sun";
 }
 
 export interface DateStripData {
@@ -99,16 +99,17 @@ export function getDateStrip(count: number = 10, startDate: Date = new Date()): 
     dates.push(shortStr);
     dayNames[shortStr] = day;
     fullDates[shortStr] = medStr;
-    availabilityHint[shortStr] = hintsPattern[i % hintsPattern.length];
+    availabilityHint[shortStr] = hintsPattern[i % hintsPattern.length] ?? "green";
   }
 
+  const firstDate = dates[0] ?? formatDateShort(startDate);
   return {
     dates,
     dayNames,
     fullDates,
     availabilityHint,
-    todayShort: dates[0],
-    todayMedium: fullDates[dates[0]],
+    todayShort: firstDate,
+    todayMedium: fullDates[firstDate] ?? formatDateMedium(startDate),
     todayLong: formatDateLong(startDate),
   };
 }
@@ -178,7 +179,11 @@ export function getSeatForecast(count: number = 6, startDate: Date = new Date())
     const d = getRelativeDate(i, startDate);
     const shortDate = formatDateShort(d);
     const day = getDayName(d);
-    const st = statuses[i % statuses.length];
+    const st = statuses[i % statuses.length] ?? {
+      status: "AVAILABLE 28",
+      color: "text-emerald-700 bg-emerald-50 border-emerald-200",
+      hexColor: "#1F7A4C"
+    };
 
     items.push({
       date: `${shortDate.replace(' ', '-')}`,

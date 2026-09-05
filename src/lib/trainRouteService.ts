@@ -84,7 +84,7 @@ const MAJOR_STATIONS: StationInfo[] = majorStationsRaw as StationInfo[];
 
 // Map of curated high-detail flagship trains
 const CURATED_TRAINS_MAP = new Map<string, TrainData>();
-for (const t of (curatedTrainsData as TrainData[])) {
+for (const t of (curatedTrainsData as unknown as TrainData[])) {
   CURATED_TRAINS_MAP.set(t.trainNo, t);
   CURATED_TRAINS_MAP.set(String(parseInt(t.trainNo, 10)), t);
 }
@@ -232,7 +232,7 @@ export function getAllStations(): StationInfo[] {
 }
 
 export function getAllTrains(): TrainData[] {
-  return curatedTrainsData as TrainData[];
+  return (curatedTrainsData as unknown) as TrainData[];
 }
 
 // Master Corridor Halts Database for Authentic Stop Schedules
@@ -421,8 +421,8 @@ const CORRIDOR_DATABASE: Record<string, {
 
 function formatTimeWithOffset(baseTimeStr: string, addMins: number): string {
   const parts = (baseTimeStr || "08:00").split(":");
-  const h = parseInt(parts[0], 10) || 8;
-  const m = parseInt(parts[1], 10) || 0;
+  const h = parseInt(parts[0] ?? "8", 10) || 8;
+  const m = parseInt(parts[1] ?? "0", 10) || 0;
   const total = (h * 60 + m + Math.round(addMins)) % (24 * 60);
   const outH = Math.floor(total / 60);
   const outM = total % 60;
@@ -446,7 +446,7 @@ export function generateComprehensiveSchedule(
 
   let durMinutes = 720;
   const durMatch = totalDurStr.match(/(\d+)h\s*(\d+)?/);
-  if (durMatch) {
+  if (durMatch && durMatch[1]) {
     durMinutes = (parseInt(durMatch[1], 10) * 60) + (parseInt(durMatch[2] || "0", 10));
   } else {
     durMinutes = Math.max(120, Math.round(totalDist * 0.9));
@@ -787,13 +787,15 @@ export function searchTrainsBetween(fromInput: string, toInput: string, date?: s
   const addedTrainNos = new Set<string>();
 
   // 1. First search curated high-detail flagship trains
-  for (const train of (curatedTrainsData as TrainData[])) {
+  for (const train of (curatedTrainsData as unknown as TrainData[])) {
     const stops = train.schedule;
     let fromIdx = -1;
     let toIdx = -1;
 
     for (let i = 0; i < stops.length; i++) {
-      const code = stops[i].stationCode.toUpperCase();
+      const st = stops[i];
+      if (!st) continue;
+      const code = st.stationCode.toUpperCase();
       if (fromIdx === -1 && fromAliases.includes(code)) {
         fromIdx = i;
       }
@@ -805,6 +807,7 @@ export function searchTrainsBetween(fromInput: string, toInput: string, date?: s
     if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
       const fromStop = stops[fromIdx];
       const toStop = stops[toIdx];
+      if (!fromStop || !toStop) continue;
       const legDist = Math.max(50, (toStop.distKm || train.totalDistanceKm) - (fromStop.distKm || 0));
       const stopCount = Math.max(0, toIdx - fromIdx - 1);
 
