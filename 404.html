@@ -1,24 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>RailYatra — Next-Gen Indian Railways</title>
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      var pathSegmentsToKeep = 1;
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RailYatra — Book Indian train tickets without the guesswork</title>
+    <meta
+      name="description"
+      content="Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place."
+    />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/" />
+    <meta property="og:title" content="RailYatra — Book Indian train tickets without the guesswork" />
+    <meta property="og:description" content="Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place." />
+    <meta property="og:image" content="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/og-image.jpg" />
 
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/" />
+    <meta property="twitter:title" content="RailYatra — Book Indian train tickets without the guesswork" />
+    <meta property="twitter:description" content="Search trains, see honest seat availability, book with a payment flow that never dead-ends, and track PNR, refunds and live running status in one place." />
+    <meta property="twitter:image" content="https://Mokshagnatej.github.io/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/og-image.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages redirect decoder
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
     </script>
-  </head>
+    <style>
+      /* ---- Loader ---- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #loader.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #loader video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ---- Skip button (Cinematic & Premium) ---- */
+      #skip-loader {
+        position: absolute;
+        bottom: 32px;
+        right: 32px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+      }
+
+      #skip-loader:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      }
+      
+      #skip-loader svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform 0.3s ease;
+      }
+      
+      #skip-loader:hover svg {
+        transform: translateX(3px);
+      }
+    </style>
+    <script type="module" crossorigin src="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/index-CAj5BKhZ.js"></script>
+    <link rel="modulepreload" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/rolldown-runtime-CbXtAM7H.js">
+    <link rel="modulepreload" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/react-vendor-DFeHYAB_.js">
+    <link rel="modulepreload" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/ui-vendor-ClT348kL.js">
+    <link rel="modulepreload" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/train-schedules-data-CdwLJ6rV.js">
+    <link rel="modulepreload" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/stations-database-DnV7GFm3.js">
+    <link rel="stylesheet" crossorigin href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/assets/index-tyLtyF4Z.css">
+  <link rel="manifest" href="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/registerSW.js"></script></head>
   <body>
+    <!-- Loading screen -->
+    <div id="loader">
+      <video id="loader-video" autoplay muted playsinline>
+        <source src="/RailYatra-Next-Gen-IRCTC-Indian-Railways-Redesign/loading-animation.webm" type="video/webm">
+      </video>
+      <button id="skip-loader" aria-label="Skip intro animation" onclick="finishLoading()">
+        Skip 
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div id="root"></div>
+
+    <script>
+      const loader = document.getElementById('loader');
+      const loaderVideo = document.getElementById('loader-video');
+      let finished = false;
+
+      // Lock scrolling while loader is active
+      document.body.style.overflow = 'hidden';
+
+      function finishLoading() {
+        if (finished) return;
+        finished = true;
+        document.body.style.overflow = ''; // Restore scrolling
+        loader.classList.add('hide');
+        setTimeout(() => loader.remove(), 1200); // clean up DOM after fade
+      }
+
+      // Reveal site once the loader video finishes playing
+      loaderVideo.addEventListener('ended', finishLoading);
+
+      // Safety net: if video fails to load or play (slow connection, autoplay block),
+      // don't trap the user on the loader forever.
+      loaderVideo.addEventListener('error', finishLoading);
+      setTimeout(finishLoading, 8000); // hard fallback in case 'ended' never fires
+    </script>
   </body>
 </html>
