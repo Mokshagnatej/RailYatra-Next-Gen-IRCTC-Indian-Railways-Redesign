@@ -25,9 +25,115 @@
         }
       }(window.location))
     </script>
+    <style>
+      /* ---- Loader ---- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #loader.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #loader video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ---- Skip button (Cinematic & Premium) ---- */
+      #skip-loader {
+        position: absolute;
+        bottom: 32px;
+        right: 32px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+      }
+
+      #skip-loader:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      }
+      
+      #skip-loader svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform 0.3s ease;
+      }
+      
+      #skip-loader:hover svg {
+        transform: translateX(3px);
+      }
+    </style>
   </head>
   <body>
+    <!-- Loading screen -->
+    <div id="loader">
+      <video id="loader-video" autoplay muted playsinline>
+        <source src="/loading-animation.webm" type="video/webm">
+      </video>
+      <button id="skip-loader" aria-label="Skip intro animation" onclick="finishLoading()">
+        Skip 
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      const loader = document.getElementById('loader');
+      const loaderVideo = document.getElementById('loader-video');
+      let finished = false;
+
+      // Lock scrolling while loader is active
+      document.body.style.overflow = 'hidden';
+
+      function finishLoading() {
+        if (finished) return;
+        finished = true;
+        document.body.style.overflow = ''; // Restore scrolling
+        loader.classList.add('hide');
+        setTimeout(() => loader.remove(), 1200); // clean up DOM after fade
+      }
+
+      // Reveal site once the loader video finishes playing
+      loaderVideo.addEventListener('ended', finishLoading);
+
+      // Safety net: if video fails to load or play (slow connection, autoplay block),
+      // don't trap the user on the loader forever.
+      loaderVideo.addEventListener('error', finishLoading);
+      setTimeout(finishLoading, 8000); // hard fallback in case 'ended' never fires
+    </script>
   </body>
 </html>
